@@ -1,0 +1,328 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<Project DefaultTargets="Build" ToolsVersion="4.0" xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
+  <ItemGroup Label="ProjectConfigurations">
+    <ProjectConfiguration Include="Debug|Win32">
+      <Configuration>Debug</Configuration>
+      <Platform>Win32</Platform>
+    </ProjectConfiguration>
+    <ProjectConfiguration Include="Release|Win32">
+      <Configuration>Release</Configuration>
+      <Platform>Win32</Platform>
+    </ProjectConfiguration>
+    <ProjectConfiguration Include="MinSizeRel|Win32">
+      <Configuration>MinSizeRel</Configuration>
+      <Platform>Win32</Platform>
+    </ProjectConfiguration>
+    <ProjectConfiguration Include="RelWithDebInfo|Win32">
+      <Configuration>RelWithDebInfo</Configuration>
+      <Platform>Win32</Platform>
+    </ProjectConfiguration>
+  </ItemGroup>
+  <PropertyGroup Label="Globals">
+    <ProjectGUID>{EACD3DDF-9C80-41D6-B3C6-3669C91A5D11}</ProjectGUID>
+    <Keyword>Win32Proj</Keyword>
+    <Platform>Win32</Platform>
+    <ProjectName>gussound</ProjectName>
+  </PropertyGroup>
+  <Import Project="$(VCTargetsPath)\Microsoft.Cpp.Default.props" />
+  <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'" Label="Configuration">
+    <ConfigurationType>DynamicLibrary</ConfigurationType>
+    <UseOfMfc>false</UseOfMfc>
+    <CharacterSet>Unicode</CharacterSet>
+  </PropertyGroup>
+  <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Release|Win32'" Label="Configuration">
+    <ConfigurationType>DynamicLibrary</ConfigurationType>
+    <UseOfMfc>false</UseOfMfc>
+    <CharacterSet>Unicode</CharacterSet>
+  </PropertyGroup>
+  <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='MinSizeRel|Win32'" Label="Configuration">
+    <ConfigurationType>DynamicLibrary</ConfigurationType>
+    <UseOfMfc>false</UseOfMfc>
+    <CharacterSet>Unicode</CharacterSet>
+  </PropertyGroup>
+  <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='RelWithDebInfo|Win32'" Label="Configuration">
+    <ConfigurationType>DynamicLibrary</ConfigurationType>
+    <UseOfMfc>false</UseOfMfc>
+    <CharacterSet>Unicode</CharacterSet>
+  </PropertyGroup>
+  <Import Project="$(VCTargetsPath)\Microsoft.Cpp.props" />
+  <ImportGroup Label="ExtensionSettings">
+  </ImportGroup>
+  <ImportGroup Label="PropertySheets">
+    <Import Project="$(UserRootDir)\Microsoft.Cpp.$(Platform).user.props" Condition="exists('$(UserRootDir)\Microsoft.Cpp.$(Platform).user.props')" Label="LocalAppDataPlatform" />  </ImportGroup>
+  <PropertyGroup Label="UserMacros" />
+    <PropertyGroup>
+      <_ProjectFileVersion>10.0.20506.1</_ProjectFileVersion>
+      <OutDir Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">d:\work\GustysSerpents\Serpents\Debug\</OutDir>
+      <IntDir Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">gussound.dir\Debug\</IntDir>
+      <TargetName Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">gussound_d</TargetName>
+      <TargetExt Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">.dll</TargetExt>
+      <LinkIncremental Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">true</LinkIncremental>
+      <GenerateManifest Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">true</GenerateManifest>
+      <OutDir Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">d:\work\GustysSerpents\Serpents\Release\</OutDir>
+      <IntDir Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">gussound.dir\Release\</IntDir>
+      <TargetName Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">gussound</TargetName>
+      <TargetExt Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">.dll</TargetExt>
+      <LinkIncremental Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">false</LinkIncremental>
+      <GenerateManifest Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">true</GenerateManifest>
+      <OutDir Condition="'$(Configuration)|$(Platform)'=='MinSizeRel|Win32'">d:\work\GustysSerpents\Serpents\MinSizeRel\</OutDir>
+      <IntDir Condition="'$(Configuration)|$(Platform)'=='MinSizeRel|Win32'">gussound.dir\MinSizeRel\</IntDir>
+      <TargetName Condition="'$(Configuration)|$(Platform)'=='MinSizeRel|Win32'">gussound</TargetName>
+      <TargetExt Condition="'$(Configuration)|$(Platform)'=='MinSizeRel|Win32'">.dll</TargetExt>
+      <LinkIncremental Condition="'$(Configuration)|$(Platform)'=='MinSizeRel|Win32'">false</LinkIncremental>
+      <GenerateManifest Condition="'$(Configuration)|$(Platform)'=='MinSizeRel|Win32'">true</GenerateManifest>
+      <OutDir Condition="'$(Configuration)|$(Platform)'=='RelWithDebInfo|Win32'">d:\work\GustysSerpents\Serpents\RelWithDebInfo\</OutDir>
+      <IntDir Condition="'$(Configuration)|$(Platform)'=='RelWithDebInfo|Win32'">gussound.dir\RelWithDebInfo\</IntDir>
+      <TargetName Condition="'$(Configuration)|$(Platform)'=='RelWithDebInfo|Win32'">gussound</TargetName>
+      <TargetExt Condition="'$(Configuration)|$(Platform)'=='RelWithDebInfo|Win32'">.dll</TargetExt>
+      <LinkIncremental Condition="'$(Configuration)|$(Platform)'=='RelWithDebInfo|Win32'">true</LinkIncremental>
+      <GenerateManifest Condition="'$(Configuration)|$(Platform)'=='RelWithDebInfo|Win32'">true</GenerateManifest>
+    </PropertyGroup>
+  <ItemDefinitionGroup Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">
+    <ClCompile>
+      <AdditionalIncludeDirectories>d:/work/GustysSerpents/Serpents/gussound/include;d:/work/GustysSerpents/Serpents/gussound/include/al;d:/work/GustysSerpents/Serpents/gussound/../guslib/guslib;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
+      <BasicRuntimeChecks>EnableFastChecks</BasicRuntimeChecks>
+      <CompileAs>CompileAsCpp</CompileAs>
+      <DebugInformationFormat>ProgramDatabase</DebugInformationFormat>
+      <ExceptionHandling>Sync</ExceptionHandling>
+      <InlineFunctionExpansion>Disabled</InlineFunctionExpansion>
+      <Optimization>Disabled</Optimization>
+      <PrecompiledHeader>NotUsing</PrecompiledHeader>
+      <RuntimeLibrary>MultiThreadedDebugDLL</RuntimeLibrary>
+      <RuntimeTypeInfo>true</RuntimeTypeInfo>
+      <WarningLevel>Level3</WarningLevel>
+      <PreprocessorDefinitions>WIN32;_WINDOWS;_DEBUG;UNICODE;_UNICODE;GUSLIB_IMP;UNICODE;_UNICODE;GUSLIBTESTDLL_EXPORTS;GUSLIB_EXP;_USRDLL;CMAKE_INTDIR="Debug";gussound_EXPORTS;%(PreprocessorDefinitions)</PreprocessorDefinitions>
+      <AssemblerListingLocation>Debug</AssemblerListingLocation>
+      <ObjectFileName>$(IntDir)</ObjectFileName>
+      <ProgramDataBaseFileName>d:/work/GustysSerpents/Serpents/Debug/gussound_d.pdb</ProgramDataBaseFileName>
+    </ClCompile>
+    <ResourceCompile>
+      <PreprocessorDefinitions>WIN32;_WINDOWS;_DEBUG;UNICODE;_UNICODE;GUSLIB_IMP;UNICODE;_UNICODE;GUSLIBTESTDLL_EXPORTS;GUSLIB_EXP;_USRDLL;CMAKE_INTDIR=\"Debug\";gussound_EXPORTS;%(PreprocessorDefinitions)</PreprocessorDefinitions>
+      <AdditionalIncludeDirectories>d:/work/GustysSerpents/Serpents/gussound/include;d:/work/GustysSerpents/Serpents/gussound/include/al;d:/work/GustysSerpents/Serpents/gussound/../guslib/guslib;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
+    </ResourceCompile>
+    <Midl>
+      <AdditionalIncludeDirectories>d:/work/GustysSerpents/Serpents/gussound/include;d:/work/GustysSerpents/Serpents/gussound/include/al;d:/work/GustysSerpents/Serpents/gussound/../guslib/guslib;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
+      <OutputDirectory>$(IntDir)</OutputDirectory>
+      <HeaderFileName>%(Filename).h</HeaderFileName>
+      <TypeLibraryName>%(Filename).tlb</TypeLibraryName>
+      <InterfaceIdentifierFileName>%(Filename)_i.c</InterfaceIdentifierFileName>
+      <ProxyFileName>%(Filename)_p.c</ProxyFileName>
+    </Midl>
+    <Link>
+      <AdditionalOptions> /machine:X86 /debug %(AdditionalOptions)</AdditionalOptions>
+      <AdditionalDependencies>kernel32.lib;user32.lib;gdi32.lib;winspool.lib;shell32.lib;ole32.lib;oleaut32.lib;uuid.lib;comdlg32.lib;advapi32.lib;..\guslib\guslib\Debug\guslib.lib;..\dependencies\audiere\audiere.lib;..\dependencies\libogg\lib\Debug\libogg_static.lib;..\dependencies\openal\OpenAL32.lib;..\dependencies\freealut\alut.lib;..\dependencies\vorbis\Debug\libvorbis_static.lib;..\dependencies\vorbis\Debug\libvorbisfile_static.lib</AdditionalDependencies>
+      <AdditionalLibraryDirectories>%(AdditionalLibraryDirectories)</AdditionalLibraryDirectories>
+      <GenerateDebugInformation>true</GenerateDebugInformation>
+      <ImportLibrary>d:/work/GustysSerpents/Serpents/gussound/Debug/gussound_d.lib</ImportLibrary>
+      <ProgramDataBaseFile>d:/work/GustysSerpents/Serpents/Debug/gussound_d.pdb</ProgramDataBaseFile>
+      <SubSystem>Console</SubSystem>
+      <Version></Version>
+    </Link>
+    <ProjectReference>
+      <LinkLibraryDependencies>false</LinkLibraryDependencies>
+    </ProjectReference>
+  </ItemDefinitionGroup>
+  <ItemDefinitionGroup Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">
+    <ClCompile>
+      <AdditionalIncludeDirectories>d:/work/GustysSerpents/Serpents/gussound/include;d:/work/GustysSerpents/Serpents/gussound/include/al;d:/work/GustysSerpents/Serpents/gussound/../guslib/guslib;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
+      <CompileAs>CompileAsCpp</CompileAs>
+      <ExceptionHandling>Sync</ExceptionHandling>
+      <InlineFunctionExpansion>AnySuitable</InlineFunctionExpansion>
+      <Optimization>MaxSpeed</Optimization>
+      <PrecompiledHeader>NotUsing</PrecompiledHeader>
+      <RuntimeLibrary>MultiThreadedDLL</RuntimeLibrary>
+      <RuntimeTypeInfo>true</RuntimeTypeInfo>
+      <WarningLevel>Level3</WarningLevel>
+      <DebugInformationFormat></DebugInformationFormat>
+      <PreprocessorDefinitions>WIN32;_WINDOWS;NDEBUG;UNICODE;_UNICODE;GUSLIB_IMP;UNICODE;_UNICODE;GUSLIBTESTDLL_EXPORTS;GUSLIB_EXP;_USRDLL;CMAKE_INTDIR="Release";gussound_EXPORTS;%(PreprocessorDefinitions)</PreprocessorDefinitions>
+      <AssemblerListingLocation>Release</AssemblerListingLocation>
+      <ObjectFileName>$(IntDir)</ObjectFileName>
+      <ProgramDataBaseFileName>d:/work/GustysSerpents/Serpents/Release/gussound.pdb</ProgramDataBaseFileName>
+    </ClCompile>
+    <ResourceCompile>
+      <PreprocessorDefinitions>WIN32;_WINDOWS;NDEBUG;UNICODE;_UNICODE;GUSLIB_IMP;UNICODE;_UNICODE;GUSLIBTESTDLL_EXPORTS;GUSLIB_EXP;_USRDLL;CMAKE_INTDIR=\"Release\";gussound_EXPORTS;%(PreprocessorDefinitions)</PreprocessorDefinitions>
+      <AdditionalIncludeDirectories>d:/work/GustysSerpents/Serpents/gussound/include;d:/work/GustysSerpents/Serpents/gussound/include/al;d:/work/GustysSerpents/Serpents/gussound/../guslib/guslib;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
+    </ResourceCompile>
+    <Midl>
+      <AdditionalIncludeDirectories>d:/work/GustysSerpents/Serpents/gussound/include;d:/work/GustysSerpents/Serpents/gussound/include/al;d:/work/GustysSerpents/Serpents/gussound/../guslib/guslib;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
+      <OutputDirectory>$(IntDir)</OutputDirectory>
+      <HeaderFileName>%(Filename).h</HeaderFileName>
+      <TypeLibraryName>%(Filename).tlb</TypeLibraryName>
+      <InterfaceIdentifierFileName>%(Filename)_i.c</InterfaceIdentifierFileName>
+      <ProxyFileName>%(Filename)_p.c</ProxyFileName>
+    </Midl>
+    <Link>
+      <AdditionalOptions> /machine:X86 %(AdditionalOptions)</AdditionalOptions>
+      <AdditionalDependencies>kernel32.lib;user32.lib;gdi32.lib;winspool.lib;shell32.lib;ole32.lib;oleaut32.lib;uuid.lib;comdlg32.lib;advapi32.lib;..\guslib\guslib\Release\guslib.lib;..\dependencies\audiere\audiere.lib;..\dependencies\libogg\lib\Release\libogg_static.lib;..\dependencies\openal\OpenAL32.lib;..\dependencies\freealut\alut.lib;..\dependencies\vorbis\Release\libvorbis_static.lib;..\dependencies\vorbis\Release\libvorbisfile_static.lib</AdditionalDependencies>
+      <AdditionalLibraryDirectories>%(AdditionalLibraryDirectories)</AdditionalLibraryDirectories>
+      <GenerateDebugInformation>false</GenerateDebugInformation>
+      <ImportLibrary>d:/work/GustysSerpents/Serpents/gussound/Release/gussound.lib</ImportLibrary>
+      <ProgramDataBaseFile>d:/work/GustysSerpents/Serpents/Release/gussound.pdb</ProgramDataBaseFile>
+      <SubSystem>Console</SubSystem>
+      <Version></Version>
+    </Link>
+    <ProjectReference>
+      <LinkLibraryDependencies>false</LinkLibraryDependencies>
+    </ProjectReference>
+  </ItemDefinitionGroup>
+  <ItemDefinitionGroup Condition="'$(Configuration)|$(Platform)'=='MinSizeRel|Win32'">
+    <ClCompile>
+      <AdditionalIncludeDirectories>d:/work/GustysSerpents/Serpents/gussound/include;d:/work/GustysSerpents/Serpents/gussound/include/al;d:/work/GustysSerpents/Serpents/gussound/../guslib/guslib;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
+      <CompileAs>CompileAsCpp</CompileAs>
+      <ExceptionHandling>Sync</ExceptionHandling>
+      <InlineFunctionExpansion>OnlyExplicitInline</InlineFunctionExpansion>
+      <Optimization>MinSpace</Optimization>
+      <PrecompiledHeader>NotUsing</PrecompiledHeader>
+      <RuntimeLibrary>MultiThreadedDLL</RuntimeLibrary>
+      <RuntimeTypeInfo>true</RuntimeTypeInfo>
+      <WarningLevel>Level3</WarningLevel>
+      <DebugInformationFormat></DebugInformationFormat>
+      <PreprocessorDefinitions>WIN32;_WINDOWS;NDEBUG;UNICODE;_UNICODE;GUSLIB_IMP;UNICODE;_UNICODE;GUSLIBTESTDLL_EXPORTS;GUSLIB_EXP;_USRDLL;CMAKE_INTDIR="MinSizeRel";gussound_EXPORTS;%(PreprocessorDefinitions)</PreprocessorDefinitions>
+      <AssemblerListingLocation>MinSizeRel</AssemblerListingLocation>
+      <ObjectFileName>$(IntDir)</ObjectFileName>
+      <ProgramDataBaseFileName>d:/work/GustysSerpents/Serpents/MinSizeRel/gussound.pdb</ProgramDataBaseFileName>
+    </ClCompile>
+    <ResourceCompile>
+      <PreprocessorDefinitions>WIN32;_WINDOWS;NDEBUG;UNICODE;_UNICODE;GUSLIB_IMP;UNICODE;_UNICODE;GUSLIBTESTDLL_EXPORTS;GUSLIB_EXP;_USRDLL;CMAKE_INTDIR=\"MinSizeRel\";gussound_EXPORTS;%(PreprocessorDefinitions)</PreprocessorDefinitions>
+      <AdditionalIncludeDirectories>d:/work/GustysSerpents/Serpents/gussound/include;d:/work/GustysSerpents/Serpents/gussound/include/al;d:/work/GustysSerpents/Serpents/gussound/../guslib/guslib;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
+    </ResourceCompile>
+    <Midl>
+      <AdditionalIncludeDirectories>d:/work/GustysSerpents/Serpents/gussound/include;d:/work/GustysSerpents/Serpents/gussound/include/al;d:/work/GustysSerpents/Serpents/gussound/../guslib/guslib;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
+      <OutputDirectory>$(IntDir)</OutputDirectory>
+      <HeaderFileName>%(Filename).h</HeaderFileName>
+      <TypeLibraryName>%(Filename).tlb</TypeLibraryName>
+      <InterfaceIdentifierFileName>%(Filename)_i.c</InterfaceIdentifierFileName>
+      <ProxyFileName>%(Filename)_p.c</ProxyFileName>
+    </Midl>
+    <Link>
+      <AdditionalOptions> /machine:X86 %(AdditionalOptions)</AdditionalOptions>
+      <AdditionalDependencies>kernel32.lib;user32.lib;gdi32.lib;winspool.lib;shell32.lib;ole32.lib;oleaut32.lib;uuid.lib;comdlg32.lib;advapi32.lib;..\guslib\guslib\MinSizeRel\guslib.lib;..\dependencies\audiere\audiere.lib;..\dependencies\libogg\lib\Release\libogg_static.lib;..\dependencies\openal\OpenAL32.lib;..\dependencies\freealut\alut.lib;..\dependencies\vorbis\Release\libvorbis_static.lib;..\dependencies\vorbis\Release\libvorbisfile_static.lib</AdditionalDependencies>
+      <AdditionalLibraryDirectories>%(AdditionalLibraryDirectories)</AdditionalLibraryDirectories>
+      <GenerateDebugInformation>false</GenerateDebugInformation>
+      <ImportLibrary>d:/work/GustysSerpents/Serpents/gussound/MinSizeRel/gussound.lib</ImportLibrary>
+      <ProgramDataBaseFile>d:/work/GustysSerpents/Serpents/MinSizeRel/gussound.pdb</ProgramDataBaseFile>
+      <SubSystem>Console</SubSystem>
+      <Version></Version>
+    </Link>
+    <ProjectReference>
+      <LinkLibraryDependencies>false</LinkLibraryDependencies>
+    </ProjectReference>
+  </ItemDefinitionGroup>
+  <ItemDefinitionGroup Condition="'$(Configuration)|$(Platform)'=='RelWithDebInfo|Win32'">
+    <ClCompile>
+      <AdditionalIncludeDirectories>d:/work/GustysSerpents/Serpents/gussound/include;d:/work/GustysSerpents/Serpents/gussound/include/al;d:/work/GustysSerpents/Serpents/gussound/../guslib/guslib;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
+      <CompileAs>CompileAsCpp</CompileAs>
+      <DebugInformationFormat>ProgramDatabase</DebugInformationFormat>
+      <ExceptionHandling>Sync</ExceptionHandling>
+      <InlineFunctionExpansion>OnlyExplicitInline</InlineFunctionExpansion>
+      <Optimization>MaxSpeed</Optimization>
+      <PrecompiledHeader>NotUsing</PrecompiledHeader>
+      <RuntimeLibrary>MultiThreadedDLL</RuntimeLibrary>
+      <RuntimeTypeInfo>true</RuntimeTypeInfo>
+      <WarningLevel>Level3</WarningLevel>
+      <PreprocessorDefinitions>WIN32;_WINDOWS;NDEBUG;UNICODE;_UNICODE;GUSLIB_IMP;UNICODE;_UNICODE;GUSLIBTESTDLL_EXPORTS;GUSLIB_EXP;_USRDLL;CMAKE_INTDIR="RelWithDebInfo";gussound_EXPORTS;%(PreprocessorDefinitions)</PreprocessorDefinitions>
+      <AssemblerListingLocation>RelWithDebInfo</AssemblerListingLocation>
+      <ObjectFileName>$(IntDir)</ObjectFileName>
+      <ProgramDataBaseFileName>d:/work/GustysSerpents/Serpents/RelWithDebInfo/gussound.pdb</ProgramDataBaseFileName>
+    </ClCompile>
+    <ResourceCompile>
+      <PreprocessorDefinitions>WIN32;_WINDOWS;NDEBUG;UNICODE;_UNICODE;GUSLIB_IMP;UNICODE;_UNICODE;GUSLIBTESTDLL_EXPORTS;GUSLIB_EXP;_USRDLL;CMAKE_INTDIR=\"RelWithDebInfo\";gussound_EXPORTS;%(PreprocessorDefinitions)</PreprocessorDefinitions>
+      <AdditionalIncludeDirectories>d:/work/GustysSerpents/Serpents/gussound/include;d:/work/GustysSerpents/Serpents/gussound/include/al;d:/work/GustysSerpents/Serpents/gussound/../guslib/guslib;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
+    </ResourceCompile>
+    <Midl>
+      <AdditionalIncludeDirectories>d:/work/GustysSerpents/Serpents/gussound/include;d:/work/GustysSerpents/Serpents/gussound/include/al;d:/work/GustysSerpents/Serpents/gussound/../guslib/guslib;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
+      <OutputDirectory>$(IntDir)</OutputDirectory>
+      <HeaderFileName>%(Filename).h</HeaderFileName>
+      <TypeLibraryName>%(Filename).tlb</TypeLibraryName>
+      <InterfaceIdentifierFileName>%(Filename)_i.c</InterfaceIdentifierFileName>
+      <ProxyFileName>%(Filename)_p.c</ProxyFileName>
+    </Midl>
+    <Link>
+      <AdditionalOptions> /machine:X86 /debug %(AdditionalOptions)</AdditionalOptions>
+      <AdditionalDependencies>kernel32.lib;user32.lib;gdi32.lib;winspool.lib;shell32.lib;ole32.lib;oleaut32.lib;uuid.lib;comdlg32.lib;advapi32.lib;..\guslib\guslib\RelWithDebInfo\guslib.lib;..\dependencies\audiere\audiere.lib;..\dependencies\libogg\lib\Release\libogg_static.lib;..\dependencies\openal\OpenAL32.lib;..\dependencies\freealut\alut.lib;..\dependencies\vorbis\Release\libvorbis_static.lib;..\dependencies\vorbis\Release\libvorbisfile_static.lib</AdditionalDependencies>
+      <AdditionalLibraryDirectories>%(AdditionalLibraryDirectories)</AdditionalLibraryDirectories>
+      <GenerateDebugInformation>true</GenerateDebugInformation>
+      <ImportLibrary>d:/work/GustysSerpents/Serpents/gussound/RelWithDebInfo/gussound.lib</ImportLibrary>
+      <ProgramDataBaseFile>d:/work/GustysSerpents/Serpents/RelWithDebInfo/gussound.pdb</ProgramDataBaseFile>
+      <SubSystem>Console</SubSystem>
+      <Version></Version>
+    </Link>
+    <ProjectReference>
+      <LinkLibraryDependencies>false</LinkLibraryDependencies>
+    </ProjectReference>
+  </ItemDefinitionGroup>
+  <ItemGroup>
+    <CustomBuild Include="CMakeLists.txt">
+      <Message Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">Building Custom Rule d:/work/GustysSerpents/Serpents/gussound/CMakeLists.txt</Message>
+      <Command Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">setlocal
+"C:\Program Files (x86)\CMake 2.8\bin\cmake.exe" -Hd:/work/GustysSerpents/Serpents -Bd:/work/GustysSerpents/Serpents --check-stamp-file d:\work\GustysSerpents\Serpents\gussound\CMakeFiles\generate.stamp
+if %errorlevel% neq 0 goto :cmEnd
+:cmEnd
+endlocal &amp; call :cmErrorLevel %errorlevel% &amp; goto :cmDone
+:cmErrorLevel
+exit /b %1
+:cmDone
+if %errorlevel% neq 0 goto :VCEnd</Command>
+      <AdditionalInputs Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">d:/work/GustysSerpents/Serpents/gussound/CMakeLists.txt;d:\work\GustysSerpents\Serpents\gussound\CMakeLists.txt;d:\work\GustysSerpents\Serpents\cmake\guslibutils.cmake;d:\work\GustysSerpents\Serpents\cmake\FindOpenAL.cmake;d:\work\GustysSerpents\Serpents\cmake\FindALUT.cmake;C:\Program Files (x86)\CMake 2.8\share\cmake-2.8\Modules\FindPackageHandleStandardArgs.cmake;C:\Program Files (x86)\CMake 2.8\share\cmake-2.8\Modules\FindPackageMessage.cmake;C:\Program Files (x86)\CMake 2.8\share\cmake-2.8\Modules\CMakeParseArguments.cmake;d:\work\GustysSerpents\Serpents\cmake\HandleLibraryTypes.cmake;d:\work\GustysSerpents\Serpents\cmake\FindOgg.cmake;C:\Program Files (x86)\CMake 2.8\share\cmake-2.8\Modules\FindPackageHandleStandardArgs.cmake;C:\Program Files (x86)\CMake 2.8\share\cmake-2.8\Modules\FindPackageMessage.cmake;C:\Program Files (x86)\CMake 2.8\share\cmake-2.8\Modules\CMakeParseArguments.cmake;d:\work\GustysSerpents\Serpents\cmake\HandleLibraryTypes.cmake;d:\work\GustysSerpents\Serpents\cmake\FindVorbis.cmake;C:\Program Files (x86)\CMake 2.8\share\cmake-2.8\Modules\FindPackageHandleStandardArgs.cmake;C:\Program Files (x86)\CMake 2.8\share\cmake-2.8\Modules\FindPackageMessage.cmake;C:\Program Files (x86)\CMake 2.8\share\cmake-2.8\Modules\CMakeParseArguments.cmake;d:\work\GustysSerpents\Serpents\cmake\HandleLibraryTypes.cmake;d:\work\GustysSerpents\Serpents\cmake\FindAudiere.cmake;C:\Program Files (x86)\CMake 2.8\share\cmake-2.8\Modules\FindPackageHandleStandardArgs.cmake;C:\Program Files (x86)\CMake 2.8\share\cmake-2.8\Modules\FindPackageMessage.cmake;C:\Program Files (x86)\CMake 2.8\share\cmake-2.8\Modules\CMakeParseArguments.cmake;d:\work\GustysSerpents\Serpents\cmake\HandleLibraryTypes.cmake;d:\work\GustysSerpents\Serpents\gussound\CMakeLists.txt;%(AdditionalInputs)</AdditionalInputs>
+      <Outputs Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">d:\work\GustysSerpents\Serpents\gussound\CMakeFiles\generate.stamp</Outputs>
+      <Message Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">Building Custom Rule d:/work/GustysSerpents/Serpents/gussound/CMakeLists.txt</Message>
+      <Command Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">setlocal
+"C:\Program Files (x86)\CMake 2.8\bin\cmake.exe" -Hd:/work/GustysSerpents/Serpents -Bd:/work/GustysSerpents/Serpents --check-stamp-file d:\work\GustysSerpents\Serpents\gussound\CMakeFiles\generate.stamp
+if %errorlevel% neq 0 goto :cmEnd
+:cmEnd
+endlocal &amp; call :cmErrorLevel %errorlevel% &amp; goto :cmDone
+:cmErrorLevel
+exit /b %1
+:cmDone
+if %errorlevel% neq 0 goto :VCEnd</Command>
+      <AdditionalInputs Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">d:/work/GustysSerpents/Serpents/gussound/CMakeLists.txt;d:\work\GustysSerpents\Serpents\gussound\CMakeLists.txt;d:\work\GustysSerpents\Serpents\cmake\guslibutils.cmake;d:\work\GustysSerpents\Serpents\cmake\FindOpenAL.cmake;d:\work\GustysSerpents\Serpents\cmake\FindALUT.cmake;C:\Program Files (x86)\CMake 2.8\share\cmake-2.8\Modules\FindPackageHandleStandardArgs.cmake;C:\Program Files (x86)\CMake 2.8\share\cmake-2.8\Modules\FindPackageMessage.cmake;C:\Program Files (x86)\CMake 2.8\share\cmake-2.8\Modules\CMakeParseArguments.cmake;d:\work\GustysSerpents\Serpents\cmake\HandleLibraryTypes.cmake;d:\work\GustysSerpents\Serpents\cmake\FindOgg.cmake;C:\Program Files (x86)\CMake 2.8\share\cmake-2.8\Modules\FindPackageHandleStandardArgs.cmake;C:\Program Files (x86)\CMake 2.8\share\cmake-2.8\Modules\FindPackageMessage.cmake;C:\Program Files (x86)\CMake 2.8\share\cmake-2.8\Modules\CMakeParseArguments.cmake;d:\work\GustysSerpents\Serpents\cmake\HandleLibraryTypes.cmake;d:\work\GustysSerpents\Serpents\cmake\FindVorbis.cmake;C:\Program Files (x86)\CMake 2.8\share\cmake-2.8\Modules\FindPackageHandleStandardArgs.cmake;C:\Program Files (x86)\CMake 2.8\share\cmake-2.8\Modules\FindPackageMessage.cmake;C:\Program Files (x86)\CMake 2.8\share\cmake-2.8\Modules\CMakeParseArguments.cmake;d:\work\GustysSerpents\Serpents\cmake\HandleLibraryTypes.cmake;d:\work\GustysSerpents\Serpents\cmake\FindAudiere.cmake;C:\Program Files (x86)\CMake 2.8\share\cmake-2.8\Modules\FindPackageHandleStandardArgs.cmake;C:\Program Files (x86)\CMake 2.8\share\cmake-2.8\Modules\FindPackageMessage.cmake;C:\Program Files (x86)\CMake 2.8\share\cmake-2.8\Modules\CMakeParseArguments.cmake;d:\work\GustysSerpents\Serpents\cmake\HandleLibraryTypes.cmake;d:\work\GustysSerpents\Serpents\gussound\CMakeLists.txt;%(AdditionalInputs)</AdditionalInputs>
+      <Outputs Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">d:\work\GustysSerpents\Serpents\gussound\CMakeFiles\generate.stamp</Outputs>
+      <Message Condition="'$(Configuration)|$(Platform)'=='MinSizeRel|Win32'">Building Custom Rule d:/work/GustysSerpents/Serpents/gussound/CMakeLists.txt</Message>
+      <Command Condition="'$(Configuration)|$(Platform)'=='MinSizeRel|Win32'">setlocal
+"C:\Program Files (x86)\CMake 2.8\bin\cmake.exe" -Hd:/work/GustysSerpents/Serpents -Bd:/work/GustysSerpents/Serpents --check-stamp-file d:\work\GustysSerpents\Serpents\gussound\CMakeFiles\generate.stamp
+if %errorlevel% neq 0 goto :cmEnd
+:cmEnd
+endlocal &amp; call :cmErrorLevel %errorlevel% &amp; goto :cmDone
+:cmErrorLevel
+exit /b %1
+:cmDone
+if %errorlevel% neq 0 goto :VCEnd</Command>
+      <AdditionalInputs Condition="'$(Configuration)|$(Platform)'=='MinSizeRel|Win32'">d:/work/GustysSerpents/Serpents/gussound/CMakeLists.txt;d:\work\GustysSerpents\Serpents\gussound\CMakeLists.txt;d:\work\GustysSerpents\Serpents\cmake\guslibutils.cmake;d:\work\GustysSerpents\Serpents\cmake\FindOpenAL.cmake;d:\work\GustysSerpents\Serpents\cmake\FindALUT.cmake;C:\Program Files (x86)\CMake 2.8\share\cmake-2.8\Modules\FindPackageHandleStandardArgs.cmake;C:\Program Files (x86)\CMake 2.8\share\cmake-2.8\Modules\FindPackageMessage.cmake;C:\Program Files (x86)\CMake 2.8\share\cmake-2.8\Modules\CMakeParseArguments.cmake;d:\work\GustysSerpents\Serpents\cmake\HandleLibraryTypes.cmake;d:\work\GustysSerpents\Serpents\cmake\FindOgg.cmake;C:\Program Files (x86)\CMake 2.8\share\cmake-2.8\Modules\FindPackageHandleStandardArgs.cmake;C:\Program Files (x86)\CMake 2.8\share\cmake-2.8\Modules\FindPackageMessage.cmake;C:\Program Files (x86)\CMake 2.8\share\cmake-2.8\Modules\CMakeParseArguments.cmake;d:\work\GustysSerpents\Serpents\cmake\HandleLibraryTypes.cmake;d:\work\GustysSerpents\Serpents\cmake\FindVorbis.cmake;C:\Program Files (x86)\CMake 2.8\share\cmake-2.8\Modules\FindPackageHandleStandardArgs.cmake;C:\Program Files (x86)\CMake 2.8\share\cmake-2.8\Modules\FindPackageMessage.cmake;C:\Program Files (x86)\CMake 2.8\share\cmake-2.8\Modules\CMakeParseArguments.cmake;d:\work\GustysSerpents\Serpents\cmake\HandleLibraryTypes.cmake;d:\work\GustysSerpents\Serpents\cmake\FindAudiere.cmake;C:\Program Files (x86)\CMake 2.8\share\cmake-2.8\Modules\FindPackageHandleStandardArgs.cmake;C:\Program Files (x86)\CMake 2.8\share\cmake-2.8\Modules\FindPackageMessage.cmake;C:\Program Files (x86)\CMake 2.8\share\cmake-2.8\Modules\CMakeParseArguments.cmake;d:\work\GustysSerpents\Serpents\cmake\HandleLibraryTypes.cmake;d:\work\GustysSerpents\Serpents\gussound\CMakeLists.txt;%(AdditionalInputs)</AdditionalInputs>
+      <Outputs Condition="'$(Configuration)|$(Platform)'=='MinSizeRel|Win32'">d:\work\GustysSerpents\Serpents\gussound\CMakeFiles\generate.stamp</Outputs>
+      <Message Condition="'$(Configuration)|$(Platform)'=='RelWithDebInfo|Win32'">Building Custom Rule d:/work/GustysSerpents/Serpents/gussound/CMakeLists.txt</Message>
+      <Command Condition="'$(Configuration)|$(Platform)'=='RelWithDebInfo|Win32'">setlocal
+"C:\Program Files (x86)\CMake 2.8\bin\cmake.exe" -Hd:/work/GustysSerpents/Serpents -Bd:/work/GustysSerpents/Serpents --check-stamp-file d:\work\GustysSerpents\Serpents\gussound\CMakeFiles\generate.stamp
+if %errorlevel% neq 0 goto :cmEnd
+:cmEnd
+endlocal &amp; call :cmErrorLevel %errorlevel% &amp; goto :cmDone
+:cmErrorLevel
+exit /b %1
+:cmDone
+if %errorlevel% neq 0 goto :VCEnd</Command>
+      <AdditionalInputs Condition="'$(Configuration)|$(Platform)'=='RelWithDebInfo|Win32'">d:/work/GustysSerpents/Serpents/gussound/CMakeLists.txt;d:\work\GustysSerpents\Serpents\gussound\CMakeLists.txt;d:\work\GustysSerpents\Serpents\cmake\guslibutils.cmake;d:\work\GustysSerpents\Serpents\cmake\FindOpenAL.cmake;d:\work\GustysSerpents\Serpents\cmake\FindALUT.cmake;C:\Program Files (x86)\CMake 2.8\share\cmake-2.8\Modules\FindPackageHandleStandardArgs.cmake;C:\Program Files (x86)\CMake 2.8\share\cmake-2.8\Modules\FindPackageMessage.cmake;C:\Program Files (x86)\CMake 2.8\share\cmake-2.8\Modules\CMakeParseArguments.cmake;d:\work\GustysSerpents\Serpents\cmake\HandleLibraryTypes.cmake;d:\work\GustysSerpents\Serpents\cmake\FindOgg.cmake;C:\Program Files (x86)\CMake 2.8\share\cmake-2.8\Modules\FindPackageHandleStandardArgs.cmake;C:\Program Files (x86)\CMake 2.8\share\cmake-2.8\Modules\FindPackageMessage.cmake;C:\Program Files (x86)\CMake 2.8\share\cmake-2.8\Modules\CMakeParseArguments.cmake;d:\work\GustysSerpents\Serpents\cmake\HandleLibraryTypes.cmake;d:\work\GustysSerpents\Serpents\cmake\FindVorbis.cmake;C:\Program Files (x86)\CMake 2.8\share\cmake-2.8\Modules\FindPackageHandleStandardArgs.cmake;C:\Program Files (x86)\CMake 2.8\share\cmake-2.8\Modules\FindPackageMessage.cmake;C:\Program Files (x86)\CMake 2.8\share\cmake-2.8\Modules\CMakeParseArguments.cmake;d:\work\GustysSerpents\Serpents\cmake\HandleLibraryTypes.cmake;d:\work\GustysSerpents\Serpents\cmake\FindAudiere.cmake;C:\Program Files (x86)\CMake 2.8\share\cmake-2.8\Modules\FindPackageHandleStandardArgs.cmake;C:\Program Files (x86)\CMake 2.8\share\cmake-2.8\Modules\FindPackageMessage.cmake;C:\Program Files (x86)\CMake 2.8\share\cmake-2.8\Modules\CMakeParseArguments.cmake;d:\work\GustysSerpents\Serpents\cmake\HandleLibraryTypes.cmake;d:\work\GustysSerpents\Serpents\gussound\CMakeLists.txt;%(AdditionalInputs)</AdditionalInputs>
+      <Outputs Condition="'$(Configuration)|$(Platform)'=='RelWithDebInfo|Win32'">d:\work\GustysSerpents\Serpents\gussound\CMakeFiles\generate.stamp</Outputs>
+    </CustomBuild>
+  </ItemGroup>
+  <ItemGroup>
+    <ClInclude Include="include\audiere.h" />
+    <ClInclude Include="include\gaudiere.h" />
+    <ClInclude Include="include\goggstreamedsound.h" />
+    <ClInclude Include="include\gopenal.h" />
+    <ClInclude Include="include\gussound.h" />
+    <ClCompile Include="src\gaudiere.cpp"  />
+    <ClCompile Include="src\goggstreamedsound.cpp"  />
+    <ClCompile Include="src\gopenal.cpp"  />
+    <ClCompile Include="src\gussound.cpp"  />
+  </ItemGroup>
+  <ItemGroup>
+    <ProjectReference Include="d:/work/GustysSerpents/Serpents/ZERO_CHECK.vcxproj">
+      <Project>C1695A09-7BAE-45F6-A9B2-A8B45C76442E</Project>
+    </ProjectReference>
+    <ProjectReference Include="d:/work/GustysSerpents/Serpents/guslib/guslib/guslib.vcxproj">
+      <Project>AC207AB4-ED5D-470A-9BB1-4A8DCE3E147F</Project>
+    </ProjectReference>
+  </ItemGroup>
+  <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets" />
+  <ImportGroup Label="ExtensionTargets">
+  </ImportGroup>
+</Project>

@@ -1,0 +1,45 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<Project ToolsVersion="4.0" xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
+  <ItemGroup>
+    <ClCompile Include="src\gaudiere.cpp">
+      <Filter>src</Filter>
+    </ClCompile>
+    <ClCompile Include="src\goggstreamedsound.cpp">
+      <Filter>src</Filter>
+    </ClCompile>
+    <ClCompile Include="src\gopenal.cpp">
+      <Filter>src</Filter>
+    </ClCompile>
+    <ClCompile Include="src\gussound.cpp">
+      <Filter>src</Filter>
+    </ClCompile>
+  </ItemGroup>
+  <ItemGroup>
+    <ClInclude Include="include\audiere.h">
+      <Filter>include</Filter>
+    </ClInclude>
+    <ClInclude Include="include\gaudiere.h">
+      <Filter>include</Filter>
+    </ClInclude>
+    <ClInclude Include="include\goggstreamedsound.h">
+      <Filter>include</Filter>
+    </ClInclude>
+    <ClInclude Include="include\gopenal.h">
+      <Filter>include</Filter>
+    </ClInclude>
+    <ClInclude Include="include\gussound.h">
+      <Filter>include</Filter>
+    </ClInclude>
+  </ItemGroup>
+  <ItemGroup>
+    <CustomBuild Include="CMakeLists.txt" />
+  </ItemGroup>
+  <ItemGroup>
+    <Filter Include="src">
+      <UniqueIdentifier>{37C71510-062F-483A-828F-8E754897DFB8}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="include">
+      <UniqueIdentifier>{BEE33AE9-827F-403A-A272-B0E70F06F0F6}</UniqueIdentifier>
+    </Filter>
+  </ItemGroup>
+</Project>

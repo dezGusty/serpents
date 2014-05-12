@@ -1,0 +1,22 @@
+Allow using several sources.
+These should be used for sound effects.
+
+The sound effects will support playing both 2D and 3D mode sounds for the same content, but with different source locations.
+
+Limitations: you cannot control individually a sound once you start it?
+  E.g. play a taunting sound from 2-3 creeps. You're running away from it. You should be able to update and lower the sound volume for all of them.
+  
+
+Functions are needed to obtain the length of a sound to be used as an effect.
+Music Management classes are still needed.
+The sound effects and music sounds could be considered to be different enough to warrant the use of separate classes.
+
+Classes:
+- SoundContent (buffer/stream), containing length, size, playback rate, information
+- SoundSource (source + link to sound content?)
+    => you should be able to create an anonymous source and play it 2D/3D in a simple manner, with no further control.
+    => you should be able to also create a named source and control it in a complex manner afterwards.
+- SoundManager, MusicPlayer, etc: just as up to now.
+    => ogg_streaming helper class (SoundContent related) should contain needed functionality, if not available in OpenAL directly.
+    
+TODO: add version information to gussound.

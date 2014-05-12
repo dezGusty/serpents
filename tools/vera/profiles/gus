@@ -1,0 +1,120 @@
+# This file defines the set of scripts (rules) that should be executed
+# when dealing with the ACT project.
+# Here is a short description of the rules in use:
+#   # Source files should not use the '\r' (CR) character
+#     F001
+#   
+#   # File names should be well-formed  
+#   # max-directory-depth     8         Maximum depth of the directory structure.
+#   # max-dirname-length      31        Maximum length of the directory path component.
+#   # max-filename-length     31        Maximum length of the leaf file name.
+#   # max-path-length         100       Maximum length of the full path.
+#   # Augustin Preda, 2014.03.26: decision: we don't care about this issue.
+#   #   F002
+#   
+#   # No trailing whitespace
+#   # Augustin Preda, 2014.03.26: this shall be ignored. White space is added by VS as a default and desired by cpplint.
+#   #   L001
+#   
+#   # Don't use tab characters
+#     L002
+#   
+#   # No leading and no trailing empty lines
+#     L003
+#     
+#   # Line cannot be too long  
+#     L004_ext
+#     
+#   # There should not be too many consecutive empty lines  
+#     L005
+#     
+#   # Source file should not be too long
+#     L006_ext
+#     
+#   # One-line comments should not have forced continuation
+#     T001
+#     
+#   # Reserved names should not be used for preprocessor macros  
+#     T002
+#   
+#   # Some keywords should be followed by a single space  
+#     T003
+#     
+#   # Some keywords should be immediately followed by a colon  
+#     T004
+#   
+#   # Keywords break and continue should be immediately followed by a semicolon  
+#     T005
+#   
+#   # Keywords return and throw should be immediately followed by a semicolon or a single space  
+#     T006
+#   
+#   # Semicolons should not be isolated by spaces or comments from the rest of the code  
+#     T007
+#   
+#   # Keywords catch, for, if, switch and while should be followed by a single space  
+#     T008
+#     
+#   # Comma should not be preceded by whitespace, but should be followed by one  
+#     T009
+#   
+#   # Identifiers should not be composed of 'l' and 'O' characters only  
+#     T010
+#   
+#   # Curly brackets from the same pair should be either in the same line or in the same column  
+#     T011
+#     
+#   # Negation operator should not be used in its short form  
+#     T012
+#   
+#   # Source files should contain the copyright notice.
+#   # This rule verifies that at least one comment in the source file contains the "copyright" word.
+#     T013
+#     
+#   # Source files should refer the Boost Software License.
+#   # Augustin Preda, 2014.03.26: We don't apply the boost license.  
+#   #   T014
+#   
+#   # HTML links in comments and string literals should be correct
+#     T015
+#     
+#   # Calls to min/max should be protected against accidental macro substitution  
+#     T016
+#     
+#   # Unnamed namespaces are not allowed in header files  
+#     T017
+#     
+#   # Using namespace is not allowed in header files  
+#     T018
+#   
+#   # Control structures should have complete curly-braced block of code
+#     T019
+#   #SpacesAroundEqualSign.tcl
+
+set rules {
+  F001
+  L002
+  L003
+  L004_ext
+  L005
+  L006_ext
+  T001
+  T002
+  T003
+  T004
+  T005
+  T006
+  T007
+  T008
+  T009
+  T010
+  T011
+  T012
+  T013
+  T015
+  T016
+  T017
+  T018
+  T019
+  SpacesAroundEqualSign
+}
