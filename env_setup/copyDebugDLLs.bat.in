@@ -1,0 +1,163 @@
+@echo off
+
+SetLocal EnableDelayedExpansion
+SetLocal EnableExtensions
+
+Rem Inform the user about the purpose of this script
+Echo This script will copy ^(and replace^) the DLL files used by the Serpents project.
+
+Set MyTargetDirectory=../Debug
+
+Rem Call the copy function for all environment variables.
+Call :copyFileToTargetDir "${OGRE_BINARY_DBG}" !MyTargetDirectory!
+Call :copyFileToTargetDir "${OGRE_Paging_BINARY_DBG}" !MyTargetDirectory!
+Call :copyFileToTargetDir "${OGRE_Plugin_BSPSceneManager_DBG}" !MyTargetDirectory!
+Call :copyFileToTargetDir "${OGRE_Plugin_CgProgramManager_DBG}" !MyTargetDirectory!
+Call :copyFileToTargetDir "${OGRE_Plugin_OctreeSceneManager_DBG}" !MyTargetDirectory!
+Call :copyFileToTargetDir "${OGRE_Plugin_PCZSceneManager_DBG}" !MyTargetDirectory!
+Call :copyFileToTargetDir "${OGRE_Plugin_ParticleFX_DBG}" !MyTargetDirectory!
+Call :copyFileToTargetDir "${OGRE_Property_BINARY_DBG}" !MyTargetDirectory!
+Call :copyFileToTargetDir "${OGRE_RTShaderSystem_BINARY_DBG}" !MyTargetDirectory!
+Call :copyFileToTargetDir "${OGRE_RenderSystem_Direct3D9_DBG}" !MyTargetDirectory!
+Call :copyFileToTargetDir "${OGRE_RenderSystem_GL_DBG}" !MyTargetDirectory!
+Call :copyFileToTargetDir "${OGRE_Terrain_BINARY_DBG}" !MyTargetDirectory!
+
+Call :copyFileToTargetDir "${GUSLIB_BINARY_DBG}" !MyTargetDirectory!
+Call :copyFileToTargetDir "${ALUT_BINARY_DBG}" !MyTargetDirectory!
+Call :copyFileToTargetDir "${OGG_BINARY_DBG}" !MyTargetDirectory!
+Call :copyFileToTargetDir "${AUDIERE_BINARY_DBG}" !MyTargetDirectory!
+Call :copyFileToTargetDir "${LUA_BINARY_DBG}" !MyTargetDirectory!
+Call :copyFileToTargetDir "${OIS_BINARY_DBG}" !MyTargetDirectory!
+Call :copyFileToTargetDir "${CEGUI_BINARY_DBG}" !MyTargetDirectory!
+
+Call :copyFileToTargetDir "../guslib/guslib/Debug/guslib.dll" !MyTargetDirectory!
+
+Pause
+GoTo :eof
+
+Rem
+Rem Copy a file to the target directory
+Rem @param %1 The file to copy.
+Rem @param %2 The target directory.
+Rem
+:copyFileToTargetDir
+  Set _fileToCopy=%1
+  Set _targetDir=%2
+  Echo.Should copy [!_fileToCopy!] to [!_targetDir!].
+  If Exist !_fileToCopy! (
+    Set _my_folder=
+    Set _my_file=
+    Call :extractLastFileOrFolder _my_folder _my_file !_fileToCopy!
+  
+    Rem Echo.File: !_my_file!
+    Rem Echo.Folder: !_my_folder!
+    
+    Rem Correct the folder name: remove quotation marks
+    set _targetDir=!_targetDir:"=!
+    
+    Rem Do the same for the file
+    Set _my_file=!_my_file:"=!
+  
+    Rem The copy operation does not work with forward slashes, only back-slashes. Replace the chars
+    Set _targetDir=!_targetDir:/=\!
+    
+    Rem The copy operation does not work with forward slashes, only back-slashes. Replace the chars
+    Set _fileToCopy=!_fileToCopy:/=\!
+  
+    If Exist !_fileToCopy! (
+      Copy !_fileToCopy! !_targetDir!\!_my_file!
+    )
+  )
+
+GoTo :eof
+
+
+Rem
+Rem SubFunction for extractLastFileOrFolder
+Rem
+:addSubPath sPathParam
+  If Not "!sResultFile!"=="" (
+    If "!sResultFolder!"=="" (
+      Set sResultFolder=!sResultFile!
+    ) Else (
+      Set sResultFolder=!sResultFolder!\!sResultFile!
+    )
+  )
+  Set sResultFile=%1
+GoTo :eof
+
+
+Rem
+Rem Utility function that takes the full path to a file as input and separates the folder and file names.
+Rem Limitation: no white space in file name.
+Rem Parameters:
+Rem  - %1 (output) - the folder name
+Rem  - %2 (output) - the file name
+Rem  - %3 (input) - the full path
+Rem
+:extractLastFileOrFolder sResultFolder sResultFile sFileWithPath 
+  Set sFileWithPath=%3
+  Set sResultFolder=
+  Set sResultFile=
+  REM For some reason tokens=* doesn't seem to work!!!!! So take each of the 15 tokens manually
+  For /f "tokens=1 delims=/" %%g in ("!sFileWithPath!") do Call :addSubPath %%g
+  For /f "tokens=2 delims=/" %%g in ("!sFileWithPath!") do Call :addSubPath %%g
+  For /f "tokens=3 delims=/" %%g in ("!sFileWithPath!") do Call :addSubPath %%g
+  For /f "tokens=4 delims=/" %%g in ("!sFileWithPath!") do Call :addSubPath %%g
+  For /f "tokens=5 delims=/" %%g in ("!sFileWithPath!") do Call :addSubPath %%g
+  For /f "tokens=6 delims=/" %%g in ("!sFileWithPath!") do Call :addSubPath %%g
+  For /f "tokens=7 delims=/" %%g in ("!sFileWithPath!") do Call :addSubPath %%g
+  For /f "tokens=8 delims=/" %%g in ("!sFileWithPath!") do Call :addSubPath %%g
+  For /f "tokens=9 delims=/" %%g in ("!sFileWithPath!") do Call :addSubPath %%g
+  For /f "tokens=10 delims=/" %%g in ("!sFileWithPath!") do Call :addSubPath %%g
+  For /f "tokens=11 delims=/" %%g in ("!sFileWithPath!") do Call :addSubPath %%g
+  For /f "tokens=12 delims=/" %%g in ("!sFileWithPath!") do Call :addSubPath %%g
+  For /f "tokens=13 delims=/" %%g in ("!sFileWithPath!") do Call :addSubPath %%g
+  For /f "tokens=14 delims=/" %%g in ("!sFileWithPath!") do Call :addSubPath %%g
+  For /f "tokens=15 delims=/" %%g in ("!sFileWithPath!") do Call :addSubPath %%g
+  
+  Set %1=!sResultFolder!
+  Set %2=!sResultFile!
+GoTo :eof
+
+
+Rem 
+Rem Fix the path sent as the first parameter add a "\" character at the end if one is not present.
+Rem @param %1 The name of the variable to fix (don't add %% or !! characters around it)
+Rem 
+:fixPathEnforceTrailing
+  Set _lclVar=!%1!
+  
+  Set _needToAddChar=1
+  If "!_lclVar:~-1!"=="\" (
+    Set _needToAddChar=0
+  )
+  If "!_lclVar:~-1!"=="/" (
+    Set _needToAddChar=0
+  )
+  
+  If "!_needToAddChar!"=="1" (
+    Set %1=!_lclVar!\
+  )
+GoTo :eof
+
+
+Rem 
+Rem Fix the path sent as the first parameter add remove any "\" or "/" character at the end if one is present.
+Rem @param %1 The name of the variable to fix (don't add %% or !! characters around it)
+Rem 
+:fixPathNoTrailing
+  Set _lclVar=!%1!
+  
+  Set _needToRemoveChar=0
+  If "!_lclVar:~-1!"=="\" (
+    Set _needToRemoveChar=1
+  )
+  If "!_lclVar:~-1!"=="/" (
+    Set _needToRemoveChar=1
+  )
+  
+  If "!_needToRemoveChar!"=="1" (
+    Set %1=!_lclVar:~0,-1!
+  )
+GoTo :eof
