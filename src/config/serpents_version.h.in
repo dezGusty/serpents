@@ -1,0 +1,89 @@
+#pragma once
+
+
+//
+// This file provides version information for the Serpents game.
+// If you are viewing this information in the file [serpents_version.h], keep in mind that
+// the information must be updated manually in the [serpents_version.h.in] file.
+//
+
+//
+// Utility macro:
+// Concatenate preprocessor tokens A and B without expanding macro definitions
+// (however, if invoked from a macro, macro arguments are expanded).
+//
+#define PPCAT_NX(A, B) A ## B
+
+//
+// Utility macro:
+// Concatenate preprocessor tokens A and B after macro-expanding them.
+//
+#define PPCAT(A, B) PPCAT_NX(A, B)
+
+//
+// Utility macro:
+// Turn A into a string literal without expanding macro definitions
+// (however, if invoked from a macro, macro arguments are expanded).
+//
+#define STRINGIZE_NX(A) #A
+
+//
+// Utility macro:
+// Turn A into a string literal after macro-expanding it.
+//
+#define STRINGIZE(A) STRINGIZE_NX(A)
+
+
+//
+// Define the major, minor and patch version numbers for separate use.
+// These should be used in the generation of the resource file version information.
+// Some macros also contain definitions for multiple amount of digits, used for alignment.
+//
+
+// Major version
+#define SERPENTS_NUM_MAJOR_VER_SIMPLE ${SERPENTS_VERSION_MAJOR}
+
+// Minor versions. Please keep in sync!
+#define SERPENTS_NUM_MINOR_VER_SIMPLE ${SERPENTS_VERSION_MINOR_1DIGIT}
+#define SERPENTS_NUM_MINOR_VER_2DIGITS ${SERPENTS_VERSION_MINOR_2DIGITS}
+#define SERPENTS_NUM_MINOR_VER_3DIGITS ${SERPENTS_VERSION_MINOR_3DIGITS}
+
+// Patch versions. Please keep in sync!
+#define SERPENTS_NUM_PATCH_VER_SIMPLE ${SERPENTS_VERSION_PATCH_1DIGIT}
+#define SERPENTS_NUM_PATCH_VER_2DIGITS ${SERPENTS_VERSION_PATCH_2DIGITS}
+
+
+//
+// Also define string adaptations
+//
+
+
+//	SERPENTS_NUM_VERSION % 100 is the patch level
+//	SERPENTS_NUM_VERSION / 100 % 1000 is the minor version
+//	SERPENTS_NUM_VERSION / 100000 is the major version
+
+// E.g: SERPENTS_NUM_VERSION 100000
+//                             ____XX = patch
+//							   _XXX__ = minor version
+//							   X_____ = major version
+
+#define SERPENTS_NUM_VERSION PPCAT(SERPENTS_NUM_MAJOR_VER_SIMPLE,PPCAT(SERPENTS_NUM_MINOR_VER_3DIGITS,SERPENTS_NUM_PATCH_VER_2DIGITS))
+
+
+//	SERPENTS_STRING_VERSION should be defined by the user to have the same value as SERPENTS_NUM_VERSION, but as a string, in the form
+//	"x_y[_z]", where "x" is the major version number, "y" is the minor version number, and "z" (optional) is the patch level. (if the patch level is 0,
+//	you should just skip it).
+
+#define SERPENTS_STRING_VERSION STRINGIZE(SERPENTS_NUM_MAJOR_VER_SIMPLE) "." STRINGIZE(SERPENTS_NUM_MINOR_VER_SIMPLE) "." STRINGIZE (SERPENTS_NUM_PATCH_VER_SIMPLE)
+
+
+//
+// File version
+//
+#define SERPENTS_STR_FILE_VERSION STRINGIZE(SERPENTS_NUM_MAJOR_VER_SIMPLE) "." STRINGIZE(SERPENTS_NUM_MINOR_VER_SIMPLE) "." STRINGIZE (SERPENTS_NUM_PATCH_VER_SIMPLE)
+
+//
+// Product version
+//
+#define SERPENTS_STR_PROD_VERSION STRINGIZE(SERPENTS_NUM_MAJOR_VER_SIMPLE) "." STRINGIZE(SERPENTS_NUM_MINOR_VER_SIMPLE) "." STRINGIZE (SERPENTS_NUM_PATCH_VER_SIMPLE)
+

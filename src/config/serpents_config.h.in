@@ -1,0 +1,11 @@
+#pragma once
+
+
+//
+// This file stores generic configuration options for the game Gusty's Serpents
+// If you are viewing this information in the file [serpents_config.h], keep in mind that
+// the information must be updated manually in the [serpents_config.h.in] file.
+//
+
+// Macro definition of flag that controls the suppression of Ogre related link warnings.
+#define SERPENTS_SUPPRESS_OGRE_C4251 ${SERPENTS_SUPPRESS_OGRE_C4251_NUM}

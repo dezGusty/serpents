@@ -1,0 +1,1 @@
+These files are not really part of the game. They are intended for testing purposes of various game components.

@@ -1,0 +1,98 @@
+// Resource script. Generated initially Microsoft Visual C++
+// Note: Manually edited afterwards by Augustin Preda.
+//
+#include "resource.h"
+#include "../src/config/serpents_version.h"
+
+// It seems that somehow, this header file is not included on Windows systems sometimes.
+// If you're missing this, the other macros will not be recognized and you'll encounter errors such as:
+// "error RC2144: PRIMARY LANGUAGE ID not a number"
+#ifdef _WIN32
+# include <windows.h>
+#endif
+
+#define APSTUDIO_READONLY_SYMBOLS
+
+// --------------------------------------------------------------------------
+//
+//	Application Icon - specified manually here.
+//
+
+// Icon with lowest ID value placed first to ensure application icon
+// remains consistent on all systems.
+IDI_GUS_APP_ICON        ICON                    "res\\SerpentsIcon.ico"
+
+// --------------------------------------------------------------------------
+//
+//  Version - written to configuration files by the CMake build process.
+//
+
+#if !defined(AFX_RESOURCE_DLL) || defined(AFX_TARG_NEUSD)
+#ifdef _WIN32
+LANGUAGE LANG_NEUTRAL, SUBLANG_NEUTRAL
+#endif //_WIN32
+
+VS_VERSION_INFO VERSIONINFO
+ FILEVERSION SERPENTS_NUM_MAJOR_VER_SIMPLE,SERPENTS_NUM_MINOR_VER_SIMPLE,SERPENTS_NUM_PATCH_VER_SIMPLE,0
+ PRODUCTVERSION SERPENTS_NUM_MAJOR_VER_SIMPLE,SERPENTS_NUM_MINOR_VER_SIMPLE,SERPENTS_NUM_PATCH_VER_SIMPLE,0
+ FILEFLAGSMASK 0x17L
+#ifdef _DEBUG
+ FILEFLAGS 0x1L
+#else
+ FILEFLAGS 0x0L
+#endif
+ FILEOS 0x4L
+ FILETYPE 0x1L
+ FILESUBTYPE 0x0L
+BEGIN
+    BLOCK "StringFileInfo"
+    BEGIN
+        BLOCK "000004b0"
+        BEGIN
+            VALUE "CompanyName", "Augustin Preda"
+            VALUE "FileDescription", "Serpents - game and samples"
+            VALUE "FileVersion", SERPENTS_STR_FILE_VERSION
+            VALUE "InternalName", "serpents"
+            VALUE "LegalCopyright", "Copyright © 2007-2013"
+            VALUE "OriginalFilename", "serpents.exe"
+            VALUE "ProductName", "Gusty's Serpents"
+            VALUE "ProductVersion", SERPENTS_STR_PROD_VERSION
+        END
+    END
+    BLOCK "VarFileInfo"
+    BEGIN
+        VALUE "Translation", 0x0, 1200
+    END
+END
+
+#endif    // Language neutral resources.
+
+
+#ifdef APSTUDIO_INVOKED
+/////////////////////////////////////////////////////////////////////////////
+//
+// TEXTINCLUDE
+//
+
+1 TEXTINCLUDE  
+BEGIN
+    "resource.h\0"
+END
+
+2 TEXTINCLUDE  
+BEGIN
+    "#include ""afxres.h""\r\n"
+    "\0"
+END
+
+3 TEXTINCLUDE  
+BEGIN
+    "\r\n"
+    "\0"
+END
+
+#endif    // APSTUDIO_INVOKED
+
+
+/////////////////////////////////////////////////////////////////////////////
+
