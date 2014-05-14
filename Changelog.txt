@@ -1,0 +1,34 @@
+~~~~~~~
+v.0.202
+~~~~~~~
+Changes from previous version:
+- Installer: changed installer, so that the script runs under Vista/Windows 7 as well. Tested under Windows 7 beta. Still some problems though: a warning appears at the end of the install about a possible incorrect install. Also, the uninstall process doesn't delete the start menu folders.
+- Game: Added fallback to opengl if the Direct3D cannot be used. Searching for DirectX file to identify if compatible. The error is silent, and just a warning is given to the user if he actually tries to use the Direct3D mode and it's not available.
+
+~~~~~~~
+v.0.201
+~~~~~~~
+Changes from version 0.200
+- Sound: remade sound and music handling. 2 different playlists (one for the menu, one for the game) now pause each other.
+- Sound: added in-game song display.
+- Sound: changed music files to have a constant bit rate. An extra song was added.
+- Misc: moved plugins to separate folder; fewer files in the main distribution folder.
+- Misc: tracing classes changed to use streams.
+- Misc: using OGRE Shoggoth 1.6.2.
+- Graphics: added folder icon.
+- Graphics: fixed initial display of menu contents that allowed all items to be visible for a split second.
+- Installer: modified the uninstaller so that it doesn't just delete the installation folder... because maybe the game was installed in [C:\Program Files\] ... and that would be bad!
+
+~~~~~~~
+v.0.200
+~~~~~~~
+Removed action camera (still buggy); may be reintroduced in a future version.
+Removed motion blur, since it was a scene blur. It will only be reintroduced if I manage to fix it to make it character only.
+
+Added map differentiation. Currently there are few differences between the 2 available maps, but they may increase in the future.
+Changed the game menu and moved the video settings configuration in-game.
+Added music support via additional packages. (Note that the music uses a different licence!)
+
+This is the second "big" release so far. This is the first after some serious redesign. The overall game should look the same, but the underlying engine went thru a complete overhaul.
+This may still be considered a beta version since there may be some bugs needing to be ironed out.
+Multi-threading was added, music was added, many own designed classes from the previous Serpents versions have been scrapped in favor of established standard classes. Installers (written in NSIS) were also added this time around.
