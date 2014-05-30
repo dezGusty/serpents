@@ -23,8 +23,8 @@
 //
 //   Menu background logic handling.
 //
-//   Last change:  $LastChangedDate: 2014-04-16 00:16:54 +0300 (Mi, 16 apr. 2014) $
-//   Revision:    $Revision: 648 $
+//   Last change:  $LastChangedDate: 2014-05-30 23:02:39 +0300 (V, 30 mai. 2014) $
+//   Revision:    $Revision: 652 $
 
 //
 // Includes
@@ -53,7 +53,8 @@ namespace guslib
 {
   GMenuItem::GMenuItem(const GMenu * gmMaster, const std::string & sName, const std::string & sCaption)
     : name(sName),
-      caption(sCaption)
+      caption(sCaption),
+      childSelectionIndex(0)
   {
     ptrToMenu = const_cast<GMenu *>(gmMaster);
     ptrToParent = NULL;
@@ -524,6 +525,10 @@ namespace guslib
 
   GMenu::~GMenu()
   {
+    if (0 != rootItem)
+    {
+      delete rootItem;
+    }
   }
 
   void GMenu::clearKeyMap()
@@ -550,6 +555,7 @@ namespace guslib
       }
     }
   }
+
   GMenuItem * GMenu::searchForItemByName(std::string itemName, GMenuItem * itemToSearchFrom)
   {
     if (itemToSearchFrom == NULL)

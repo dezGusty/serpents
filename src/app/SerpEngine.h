@@ -73,8 +73,8 @@ namespace app
     public:
 		virtual bool initializeRTShaderSystem(Ogre::SceneManager* sceneMgr);
 		virtual bool initializeRTShaderSystem(Ogre::SceneManager* sceneMgr, const SerpEngineStartupSettings& startupSettings);
-		void setShaderGenerator(Ogre::RTShader::ShaderGenerator* shaderGenerator) 
-		{ 
+		void setShaderGenerator(Ogre::RTShader::ShaderGenerator* shaderGenerator)
+		{
 			mShaderGenerator = shaderGenerator;
 		};
 		Ogre::RTShader::ShaderGenerator* getShaderGenerator() { return mShaderGenerator; }

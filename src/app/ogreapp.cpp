@@ -80,7 +80,7 @@
 #include "impl/MenuState.h"
 
 
-//// Define a pointer function to the Server. 
+//// Define a pointer function to the Server.
 void tlaunch_renderMain(void* op)
 {
   app::OgreApp *castedApp = static_cast<app::OgreApp*>(op);
@@ -191,7 +191,7 @@ namespace app
         {
           config_.load(targetFile);
           std::string dataFolder = guslib::filehelper::RemoveLastFolderFromName(*it, true);
-          // Store the data folder. Strip the final part from it. 
+          // Store the data folder. Strip the final part from it.
           // We'll be assuming the path starts from the parent dir of "data".
           config_["_auto_"]["dataFolder"].setAsString(dataFolder);
 
@@ -236,7 +236,7 @@ namespace app
     }
 
     // Write header to trace file.
-    // TODO(Augustin Preda, 2014.04.26): replace this header with a separate class dedicated to identifying 
+    // TODO(Augustin Preda, 2014.04.26): replace this header with a separate class dedicated to identifying
     // relevant information to place in the log file.
     GTRACE(3, "Arguments: [" << guslib::CommandLine::getProgramArguments() << "]");
     GTRACE(1, "Trace file for " << "Serpents" << " v. "<< SERPENTS_STRING_VERSION);
@@ -299,7 +299,7 @@ namespace app
 
       GUS_THREAD_TYPE thread4(tlaunch_networkingMain, this);
       // GUS_THREAD_TYPE thread4(boost::bind(&OgreApp::threadNetworkingMain, this));
-      
+
 
       if (useLogicThread_)
       {
@@ -308,7 +308,7 @@ namespace app
       }
 
       GTRACE(4, "Joining threads");
-      
+
       // Join the main thread. This means, we wait for this thread to finish.
       // It also means that we must ensure that the other threads will be finished prior to this main thread.
       thread1.join();
@@ -729,9 +729,9 @@ namespace app
     Ogre::RenderSystem *rsys = NULL;
     std::string preferredRenderer = config_["video"]["preferredEngine"].getAsStringOrDefaultVal("Direct3D");
 
-    // The rendered name is stored in the config file as either Direct3D or OpenGL. But Ogre does not recognize 
+    // The rendered name is stored in the config file as either Direct3D or OpenGL. But Ogre does not recognize
     // those names. So parse the name to something that is recognized by Ogre.
-    preferredRenderer = app::SerpentsGameHelper::getPtr()->getDriverNameForPseudoName(preferredRenderer); 
+    preferredRenderer = app::SerpentsGameHelper::getPtr()->getDriverNameForPseudoName(preferredRenderer);
     app::SerpentsGameHelper::getPtr()->setPreferredRendererName(preferredRenderer);
 
     Ogre::RenderSystemList renderers = ogreRootPtr_->getAvailableRenderers();
@@ -753,7 +753,7 @@ namespace app
           {
             Ogre::StringVector possibleValues = optit->second.possibleValues;
             app::SerpentsGameHelper::get().getEditableResolutionsMapping()[rsName].clear();
-        
+
             for (Ogre::StringVector::const_iterator subit = possibleValues.begin();
               subit != possibleValues.end(); ++subit)
             {
@@ -893,7 +893,7 @@ namespace app
     miscParams["displayFrequency"] = Ogre::StringConverter::toString(0);
     GTRACE(4, "Setting colour depth to : " << colourDepth);
     miscParams["colourDepth"] =  Ogre::StringConverter::toString(colourDepth);
-    
+
     renderWindowPtr_ = ogreRootPtr_->createRenderWindow("Gusty's Serpents", width, height,
                       fullscreen, &miscParams);
     GTRACE(3, "Created app window, size=" << renderWindowPtr_->getWidth() << "," << renderWindowPtr_->getHeight()
@@ -904,7 +904,8 @@ namespace app
 
     // store the used resolution in the helper.
     {
-      int dummyX, dummyY;
+      int dummyX = 0;
+      int dummyY = 0;
       std::string sampleResolutionForRenderer = app::SerpentsGameHelper::getPtr()->retrieveSampleRenderSystemWindowSize(
           ogreRootPtr_, dummyX, dummyY);
       sampleResolutionForRenderer = app::SerpentsGameHelper::getPtr()->getUpdatedResolutionString(
@@ -938,7 +939,7 @@ namespace app
     // 1 - TFO_BILINEAR
     // 2 - TFO_TRILINEAR
     // 3 - TFO_ANISOTROPIC
-    
+
     int textureFilteringMode = config_["video"]["textureFiltering"].getAsIntOrDefaultVal(3);
 
     // Change the default texture filtering mode.
@@ -1294,7 +1295,7 @@ namespace app
 
     int iSleep = 10; // TODO: get from config. GBaseAppSettings::getPtr()->setting.perf.cpuSleep;
     GTRACE(3, "OgreApp::threadLogicHandlingMain done waiting for init. starting translation.");
-    
+
     // do the loop
     bool bKeepLoop = true;
     while (bKeepLoop)

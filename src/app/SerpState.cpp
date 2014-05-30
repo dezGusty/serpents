@@ -37,7 +37,7 @@ namespace app
 
 
 	void SerpStateManagerUtil::setListener (const SerpStateManagerListener * aListener)
-	{ 
+	{
 		listenerPtr_ = const_cast<SerpStateManagerListener*> (aListener);
 	}
 
@@ -267,7 +267,7 @@ namespace app
 			return retVal;
 		}
 		GTRACE(6, "SerpStateManagerUtil: renderScene has no states!.");
-		
+
 		return false;
 	}
 

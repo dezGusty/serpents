@@ -406,23 +406,19 @@ namespace gussound
       return;
     }
 
-    for (SoundEffectList::iterator iter = deletionList_.begin();
-      iter != deletionList_.end(); ++iter)
+    SoundEffectList::iterator iter = deletionList_.begin();
+    for (SoundEffectList::iterator iter2 = tempEffectList_.begin();
+      iter2 != tempEffectList_.end(); ++iter2)
     {
-      for (SoundEffectList::iterator iter2 = tempEffectList_.begin();
-        iter2 != tempEffectList_.end(); ++iter2)
+      if (* iter == * iter2)
       {
-        if (* iter == * iter2)
-        {
-          GTRACE(7, "EffectableSound::elapseTime removing effect");
-          tempEffectList_.erase(iter2);
-          break;
-        }
+        GTRACE(7, "EffectableSound::elapseTime removing effect");
+        tempEffectList_.erase(iter2);
+        break;
       }
-
-      deletionList_.erase(iter);
-      break;
     }
+
+    deletionList_.erase(iter);
 
     for (SoundEffectList::iterator iter = tempEffectList_.begin();
       iter != tempEffectList_.end(); ++iter)

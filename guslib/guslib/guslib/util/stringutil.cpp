@@ -21,8 +21,8 @@
 //   OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN
 //   THE SOFTWARE.
 //
-//   Last change:  $LastChangedDate: 2014-04-25 21:56:20 +0300 (V, 25 apr. 2014) $
-//   Revision:    $Revision: 649 $
+//   Last change:  $LastChangedDate: 2014-05-30 23:02:39 +0300 (V, 30 mai. 2014) $
+//   Revision:    $Revision: 652 $
 
 
 //
@@ -156,8 +156,9 @@ namespace guslib
       case UpperCase:
         return "FALSE";
       default:
-        return "False";
+        break;
       }  // fall through
+
       return "False";
     }
 

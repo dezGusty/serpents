@@ -13,7 +13,7 @@ namespace app
 
 
 	/// The base class for frame listeners in the base framework
-	class SerpFrameListener 
+	class SerpFrameListener
 		: public Ogre::FrameListener
 		, public Ogre::WindowEventListener
 	{
@@ -21,7 +21,7 @@ namespace app
 		//guslib::GMutex inputObjectsAccessMutex; // mouse and kb object access.
 		//guslib::GMutex windowOperationsMutex; // window close, render frame, etc.
 		Ogre::RenderWindow* renderWindowPtr_;
-		
+
 		//	OIS Input devices
 
 		OIS::InputManager* inputManagerPtr_;

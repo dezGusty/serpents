@@ -43,7 +43,7 @@ namespace app
 	bool SerpEngine::renderCompleteScene ()
 	{
 		// This is basically a copy of the standard OGRE root function "renderOneFrame".
-		// What it does in addition to the aforementioned function is to add a mutex lock for 
+		// What it does in addition to the aforementioned function is to add a mutex lock for
 		// loading and rendering operations.
 		// The function should be called from the rendering thread!
 
@@ -132,7 +132,7 @@ namespace app
 
 	void SerpEngine::setConfig (guslib::Configuration& config)
 	{
-		config_= config; 
+		config_= config;
 	}
 
 	void SerpEngine::shutDown()
@@ -150,7 +150,7 @@ namespace app
 
 
 	void SerpEngine::setFrameListener (SerpFrameListener * ptr)
-	{ 
+	{
 		GTRACE (3, "SerpEngine: received frame listener");
 		if (frameListenerPtr_)
 		{
@@ -244,7 +244,7 @@ namespace app
 	{
 		GTRACE (4, "SerpEngine: pressed mouse button");
 		utils::CEGUIHelperUtil::injectMouseButtonDown (id);
-		
+
 		// TODO: this limits the possibilities of subclasses a lot; should consider sending the full event.
 		stateManager_.reactToMousePressed (id, e.state.X.abs, e.state.Y.abs);
 		return true;
@@ -327,8 +327,8 @@ namespace app
 				}
 			}
 			// Core libs path found in the current group.
-			if (coreLibsFound) 
-				break; 
+			if (coreLibsFound)
+				break;
 		}
 
 		if (rtssUsesMemoryCache)
@@ -340,15 +340,15 @@ namespace app
 		{
 			mShaderGenerator->setShaderCachePath (shaderCachePath);
 		}
-		
+
 		GTRACE (3, "The entry [RTShaderLib] was " << (coreLibsFound ? "" : "NOT ") << "found in the resources list");
 
 		// Core shader libs not found -> shader generating will fail.
-		if (shaderCoreLibsPath.empty())			
-			return false;			
+		if (shaderCoreLibsPath.empty())
+			return false;
 
 		// Create and register the material manager listener.
-		//mMaterialMgrListener = new ShaderGeneratorTechniqueResolverListener(mShaderGenerator);				
+		//mMaterialMgrListener = new ShaderGeneratorTechniqueResolverListener(mShaderGenerator);
 		//Ogre::MaterialManager::getSingleton().addListener(mMaterialMgrListener);
 		return true;
 	}

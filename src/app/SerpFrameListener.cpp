@@ -37,7 +37,7 @@ namespace app
 		params.insert (std::make_pair (std::string ("w32_mouse"), std::string ("DISCL_FOREGROUND")));
 		params.insert (std::make_pair (std::string ("w32_mouse"), std::string ("DISCL_NONEXCLUSIVE")));
 		params.insert (std::make_pair (std::string ("w32_keyboard"), std::string ("DISCL_FOREGROUND")));
-		params.insert (std::make_pair (std::string ("w32_keyboard"), std::string ("DISCL_NONEXCLUSIVE"))); 
+		params.insert (std::make_pair (std::string ("w32_keyboard"), std::string ("DISCL_NONEXCLUSIVE")));
 
 		inputManagerPtr_ = InputManager::createInputSystem (params);
 
@@ -81,7 +81,7 @@ namespace app
 
 
 	void SerpFrameListener::releaseEngine ()
-	{ 
+	{
 		GTRACE(4, "GBaseFrameListener received command to release engine. Setting ptr to engine to NULL. (Engine not deleted).");
 		enginePtr_ = NULL;
 	}
@@ -171,7 +171,7 @@ namespace app
 		if (! renderWindowPtr_)
 			return false;
 
-		if (renderWindowPtr_->isClosed ())	
+		if (renderWindowPtr_->isClosed ())
 			return false;
 
 		//guslib::GScopedLock myLock(windowOperationsMutex);
@@ -197,7 +197,7 @@ namespace app
 		if (renderWindowPtr_ == NULL)
 			return false;
 
-		if( this->renderWindowPtr_->isClosed())	
+		if( this->renderWindowPtr_->isClosed())
 			return false;
 
 		bool result=true;

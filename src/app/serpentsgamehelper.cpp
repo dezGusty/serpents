@@ -337,7 +337,7 @@ namespace app
           it != myCfgMap.end();
           ++it)
       {
-        GTRACE(4, "option name=[" << it->second.name << "], val=[" << it->second.currentValue << "]");
+        GTRACE(4, "option name = [" << it->second.name << "], val = [" << it->second.currentValue << "]");
       }
 
       Ogre::ConfigOptionMap::iterator opt_it = myCfgMap.find("Video Mode");
@@ -745,7 +745,7 @@ namespace app
     Note: not tested for Linux & Apple platforms, maybe in those cases the information is not available.
     Then again, maybe it's needed on those platforms.
     @param iconID A numerical identifier for the icon.
-    Note: on Windows, this should be the ID of the icon in the resource file. As an example: add the 
+    Note: on Windows, this should be the ID of the icon in the resource file. As an example: add the
     constant IDI_MY_ICON in the header file
       [MyResource.h]
       #define IDI_MY_ICON  101
@@ -900,7 +900,7 @@ namespace app
    * If you only add resource locations using the standard OGRE functions, this function will have no effect.
    *
    * This will be mainly used to load resource groups after the aspect ratio is calculated.
-   * The aspect ratio will be specified as a custom string in the resource paths. 
+   * The aspect ratio will be specified as a custom string in the resource paths.
    * That custom string (E.g. "$(ASPECT_RATIO)") will need to be replaced by the string
    * of the actual aspect ratio, corresponding to a folder name (E.g. "016_009");
    * @author Augustin Preda

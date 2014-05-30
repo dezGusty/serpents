@@ -26,8 +26,8 @@
 //
 //   Menu background logic handling.
 //
-//   Last change:  $LastChangedDate: 2014-04-16 00:16:54 +0300 (Mi, 16 apr. 2014) $
-//   Revision:    $Revision: 648 $
+//   Last change:  $LastChangedDate: 2014-05-30 23:02:39 +0300 (V, 30 mai. 2014) $
+//   Revision:    $Revision: 652 $
 
 //
 // Includes
@@ -109,14 +109,17 @@ namespace guslib
     {
       return auxData;
     }
+
     virtual std::string getCaption()
     {
       return caption;
     }
+
     const GMenuItemList getChildren() const
     {
       return children;
     }
+
     virtual int getItemDepth()
     {
       return itemDepth;
@@ -126,13 +129,16 @@ namespace guslib
     {
       return name;
     }
+    
     virtual GMenuItem * getSelectedChild();
     virtual int getSelectedChildIndex();
+    
     virtual const std::string &getType()
     {
       static std::string s("menu");
       return s;
     }
+
     virtual bool hasChildren()
     {
       return children.size() > 0;

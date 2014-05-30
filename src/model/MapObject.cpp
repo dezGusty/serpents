@@ -41,6 +41,8 @@ namespace Serpents
 	DPOINT MapObject::getLocation() const
 	{
 		DPOINT ret;
+    ret.x = ret.y = 0;
+
 		switch( pivot )
 		{
 		case CenterPivot:
@@ -65,6 +67,8 @@ namespace Serpents
 	DPOINT MapObject::getSize() const
 	{
 		DPOINT ret;
+    ret.x = ret.y = 0;
+
 		switch( pivot )
 		{
 		case CenterPivot:

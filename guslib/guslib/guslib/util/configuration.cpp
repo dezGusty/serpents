@@ -23,8 +23,8 @@
 //
 //   Application configuration utility.
 //
-//   Last change:  $LastChangedDate: 2014-04-25 21:56:20 +0300 (V, 25 apr. 2014) $
-//   Revision:    $Revision: 649 $
+//   Last change:  $LastChangedDate: 2014-05-30 23:02:39 +0300 (V, 30 mai. 2014) $
+//   Revision:    $Revision: 652 $
 
 //
 // Includes
@@ -219,13 +219,15 @@ namespace guslib
 
 
   PropertyGroup::PropertyGroup(const std::string& name)
-    : name_(name)
+    : name_(name),
+      savable_(true)
   {
     GTRACE(7, "Property Group CTor [" << getName() << "]");
   }
 
   PropertyGroup::PropertyGroup()
-    : name_("general")
+    : name_("general"),
+      savable_(true)
   {
     GTRACE(7, "Property Group CTor [" << getName() << "]");
   }

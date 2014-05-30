@@ -63,7 +63,7 @@ namespace Ogre
 namespace app
 {
   /**
-   * Enumeration of possible display modes. Please take note that not all may be supported on 
+   * Enumeration of possible display modes. Please take note that not all may be supported on
    * all combinations of hardware and software.
    */
   enum DisplayModes
@@ -93,6 +93,16 @@ namespace app
     std::string fullText;
     double aspectRatio;        // aspect ratio value (floating point numerical value).
     std::string aspectRatioFolder;  // text to identify the aspect ratio folder (fraction text).
+
+    ResolutionConfig()
+      : width(0),
+        height(0),
+        depth(0),
+        fullText(""),
+        aspectRatio(0.0),
+        aspectRatioFolder("")
+    {
+    }
   };
 
 
@@ -374,7 +384,7 @@ namespace app
       Note: not tested for Linux & Apple platforms, maybe in those cases the information is not available.
       Then again, maybe it's needed on those platforms.
       @param iconID A numerical identifier for the icon.
-      Note: on Windows, this should be the ID of the icon in the resource file. As an example: add the 
+      Note: on Windows, this should be the ID of the icon in the resource file. As an example: add the
       constant IDI_MY_ICON in the header file
         [MyResource.h]
         #define IDI_MY_ICON  101
