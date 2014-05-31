@@ -33,7 +33,7 @@ REM     Call :doProcessing.SingleFile %%G
 REM   )
 
   Echo.Please stand by while the script analyses the source files...
-  FOR /f "tokens=*" %%G IN ('dir /b /s src\app\*.* /O:N') DO (
+  FOR /f "tokens=*" %%G IN ('dir /b /s src\impl\*.* /O:N') DO (
     Set lcl_baseFileName=%%G
     Call :doProcessing.SingleFile !lcl_baseFileName!
   )

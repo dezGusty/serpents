@@ -307,8 +307,8 @@ SET (SOURCE_FILES_IMPL
   ./src/impl/MenuState.h
   ./src/impl/SerpMaterialListener.cpp
   ./src/impl/SerpMaterialListener.h
-  ./src/impl/WorkbenchState.cpp
-  ./src/impl/WorkbenchState.h
+  ./src/impl/workbenchstate.cpp
+  ./src/impl/workbenchstate.h
 )
 
 # Specify the group for engine

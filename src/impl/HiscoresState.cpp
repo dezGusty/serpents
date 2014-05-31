@@ -71,7 +71,7 @@ namespace Serpents
 		Ogre::ResourceGroupManager::getSingleton ().loadResourceGroup ("General");
 
 		CEGUI::WindowManager& win_mgr = CEGUI::WindowManager::getSingleton();
-	
+
 		CEGUI::System* ceguiSysPtr_ = CEGUI::System::getSingletonPtr();
 
 #ifdef CEGUI_07
@@ -135,7 +135,7 @@ namespace Serpents
 		if (btn)
 		{
 			btn->setWantsMultiClickEvents (false);
-			btn->subscribeEvent (CEGUI::PushButton::EventClicked, 
+			btn->subscribeEvent (CEGUI::PushButton::EventClicked,
 				CEGUI::Event::Subscriber (&HiscoresState::onButtonOkClicked, this));
 		}
 
@@ -147,7 +147,7 @@ namespace Serpents
 	{
 		CEGUI::WindowManager& win_mgr = CEGUI::WindowManager::getSingleton();
 		CEGUI::Editbox * textItem = static_cast <CEGUI::Editbox *> (utils::CEGUIHelperUtil::getWindow  (nameInputField));
-		
+
 		if (textItem)
 		{
 			// TODO: also call a function to "fix" the string, removing special chars, such as "<", "\", etc.
@@ -165,7 +165,7 @@ namespace Serpents
 				{
 					tempWindow->hide ();
 				}
-				
+
 				tempWindow = utils::CEGUIHelperUtil::getWindow ("HighscoreListPanel");
 				if (tempWindow)
 				{
@@ -213,12 +213,12 @@ namespace Serpents
 
 				CEGUI::Editbox* textItem;
 				textItem = static_cast <CEGUI::Editbox *> (utils::CEGUIHelperUtil::getWindow (itemName));
-				
+
 				if (textItem)
 				{
 					textItem->setText (guslib::stringutil::DoubleToString (myTable[i].get ()->getValue ()));
 				}
-				
+
 				ss.str("");
 				ss << prefixOfNameTextElem << ((i<9)? "0" : "") << (i+1) << suffixOfNameTextElem;
 				itemName = ss.str ();
@@ -246,7 +246,7 @@ namespace Serpents
 			if (btn)
 			{
 				btn->setWantsMultiClickEvents (false);
-				btn->subscribeEvent (CEGUI::PushButton::EventClicked, 
+				btn->subscribeEvent (CEGUI::PushButton::EventClicked,
 					CEGUI::Event::Subscriber (&HiscoresState::onButtonBackClicked, this));
 			}
 
@@ -289,7 +289,7 @@ namespace Serpents
 		GTRACE(4, "Completing exit game state...");
 	}
 
-	void HiscoresState::pause() 
+	void HiscoresState::pause()
 	{
 	}
 	void HiscoresState::resume()
@@ -330,7 +330,7 @@ namespace Serpents
 	}
 
 	void HiscoresState::reactToKeyRelease(OIS::KeyCode keycode){}
-	
+
 	void HiscoresState::reactToMouseMoved (int x, int y){}
 
 	void HiscoresState::reactToMousePressed (const OIS::MouseButtonID& btn, int x, int y){}
@@ -350,7 +350,7 @@ namespace Serpents
 			{
 				logicEventQueue.push( new GBaseEvent(GET_Exit, "") );
 			}
-			
+
 			GTRACE(5, "HiscoresState::handleLogicThreadLoop() exiting (done loading).");
 			return true;
 		}

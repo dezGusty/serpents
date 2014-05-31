@@ -25,9 +25,7 @@ namespace app
 	// Fwd. class decls.
 
 	class SerpFrameListener;
-	class Ogre::Root;
-	class Ogre::SceneManager;
-	class Ogre::Camera;
+	
 
 	//
 	// POD structure?

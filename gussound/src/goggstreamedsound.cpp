@@ -103,27 +103,28 @@ namespace GOpenAl
     buffers_[0] = 0;
     buffers_[1] = 0;
 
-    oggStream_.datasource = 0;
-    oggStream_.seekable = 0;
-    oggStream_.offset = 0;
-    oggStream_.end = 0;
-    oggStream_.oy = ogg_sync_state();
-    oggStream_.links = 0;
-    oggStream_.dataoffsets = 0;
-    oggStream_.serialnos = 0;
-    oggStream_.pcmlengths = 0;
-    oggStream_.vi = 0;
-    oggStream_.vc = 0;
-    oggStream_.pcm_offset = 0;
-    oggStream_.ready_state = 0;
+    oggStream_.bittrack = 0;
+    oggStream_.callbacks = ov_callbacks();
     oggStream_.current_serialno = 0;
     oggStream_.current_link = 0;
-    oggStream_.bittrack = 0;
-    oggStream_.samptrack = 0;
+    oggStream_.dataoffsets = 0;
+    oggStream_.datasource = 0;
+    oggStream_.end = 0;
+    oggStream_.links = 0;
+    oggStream_.offset = 0;
+    oggStream_.offsets = 0;
     oggStream_.os = ogg_stream_state();
-    oggStream_.vd = vorbis_dsp_state();
+    oggStream_.oy = ogg_sync_state();
+    oggStream_.pcm_offset = 0;
+    oggStream_.pcmlengths = 0;
+    oggStream_.ready_state = 0;
+    oggStream_.samptrack = 0;
+    oggStream_.seekable = 0;
+    oggStream_.serialnos = 0;
     oggStream_.vb = vorbis_block();
-    oggStream_.callbacks = ov_callbacks();
+    oggStream_.vc = 0;
+    oggStream_.vd = vorbis_dsp_state();
+    oggStream_.vi = 0;
   }
 
   /// Destructor

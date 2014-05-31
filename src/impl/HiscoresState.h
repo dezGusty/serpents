@@ -35,7 +35,7 @@
 
 namespace Serpents
 {
-	class HiscoresState 
+	class HiscoresState
 		: public app::SerpState
 	{
 	private:
@@ -81,13 +81,13 @@ namespace Serpents
 
 		// Handle state initialization.
 		virtual void enter (const app::SerpStateParams& param) override;
-		
+
 		// Handle state control release.
 		virtual void exit () override;
 
 		// Suspend the current state. Should most likely be resumed later on.
 		virtual void pause () override;
-		
+
 		// Resume a suspended state.
 		virtual void resume () override;
 

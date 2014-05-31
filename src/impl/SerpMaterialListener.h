@@ -5,7 +5,7 @@
 
 #include <OgreMaterialManager.h>
 
-class MaterialListener : 
+class MaterialListener :
     public Ogre::MaterialManager::Listener
 {
     protected:
@@ -13,6 +13,6 @@ class MaterialListener :
     public:
         MaterialListener();
 
-        Ogre::Technique *handleSchemeNotFound(unsigned short, const Ogre::String& schemeName, 
+        Ogre::Technique *handleSchemeNotFound(unsigned short, const Ogre::String& schemeName,
                 Ogre::Material*, unsigned short, const Ogre::Renderable*);
-}; 
+};

@@ -120,7 +120,7 @@ namespace Serpents
 		Ogre::ResourceGroupManager::getSingleton ().loadResourceGroup ("General");
 
 		CEGUI::WindowManager& win_mgr = CEGUI::WindowManager::getSingleton ();
-	
+
 		CEGUI::System* ceguiSysPtr_ = CEGUI::System::getSingletonPtr ();
 
 #ifdef CEGUI_07
@@ -143,7 +143,7 @@ namespace Serpents
 	    ceguiSysPtr_->setDefaultTooltip ("GlossySerpent/Tooltip");
 #else
 		CEGUI::Window* mainMenuSheet  = win_mgr.loadLayoutFromFile ("MainMenu.layout");
-	    
+
 		// install this as the root GUI sheet
 		ceguiSysPtr_->getDefaultGUIContext ().setRootWindow (mainMenuSheet);
 		optionsWindow = (CEGUI::FrameWindow*) win_mgr.loadLayoutFromFile ("Options.layout");
@@ -216,7 +216,7 @@ namespace Serpents
 			cbo->subscribeEvent(CEGUI::Combobox::EventListSelectionAccepted, CEGUI::Event::Subscriber(&MenuState::onComboValueChange, this));
 		}
 
-		
+
 		cbo = static_cast<CEGUI::Combobox*> (utils::CEGUIHelperUtil::getWindow ("DisplayModeBox"));
 		if (cbo)
 		{
@@ -242,7 +242,7 @@ namespace Serpents
 			{
 				cbo->setItemSelectState (cbo->getItemCount () - 1, true);
 			}
-			
+
 			if (app::SerpentsGameHelper::getPtr ()->hasFeature ("non-exclusive-fullscreen"))
 			{
 				cbo->addItem (new utils::SimpleListItem ((CEGUI::utf8*) app::SerpentsGameHelper::getPtr()->
@@ -316,15 +316,15 @@ namespace Serpents
 				cbo->resetList ();
 
 				// Get the list of resolutions permitted for the selected renderer.
-				std::vector <std::string> resOptions = 
+				std::vector <std::string> resOptions =
 					app::SerpentsGameHelper::getPtr ()->getEditableResolutionsMapping ()[currentEngine];
-				
+
 				// Get the pre-saved config.
-				app::ResolutionConfig resCfg = 
+				app::ResolutionConfig resCfg =
 					app::SerpentsGameHelper::getPtr ()->getPreferredResolutionConfig ();
-				
-				// And calculate the preferred resolution based on the preferred config 
-				std::string prefResolution = 
+
+				// And calculate the preferred resolution based on the preferred config
+				std::string prefResolution =
 					app::SerpentsGameHelper::getPtr ()->getUpdatedResolutionString (*resOptions.begin(), resCfg.width, resCfg.height, resCfg.depth);
 				GTRACE (4, "Expecting preferred resolution as: " << prefResolution);
 
@@ -388,17 +388,17 @@ namespace Serpents
 	{
 		// hide
 		showOptions (false);
-		
+
 		app::ResolutionConfig resCfg = app::SerpentsGameHelper::getPtr ()->getPreferredResolutionConfig ();
-		
+
 		// store the options into the helper and into the config.
 		CEGUI::Combobox* cbo = static_cast<CEGUI::Combobox*> (utils::CEGUIHelperUtil::getWindow ("VideoDriverBox"));
 		if (cbo)
 		{
 			std::string currentEngine = cbo->getSelectedItem ()->getText ().c_str ();
-			std::string storageRenderer = app::SerpentsGameHelper::getPtr ()->getPseudoNameForDriverName (currentEngine); 
+			std::string storageRenderer = app::SerpentsGameHelper::getPtr ()->getPseudoNameForDriverName (currentEngine);
 
-			enginePtr_->getConfig () ["video"]["preferredEngine"].setAsString (storageRenderer); 
+			enginePtr_->getConfig () ["video"]["preferredEngine"].setAsString (storageRenderer);
 			app::SerpentsGameHelper::getPtr ()->setPreferredRendererName (currentEngine);
 
 		}
@@ -427,7 +427,7 @@ namespace Serpents
 				enginePtr_->getConfig () ["video"]["colourDepth"].setAsInt (subConfig.depth);
 				resCfg.depth = subConfig.depth;
 			}
-			
+
 			resCfg.width = subConfig.width;
 			resCfg.height = subConfig.height;
 		}

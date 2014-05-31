@@ -10,7 +10,7 @@ MaterialListener::MaterialListener()
 }
 
 
-Ogre::Technique* MaterialListener::handleSchemeNotFound(unsigned short, const Ogre::String& schemeName, 
+Ogre::Technique* MaterialListener::handleSchemeNotFound(unsigned short, const Ogre::String& schemeName,
         Ogre::Material*, unsigned short, const Ogre::Renderable*)
 {
     if (schemeName == "glow")
