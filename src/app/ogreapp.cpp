@@ -67,8 +67,8 @@
 
 
 #include "config/serpents_version.h"
-#include "app/SerpEngine.h"
-#include "app/SerpFrameListener.h"
+#include "app/serpentsengine.h"
+#include "app/serpentsframelistener.h"
 
 // Game helper
 #include "app/SerpentsGameHelper.h"

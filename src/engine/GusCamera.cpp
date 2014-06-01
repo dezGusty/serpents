@@ -28,7 +28,9 @@ namespace Serpents
 {
   GusCamera::GusCamera(Ogre::Camera * aCamera)
     : camera(aCamera),
-      zoomLevel(0)  //  0 = no zoom; 1 = max zoom
+      zoomLevel(0),  //  0 = no zoom; 1 = max zoom
+      zoomStep(0.1),
+      zoomMax(1.0)
   {
     originalOrientation = camera->getOrientation();
     originalPos = camera->getPosition();

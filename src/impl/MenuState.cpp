@@ -18,7 +18,7 @@
 #include "impl/MenuState.h"
 #include <guslib/trace/Trace.h>
 
-#include "app/SerpEngine.h"
+#include "app/serpentsengine.h"
 
 #include "utils/CEGUIUtils.h"
 #include "app/SerpentsGameHelper.h"

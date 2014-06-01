@@ -47,7 +47,7 @@
 #include "app/baseappinterface.h"
 
 // GUI
-#include "app/SerpGUI.h"
+#include "app/serpentsgui.h"
 
 // TODO(Augustin Preda): move to a proper location.
 #include "impl/SerpMaterialListener.h"

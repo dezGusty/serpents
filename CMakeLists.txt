@@ -281,14 +281,14 @@ SET (SOURCE_FILES_APP
   ./src/app/GameConsole.h
   ./src/app/ogreapp.cpp
   ./src/app/ogreapp.h
-  ./src/app/SerpEngine.cpp
-  ./src/app/SerpEngine.h
+  ./src/app/serpentsengine.cpp
+  ./src/app/serpentsengine.h
   ./src/app/serpentsgamehelper.cpp
   ./src/app/serpentsgamehelper.h
-  ./src/app/SerpFrameListener.cpp
-  ./src/app/SerpFrameListener.h
-  ./src/app/SerpGui.cpp
-  ./src/app/SerpGui.h
+  ./src/app/serpentsframelistener.cpp
+  ./src/app/serpentsframelistener.h
+  ./src/app/serpentsgui.cpp
+  ./src/app/serpentsgui.h
   ./src/app/SerpState.cpp
   ./src/app/SerpState.h
 ) 

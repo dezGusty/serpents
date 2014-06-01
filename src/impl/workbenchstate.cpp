@@ -47,8 +47,8 @@
 // This project's headers
 //
 
-#include "app/SerpEngine.h"
-#include "app/SerpFrameListener.h"
+#include "app/serpentsengine.h"
+#include "app/serpentsframelistener.h"
 
 #include "engine/GusCamera.h"
 
@@ -1280,8 +1280,8 @@ namespace Serpents
 
     // Definition of variables used in creating a render-to-texture (RTT) implementation.
     CEGUI::BasicImage*      d_textureTargetImage;
-    CEGUI::TextureTarget*   d_textureTarget;
-    d_textureTarget = myRenderer->createTextureTarget();
+    /*CEGUI::TextureTarget*   d_textureTarget;
+    d_textureTarget = */myRenderer->createTextureTarget();
     CEGUI::String imageName("character_img");
     d_textureTargetImage = static_cast<CEGUI::BasicImage*>(&CEGUI::ImageManager::getSingleton().create(
         "BasicImage", imageName));
@@ -1483,7 +1483,6 @@ namespace Serpents
 
   bool WorkbenchState::onButtonOptionsCloseClicked(const CEGUI::EventArgs& evt)
   {
-    CEGUI::WindowManager& win_mgr = CEGUI::WindowManager::getSingleton();
     CEGUI::System* ceguiSysPtr = CEGUI::System::getSingletonPtr();
 
     CEGUI::Window* currentRoot = ceguiSysPtr->getDefaultGUIContext().getRootWindow();
@@ -1565,7 +1564,6 @@ namespace Serpents
   bool WorkbenchState::onButtonSubmenuClicked(const CEGUI::EventArgs& evt)
   {
     GTRACE(3, "Submenu display button clicked");
-    CEGUI::WindowManager& win_mgr = CEGUI::WindowManager::getSingleton();
 
     if (NULL == mContextMenuPtr)
     {
@@ -1692,8 +1690,6 @@ namespace Serpents
   bool WorkbenchState::onButtonGetRandomValueClicked(const CEGUI::EventArgs& evt)
   {
     GTRACE(3, "WorkbenchState::onButtonGetRandomValueClicked");
-    CEGUI::WindowManager& win_mgr = CEGUI::WindowManager::getSingleton();
-
     float myval = guslib::Random::getPtr()->getValueUpTo(100) / 100.0f;
 
     // Update the level label

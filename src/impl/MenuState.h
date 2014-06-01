@@ -32,7 +32,7 @@
 
 //#include <model/ScoringTable.h>
 
-#include "app/SerpGui.h"
+#include "app/serpentsgui.h"
 
 namespace Serpents
 {
