@@ -22,11 +22,11 @@
 //
 // Own header.
 //
-#include "engine/guscamera.h"
+#include "engine/serpentscamera.h"
 
 namespace Serpents
 {
-  GusCamera::GusCamera(Ogre::Camera * aCamera)
+  SerpentsCamera::SerpentsCamera(Ogre::Camera * aCamera)
     : camera(aCamera),
       zoomLevel(0),  //  0 = no zoom; 1 = max zoom
       zoomStep(0.1),
@@ -37,12 +37,12 @@ namespace Serpents
   }
 
 
-  GusCamera::~GusCamera(void)
+  SerpentsCamera::~SerpentsCamera(void)
   {
   }
 
 
-  void GusCamera::lookAt(const Ogre::Vector3 & lookTarget)
+  void SerpentsCamera::lookAt(const Ogre::Vector3 & lookTarget)
   {
     if (NULL == camera)
     {
@@ -58,7 +58,7 @@ namespace Serpents
     camera->lookAt(actualVector);
   }
 
-  void GusCamera::setZoomLevel(const Ogre::Real & zoom)
+  void SerpentsCamera::setZoomLevel(const Ogre::Real & zoom)
   {
     if (zoom >= 0 && zoom <= 1)
     {
@@ -72,7 +72,7 @@ namespace Serpents
   }
 
 
-  void GusCamera::setZoomMax(const Ogre::Real & zoom)
+  void SerpentsCamera::setZoomMax(const Ogre::Real & zoom)
   {
     if (zoom >= 0 && zoom <= 1)
     {
@@ -83,7 +83,7 @@ namespace Serpents
   }
 
 
-  void GusCamera::slideToLocation(Ogre::Vector3 newPosition)
+  void SerpentsCamera::slideToLocation(Ogre::Vector3 newPosition)
   {
     Ogre::Vector3 camPos = this->originalPos;
     Ogre::Vector3 moveVector = newPosition;
@@ -99,7 +99,7 @@ namespace Serpents
   }
 
 
-  void GusCamera::setFOV(const Ogre::Real & fov)
+  void SerpentsCamera::setFOV(const Ogre::Real & fov)
   {
     if (this->camera != NULL)
     {

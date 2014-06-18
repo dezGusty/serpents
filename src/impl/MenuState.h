@@ -20,7 +20,7 @@
 //    The state that handles the main menu.
 
 // Extend the basic state
-#include <app/SerpState.h>
+#include "app/serpentsstate.h"
 
 // Standard Ogre includes
 #include <OIS.h>

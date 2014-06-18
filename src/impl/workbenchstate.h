@@ -51,13 +51,13 @@
 // This project's headers
 //
 
-#include "app/serpstate.h"
+#include "app/serpentsstate.h"
 
 
 namespace Serpents
 {
   // Forward class declarations.
-  class GusCamera;
+  class SerpentsCamera;
 
   /**
     The class to be used as testing grounds for new functionality.
@@ -70,8 +70,8 @@ namespace Serpents
     bool initialize();
 
     guslib::Configuration levelConfig_;
-    GSmartPtr<GusCamera> playerCamera_;
-    GSmartPtr<GusCamera> secondCamera_;
+    GSmartPtr<SerpentsCamera> playerCamera_;
+    GSmartPtr<SerpentsCamera> secondCamera_;
 
     bool canRotate_;
     int oldMouseX_;

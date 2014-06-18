@@ -18,8 +18,8 @@
 //
 //    The state that handles the display of high-scores.
 //
-//	  Last change:	$LastChangedDate: 2012-05-26 21:59:43 +0300 (S, 26 mai. 2012) $
-//	  Revision:		$Revision: 528 $
+//	  Last change:	$LastChangedDate: 2014-05-31 11:26:56 +0300 (S, 31 mai. 2014) $
+//	  Revision:		$Revision: 653 $
 
 
 #include <impl/HiscoresState.h>

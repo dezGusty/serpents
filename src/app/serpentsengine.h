@@ -46,7 +46,7 @@
 // Include the main configuration file.
 #include "config/serpents_config.h"
 
-#include "SerpState.h"
+#include "app/serpentsstate.h"
 #include "app/serpentsgui.h"
 
 

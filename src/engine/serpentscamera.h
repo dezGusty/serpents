@@ -38,7 +38,7 @@ namespace Serpents
 {
   /// Ogre::Camera container, allowing some additional functionality.
   /// TODO: use quaternion nlerp/slerp and keep a slower camera movement, so that it's not instant... so not blocky.
-  class GusCamera
+  class SerpentsCamera
   {
   private:
     Ogre::Camera * camera;        //  the Ogre camera to do the actual rendering.
@@ -50,9 +50,9 @@ namespace Serpents
     Ogre::Real zoomMax;
   public:
     //  Ctor.
-    explicit GusCamera(Ogre::Camera * camera);
+    explicit SerpentsCamera(Ogre::Camera * camera);
 
-    virtual ~GusCamera(void);
+    virtual ~SerpentsCamera(void);
 
     ///  Setter for the target point of the camera.
     virtual void setTargetPos(const Ogre::Vector3 &newTarget)
@@ -116,5 +116,5 @@ namespace Serpents
     }
   };
 
-  typedef std::vector<GusCamera> GusCameraList;
+  typedef std::vector<SerpentsCamera> SerpentsCameraList;
 }

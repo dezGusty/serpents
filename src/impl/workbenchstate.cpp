@@ -50,7 +50,7 @@
 #include "app/serpentsengine.h"
 #include "app/serpentsframelistener.h"
 
-#include "engine/GusCamera.h"
+#include "engine/serpentscamera.h"
 
 #include "app/SerpentsGameHelper.h"
 // Main sound header.
@@ -856,7 +856,6 @@ namespace Serpents
       if (tc->getTabCount() > 0)
       {
         tc->setSelectedTabAtIndex(0);
-        //tc->invalidate(true);
         tc->invalidateRenderingSurface();
       }
     }
@@ -2712,10 +2711,10 @@ namespace Serpents
       }
     }
 
-    playerCamera_ = new GusCamera(camPtr);
+    playerCamera_ = new SerpentsCamera(camPtr);
     if (camSecPtr)
     {
-      secondCamera_ = new GusCamera(camSecPtr);
+      secondCamera_ = new SerpentsCamera(camSecPtr);
     }
 
     playerCamera_->setZoomMax(1.0f);

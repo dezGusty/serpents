@@ -94,7 +94,7 @@ namespace app
 
     mousePtr_->setBuffered(true);
     mousePtr_->setEventCallback(enginePtr_);
-    
+
     // Register as a Window listener
     Ogre::WindowEventUtilities::addWindowEventListener(renderWindowPtr_, this);
   }
@@ -110,12 +110,12 @@ namespace app
       enginePtr_->releaseFrameListener();
     }
 
-    if (enginePtr_) 
-    {  
+    if (enginePtr_)
+    {
       enginePtr_->shutDown();
     }
 
-    if (enginePtr_) 
+    if (enginePtr_)
     {
       releaseEngine();
     }
