@@ -252,7 +252,6 @@ FILE(GLOB_RECURSE HEADER_FILES ${CMAKE_CURRENT_SOURCE_DIR}/src/*.h)
 SET (SOURCE_FILES
   ./include/common/BuildOpts.h
   ./include/common/RestartOpts.h
-  ./include/common/SharedStrings.h
   ./include/model/BodyPartBase.h
   ./include/model/Bonus.h
   ./include/model/GRenderable.h
@@ -289,8 +288,8 @@ SET (SOURCE_FILES_APP
   ./src/app/serpentsframelistener.h
   ./src/app/serpentsgui.cpp
   ./src/app/serpentsgui.h
-  ./src/app/SerpState.cpp
-  ./src/app/SerpState.h
+  ./src/app/serpentsstate.cpp
+  ./src/app/serpentsstate.h
 ) 
 
 
@@ -313,8 +312,8 @@ SET (SOURCE_FILES_IMPL
 
 # Specify the group for engine
 SET (SOURCE_FILES_ENGINE
-  ./src/engine/GusCamera.cpp
-  ./src/engine/GusCamera.h
+  ./src/engine/serpentscamera.cpp
+  ./src/engine/serpentscamera.h
 )
 
 
@@ -349,7 +348,6 @@ SOURCE_GROUP ("src\\scripting" FILES ${SOURCE_FILES_SCRIPTING})
 SOURCE_GROUP("include" FILES
   ./include/common/BuildOpts.h
   ./include/common/RestartOpts.h
-  ./include/common/SharedStrings.h
   ./include/model/BodyPartBase.h
   ./include/model/Bonus.h
   ./include/model/GRenderable.h
