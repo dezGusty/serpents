@@ -141,6 +141,8 @@ SET (SOURCE_FILES_COMMON
 SET (SOURCE_FILES_SYSTEM
   ./guslib/system/apprestart.h
   ./guslib/system/commandline.h
+  ./guslib/system/processrunner.cpp
+  ./guslib/system/processrunner.h
   ./guslib/system/random.cpp
   ./guslib/system/random.h
   ./guslib/system/systemmutex.cpp

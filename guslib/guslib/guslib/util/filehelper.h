@@ -42,7 +42,7 @@
 // C++ system headers
 //
 
-// Using the std::string
+#include <map>
 #include <string>
 #include <vector>
 
@@ -158,6 +158,15 @@ namespace guslib
         const std::vector <std::string> matchingList,
         bool mustMatch = true,
         bool emptyContentMeansMatch = true);
+
+    /**
+      Transcopy a file (Copy with transformations).
+      Copy the contents of source_file into dest_file, taking care in the course of this to apply the transformations.
+    */
+    GUSLIB_EXPORT_SYMBOL bool TranscopyFile(
+        const std::string& source_file_name,
+        const std::string& dest_file_name,
+        std::map<std::string, std::string> transformations);
 
   }
 }
