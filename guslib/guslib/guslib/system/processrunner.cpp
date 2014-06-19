@@ -177,18 +177,22 @@ namespace guslib
       // Ensure that the read handle to the pipe for STDOUT is not inherited.
       if (false == SetHandleInformation(hdl_child_std_out_read, HANDLE_FLAG_INHERIT, 0))
       {
+        CloseHandle(hdl_child_std_out_write);
         return std::string("");
       }
 
       // Create a pipe for the child process's STDIN.
       if (false == CreatePipe(&hdl_child_std_in_read, &hdl_child_std_in_write, &sec_attribs, 0))
       {
+        CloseHandle(hdl_child_std_out_write);
         return std::string("");
       }
 
       // Ensure the write handle to the pipe for STDIN is not inherited.
       if (false == SetHandleInformation(hdl_child_std_in_read, HANDLE_FLAG_INHERIT, 0) )
       {
+        CloseHandle(hdl_child_std_out_write);
+        CloseHandle(hdl_child_std_in_write);
         return std::string("");
       }
     }
@@ -251,6 +255,7 @@ namespace guslib
       )
     {
       DWORD encountered_error = GetLastError();
+      CloseHandle(hdl_child_std_in_write);
       return guslib::stringutil::LongLongToString(encountered_error);
     }
 
@@ -385,7 +390,7 @@ namespace guslib
       if (keep_standard_output)
       {
         bSuccess = WriteFile(hParentStdOut, chBuf, dwRead, &dwWritten, NULL);
-        if (false == bSuccess )
+        if (false == bSuccess)
         {
           break;
         }

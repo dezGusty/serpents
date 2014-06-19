@@ -40,7 +40,6 @@
 // C++ system includes
 //
 #include <exception>
-#include <string>
 
 
 namespace guslib
@@ -52,13 +51,17 @@ namespace guslib
     : public std::exception
   {
   private:
-    std::string exceptionMessage_;
 
   public:
     /**
       Constructor. Must pass a message to use.
     */
     explicit SimpleException(const char* text);
+
+    /**
+      Copy constructor.
+    */
+    SimpleException(const SimpleException& rhs);
 
     /**
       Destructor. Not designed to do anything special. Guarantees a no-throw.
@@ -69,6 +72,13 @@ namespace guslib
       Adapt the exception to a string. Guarantees a no-throw.
     */
     const char* what() const throw();
+
+  private:
+    // Internal class to store the implementation.
+    class Impl;
+
+    // Pointer to implementation (pImpl).
+    Impl* impl_;
   };
 }
 

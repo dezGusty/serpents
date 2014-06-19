@@ -33,20 +33,46 @@
 //
 #include "guslib/common/simpleexception.h"
 
+//
+// C++ system includes
+//
+#include <string>
+
 namespace guslib
 {
-  SimpleException::SimpleException(const char* text)
-    : std::exception()
+  /**
+    Pimpl Idiom for the exception.
+  */
+  class SimpleException::Impl
   {
-    this->exceptionMessage_ = text;
+  public:
+    std::string exceptionMessage_;
+
+    explicit Impl(const char* text)
+    {
+      this->exceptionMessage_ = text;
+    }
+  };
+
+
+  SimpleException::SimpleException(const char* text)
+    : std::exception(),
+      impl_(new SimpleException::Impl(text))
+  {
+  }
+
+  SimpleException::SimpleException(const SimpleException& rhs)
+    : impl_(new SimpleException::Impl(rhs.impl_->exceptionMessage_.c_str()))
+  {
   }
 
   SimpleException::~SimpleException() throw()
   {
+    delete impl_;
   }
 
   const char* SimpleException::what() const throw()
   {
-    return this->exceptionMessage_.c_str();
+    return this->impl_->exceptionMessage_.c_str();
   }
 }

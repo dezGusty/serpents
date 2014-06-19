@@ -187,7 +187,7 @@ namespace app
 
     virtual void setListener(const SerpStateManagerListener * aListener);
 
-        virtual void setStateNextTick(const std::string& state, const SerpStateParams& params);
+    virtual void setStateNextTick(const std::string& state, const SerpStateParams& params);
     virtual void pushStateNextTick(const std::string& state, const SerpStateParams& params);
     virtual void popStateNextTick();
 

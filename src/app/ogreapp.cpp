@@ -77,7 +77,7 @@
 #include "impl/WorkbenchState.h"
 
 // TODO: move to another place?
-#include "impl/MenuState.h"
+//#include "impl/MenuState.h"
 
 
 //// Define a pointer function to the Server.
@@ -994,7 +994,7 @@ namespace app
 
     std::string preferredLevel = config_["gameplay"]["preferredWorkbench"].getAsStringOrDefaultVal("");
     enginePtr_->getStateMgr().addState(new Serpents::WorkbenchState("test", preferredLevel, enginePtr_));
-    enginePtr_->getStateMgr().addState(new Serpents::MenuState("menu_test", enginePtr_));
+    //enginePtr_->getStateMgr().addState(new Serpents::MenuState("menu_test", enginePtr_));
 
     guslib::Configuration cfgMenu;
     enginePtr_->getStateMgr().setStateNextTick("test", app::SerpStateParams(cfgMenu));

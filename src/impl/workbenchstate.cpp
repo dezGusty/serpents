@@ -2616,7 +2616,7 @@ namespace Serpents
 
           int lightType = levelConfig_[sName]["type"].getAsInt();
 
-          Ogre::ManualObject* myManualObject;
+          Ogre::ManualObject* myManualObject = NULL;
           if (lightType != 0)
           {
             std::string lineName = sName;
@@ -2655,7 +2655,7 @@ namespace Serpents
 
             // Light attaching to node DISABLED.
             //myNode->attachObject(lTemp);
-            if (lightType != 0)
+            if (lightType != 0 && myManualObject != NULL)
             {
               myNode->attachObject(myManualObject);
             }

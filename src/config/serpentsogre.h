@@ -7,8 +7,8 @@
 #if SERPENTS_SUPPRESS_OGRE_C4251 == 1
 #pragma warning (push)
 #pragma warning (disable:4251)
-#include <Ogre.h>
+#include "Ogre.h"
 #pragma warning (pop)
 #else
-#include <Ogre.h>
+#include "Ogre.h"
 #endif

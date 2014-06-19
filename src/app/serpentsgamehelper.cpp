@@ -40,7 +40,6 @@
 // C system headers.
 //
 #if GUSLIB_PLATFORM_TYPE == GUSLIB_PLATFORM_TYPE_WINDOWS
-// #define WIN32_LEAN_AND_MEAN   // TODO: still needed?
 # include <windows.h>
 #elif GUSLIB_PLATFORM_TYPE == GUSLIB_PLATFORM_TYPE_LINUX
 # include <X11/Xlib.h>
@@ -69,8 +68,10 @@
 //
 
 // Forwards the inclusion of ogre.h
-#include "config/serpentsogre.h"
+//#include "config/serpentsogre.h"
 
+#include "OgreRoot.h"
+#include "OgreRenderWindow.h"
 
 namespace app
 {
