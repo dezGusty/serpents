@@ -67,11 +67,10 @@
 // This library's headers
 //
 
-// Forwards the inclusion of ogre.h
-//#include "config/serpentsogre.h"
-
 #include "OgreRoot.h"
 #include "OgreRenderWindow.h"
+#include "OgreEntity.h"
+#include "OgreSubEntity.h"
 
 namespace app
 {
@@ -315,6 +314,45 @@ namespace app
     return returnValue;
   }
 
+
+  /**
+    Dump the contents of the given scene node and any child nodes that may be attached to it to
+    the (default) logger.
+    @param rootNode The node to start the print from.
+    @author Augustin Preda.
+  */
+  void SerpentsGameHelperUtil::printAllKidsToLogger(Ogre::SceneNode * rootNode, int level)
+  {
+    if (!rootNode)
+    {
+      return;
+    }
+
+    GTRACE(3, "Lvl: " << level << "; Node: " << rootNode->getName());
+    Ogre::Node::ChildNodeIterator it = rootNode->getChildIterator();
+    while (it.hasMoreElements())
+    {
+      Ogre::SceneNode * node = static_cast<Ogre::SceneNode*>(it.getNext());
+      Ogre::SceneNode::ObjectIterator it2 = node->getAttachedObjectIterator();
+      while (it2.hasMoreElements())
+      {
+        Ogre::MovableObject *movable = static_cast<Ogre::MovableObject*>(it2.getNext());
+        GTRACE(3, "attached: " << movable->getName() << "; " << movable->getMovableType());
+        if (movable->getMovableType() == "Entity")
+        {
+          Ogre::Entity * ent = static_cast<Ogre::Entity*>(movable);
+          int numSubEntities = ent->getNumSubEntities();
+          for (int i = 0; i < numSubEntities; ++i)
+          {
+            Ogre::SubEntity * subent = ent->getSubEntity(i);
+            GTRACE(3, "Entity " << i << " material: " << subent->getMaterialName());
+          }
+        }
+      }
+
+      printAllKidsToLogger(node, level + 1);
+    }
+  }
 
   /**
    * Retrieves (via output parameters) the settings requested by the user for the video mode size

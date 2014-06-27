@@ -25,13 +25,6 @@
 // Standard Ogre includes
 #include <OIS.h>
 
-// Forwards the inclusion of ogre.h
-#include <config/serpentsogre.h>
-
-#include <guslib/thirdparty/yasper.h>
-
-//#include <model/ScoringTable.h>
-
 #include "app/serpentsgui.h"
 
 namespace Serpents
@@ -55,7 +48,6 @@ namespace Serpents
 	public:
 		MenuState (const std::string& name
 			, app::SerpEngine *enginePtr
-			//, yasper::ptr<Serpents::GScoringTable> scoringTablePtr
 			);
 
 

@@ -27,7 +27,6 @@ namespace Serpents
 {
 	MenuState::MenuState (const std::string& name
 		, app::SerpEngine *enginePtr
-		//, yasper::ptr<Serpents::GScoringTable> scoringTablePtr
 		)
 		: SerpState (name, enginePtr)
 		, initialized_ (false)

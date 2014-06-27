@@ -57,6 +57,7 @@ namespace Ogre
 {
   class Root;
   class RenderWindow;
+  class SceneNode;
 }
 
 
@@ -328,6 +329,13 @@ namespace app
      */
     std::string getNearestAspectRatioStringForWindowSize(int width, int height);
 
+    /**
+      Dump the contents of the given scene node and any child nodes that may be attached to it to
+      the (default) logger.
+      @param rootNode The node to start the print from.
+      @author Augustin Preda.
+    */
+    void printAllKidsToLogger(Ogre::SceneNode * rootNode, int level = 0);
 
     /**
      * Retrieves (via output parameters) the settings requested by the user for the video mode size

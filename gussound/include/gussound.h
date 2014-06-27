@@ -973,7 +973,7 @@ namespace gussound
   {
   public:
     /// Set the log file to be used (part of the tracing library).
-    static void setLoggerTarget(const std::string& fileName, int level = 5);
+    static void setLoggerTarget(const char* fileName, int level = 5);
   };
 
 

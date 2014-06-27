@@ -1731,7 +1731,7 @@ namespace gussound
   ///
   /// Set the log file to be used (part of the tracing library).
   ///
-  void SoundManagerLogger::setLoggerTarget(const std::string& fileName, int level)
+  void SoundManagerLogger::setLoggerTarget(const char* fileName, int level)
   {
     GSTARTTRACING(fileName, level);
   }

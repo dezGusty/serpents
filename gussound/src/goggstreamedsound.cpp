@@ -36,6 +36,7 @@
 // C++ system headers
 //
 
+#include <fstream>
 #include <string>
 
 //

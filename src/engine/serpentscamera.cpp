@@ -24,6 +24,7 @@
 //
 #include "engine/serpentscamera.h"
 
+
 namespace Serpents
 {
   SerpentsCamera::SerpentsCamera(Ogre::Camera * aCamera)

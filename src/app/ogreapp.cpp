@@ -232,7 +232,7 @@ namespace app
 
     if (traceLevel > 0 && traceFile.length() > 0)
     {
-      GSTARTTRACING(traceFile, traceLevel);
+      GSTARTTRACING(traceFile.c_str(), traceLevel);
     }
 
     // Write header to trace file.
@@ -513,7 +513,7 @@ namespace app
       std::string sound_log_file_name(config_["logging"]["soundLog"].getAsString());
 
       // Set the logging details
-      gussound::SoundManagerLogger::setLoggerTarget(sound_log_file_name, 4);
+      gussound::SoundManagerLogger::setLoggerTarget(sound_log_file_name.c_str(), 4);
       gussound::SoundManagerFactory::getPtr()->Register("openal", GOpenAl::OpenAlManagerUtil::createSoundManager);
       gussound::SoundManager::setPtr(
           gussound::SoundManagerFactory::getPtr()->CreateObject("openal"));

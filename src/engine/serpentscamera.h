@@ -25,14 +25,12 @@
 // C++ system headers
 //
 
-#include <vector>
 
 //
 // This project's headers.
 //
 
-// Forwards the inclusion of ogre.h
-#include "config/serpentsogre.h"
+#include "OgreRoot.h"
 
 namespace Serpents
 {
@@ -48,6 +46,7 @@ namespace Serpents
     Ogre::Real zoomLevel;      //  zoom level to use. 0 = no zoom; 1 = max zoom
     Ogre::Real zoomStep;            // steps between zooms; (units travelled in 1 sec.)
     Ogre::Real zoomMax;
+
   public:
     //  Ctor.
     explicit SerpentsCamera(Ogre::Camera * camera);
@@ -78,7 +77,7 @@ namespace Serpents
     }
 
     /// Same as standard camera lookAt, taking the zoom level in addition.
-    virtual void lookAt(const Ogre::Vector3 & lookTarget);
+    virtual void lookAt(const Ogre::Vector3& lookTarget);
 
     ///  Reset the camera orientation to its initial value
     virtual void resetOrientation()
@@ -115,6 +114,4 @@ namespace Serpents
       return this->zoomLevel;
     }
   };
-
-  typedef std::vector<SerpentsCamera> SerpentsCameraList;
 }

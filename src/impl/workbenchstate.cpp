@@ -52,7 +52,7 @@
 
 #include "engine/serpentscamera.h"
 
-#include "app/SerpentsGameHelper.h"
+#include "app/serpentsgamehelper.h"
 // Main sound header.
 
 #include "utils/CEGUIUtils.h"

@@ -24,8 +24,8 @@
 //   OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN
 //   THE SOFTWARE.
 //
-//   Last change:  $LastChangedDate: 2014-04-13 22:58:12 +0300 (D, 13 apr. 2014) $
-//   Revision:    $Revision: 647 $
+//   Last change:  $LastChangedDate: 2014-06-27 22:54:16 +0300 (V, 27 iun. 2014) $
+//   Revision:    $Revision: 657 $
 
 //
 // Includes
@@ -40,13 +40,8 @@
 // C++ system headers
 //
 
-#include<algorithm>
-// Using std::ofstream
-#include <fstream>
 // output stream
 #include <ostream>
-// Using std::string
-#include <string>
 
 //
 // This libraries' headers
@@ -124,83 +119,54 @@ namespace guslib
   class GUSLIB_EXPORT_SYMBOL TraceUtil
   {
   private:
-    std::string fileName_;
     bool enabled_;
     int level_;
     TraceEncoding encoding_;  // the encoding that is set by the user, according to the preferrence.
     TraceEncoding encodingUsed_;  //  the encoding that was used when opening.
-    std::ostream customOut_;  // the output stream; used for write operations.
-    std::ofstream of_;  // the output filestream; used for file operations.
+
+    class Impl;
+    Impl* impl_;
+
+    ///
+    ///  DISABLED. Copy constructor.
+    ///
+    TraceUtil(const TraceUtil& rhs);
+
+    ///
+    /// DISABLED. Assignment operator.
+    ///
+    TraceUtil& operator=(const TraceUtil&);
+
   protected:
     bool fileIsOpened;
 
     ///
     /// Close the file handle. Override this if you define a child class with a different stream.
     ///
-    virtual void closeFileHandle()
-    {
-      // Close the file stream.
-      of_.close();
-      fileIsOpened = false;
-    }
+    virtual void closeFileHandle();
 
     ///
     /// Open the file handle. Override this if you define a child class with a different stream.
     ///
-    virtual void openFileHandle()
-    {
-      try
-      {
-        // Open the file stream
-        of_.open(fileName_.c_str());
-
-        // Store the file stream's buffer in the output stream
-        customOut_.rdbuf(of_.rdbuf());
-
-        encodingUsed_ = encoding_;
-
-        // Keep track of the opened status.
-        fileIsOpened = true;
-      }
-      catch (std::exception &)
-      {
-        fileIsOpened = false;
-      }
-    }
+    virtual void openFileHandle();
 
 #if GUSLIB_THREAD_SUPPORT == 1
     /// mutex used in multithreaded trace access.
     GUS_MUTEX(writeMutex);
 #endif
+
     ///
     /// The constructor.
     ///
-    TraceUtil()
-      : fileName_(""),
-        fileIsOpened(false),
-        level_(10),
-        enabled_(true),
-        of_(std::ofstream("")),
-        customOut_(NULL),
-        encoding_(ASCII),
-        encodingUsed_(ASCII)
-    {
-    }
+    TraceUtil();
 
   public:
     ///
     /// Destructor; simply close the file handle.
     ///
-    virtual ~TraceUtil()
-    {
-      closeFileHandle();
-    }
+    virtual ~TraceUtil();
 
-    virtual std::ostream& operator<<(std::streambuf * ss)
-    {
-      customOut_ << ss;
-      return customOut_;
-    }
+    virtual std::ostream& operator<<(std::streambuf * ss);
 
     ///
     /// Get the encoding that was selected upon file open
@@ -223,10 +189,7 @@ namespace guslib
     /// using the writeLine function, if you need to pass something other
     /// than plain text.
     ///
-    virtual std::ostream& getOutputStream()
-    {
-      return customOut_;
-    }
+    virtual std::ostream& getOutputStream();
 
 
 #if GUSLIB_THREAD_SUPPORT == 1
@@ -264,13 +227,7 @@ namespace guslib
     ///
     /// Initialization with the file name to use.
     ///
-    virtual void initialize(const std::string & fileNameToUse)
-    {
-      fileName_ = fileNameToUse;
-
-      // Open the file, deleting its old contents
-      openFileHandle();
-    }
+    virtual void initialize(const char* fileNameToUse);
 
     ///
     /// Enable or disable the logging alltogether.
@@ -293,20 +250,8 @@ namespace guslib
     ///
     /// Setter for the filename. This also opens the file for writing.
     ///
-    virtual void setFileName(const std::string & fileNameToUse)
-    {
-      if (fileNameToUse.length() <= 0)
-      {
-        return;
-      }
+    virtual void setFileName(const char* fileNameToUse);
 
-      // Close the existing file handle if one is already opened.
-      closeFileHandle();
-
-      // Open or reopen the file handle.
-      fileName_ = fileNameToUse;
-      openFileHandle();
-    }
 
     ///
     /// Setter for the tracing level.
@@ -321,23 +266,7 @@ namespace guslib
     /// Add a line to write into the log file (using a string).
     /// Writes a line to the file. The file is expected to be opened; the text is expected to be non-empty.
     ///
-    virtual void inline writeLine(const std::string & textToWrite)
-    {
-#if GUSLIB_THREAD_SUPPORT == 1
-      GUS_LOCK_MUTEX(writeMutex);
-#endif
-      if (false == fileIsOpened)
-      {
-        return;
-      }
-
-      if (false == isEnabled())
-      {
-        return;
-      }
-
-      customOut_ << textToWrite << std::endl;
-    }
+    virtual void inline writeLine(const char* textToWrite);
 
     // Allow the singleton template to have access to the constructor.
     friend class guslib::Singleton <TraceUtil>;

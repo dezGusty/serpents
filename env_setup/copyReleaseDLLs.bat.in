@@ -22,13 +22,40 @@ Call :copyFileToTargetDir "${OGRE_RenderSystem_Direct3D9_REL}" !MyTargetDirector
 Call :copyFileToTargetDir "${OGRE_RenderSystem_GL_REL}" !MyTargetDirectory!
 Call :copyFileToTargetDir "${OGRE_Terrain_BINARY_REL}" !MyTargetDirectory!
 
-Call :copyFileToTargetDir "${GUSLIB_BINARY_REL}" !MyTargetDirectory!
-Call :copyFileToTargetDir "${ALUT_BINARY_REL}" !MyTargetDirectory!
-Call :copyFileToTargetDir "${OGG_BINARY_REL}" !MyTargetDirectory!
-Call :copyFileToTargetDir "${AUDIERE_BINARY_REL}" !MyTargetDirectory!
-Call :copyFileToTargetDir "${LUA_BINARY_REL}" !MyTargetDirectory!
-Call :copyFileToTargetDir "${OIS_BINARY_REL}" !MyTargetDirectory!
-Call :copyFileToTargetDir "${CEGUI_BINARY_REL}" !MyTargetDirectory!
+Rem Copying guslib binaries
+If Not "${GUSLIB_BINARY_REL}"=="" (
+  Call :copyFileToTargetDir "${GUSLIB_BINARY_REL}" !MyTargetDirectory!
+)
+
+Rem Copying alut binaries
+If Not "${ALUT_BINARY_REL}"=="" (
+  Call :copyFileToTargetDir "${ALUT_BINARY_REL}" !MyTargetDirectory!
+)
+
+Rem Copying ogg binaries
+If Not "${OGG_BINARY_REL}"=="" (
+  Call :copyFileToTargetDir "${OGG_BINARY_REL}" !MyTargetDirectory!
+)
+
+Rem Copying audiere binaries
+If Not "${AUDIERE_BINARY_REL}"=="" (
+  Call :copyFileToTargetDir "${AUDIERE_BINARY_REL}" !MyTargetDirectory!
+)
+
+Rem Copying Lua binaries
+If Not "${LUA_BINARY_REL}"=="" (
+  Call :copyFileToTargetDir "${LUA_BINARY_REL}" !MyTargetDirectory!
+)
+
+Rem Copying OIS binaries
+If Not "${OIS_BINARY_REL}"=="" (
+  Call :copyFileToTargetDir "${OIS_BINARY_REL}" !MyTargetDirectory!
+)
+
+Rem Copying CEGUI binaries
+If Not "${CEGUI_BINARY_REL}"=="" (
+  Call :copyFileToTargetDir "${CEGUI_BINARY_REL}" !MyTargetDirectory!
+)
 
 Call :copyFileToTargetDir "../guslib/guslib/Release/guslib.dll" !MyTargetDirectory!
 
