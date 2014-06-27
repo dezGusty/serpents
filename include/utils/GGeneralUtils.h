@@ -18,23 +18,9 @@
 //
 //    General utilities.
 
-#include <stdio.h>
 // Using the std::string
 #include <string>
-// Using the std::stringstream
-#include <sstream>
-// Using the std::vector
-#include <vector>
 
-#include "GCommonDef.h"
-
-// defines for windows file locations.
-#ifdef _WINDOWS
-	#define G_CURRENT_FOLDER 1
-	#define G_WINDOWS_FOLDER G_CURRENT_FOLDER<<1
-	#define G_WINDOWS_SYS32_FOLDER G_WINDOWS_FOLDER<<1
-	#define G_ALL_LOCATIONS 11111111
-#endif
 
 ///
 /// @brief Utilities namespace.
@@ -62,10 +48,6 @@ namespace GUtils
 	typedef SPoint<DFLOAT> DPOINT;
 
 	typedef SPoint<int> IPOINT;
-
-#ifndef SAFE_DELETE
-#define SAFE_DELETE(pointer) if(pointer!=NULL){delete pointer;}
-#endif
 
 
 	///
@@ -148,8 +130,6 @@ namespace GUtils
 		static long charBasisIntArrayToNumber( int * theArray, int len );
 		
 		static long charBasisCharArrayToNumber( const char * theArray, int len );
-
-		static bool fileExists( const char * fileName );
 
 		static std::string rectToString( DRECT myRect );
 	};

@@ -24,6 +24,13 @@
 //
 #include "engine/serpentscamera.h"
 
+//
+// Other libraries' headers
+//
+
+// OGRE headers
+#include "OgreRoot.h"
+#include "OgreVector3.h"
 
 namespace Serpents
 {
@@ -57,6 +64,12 @@ namespace Serpents
     }
 
     camera->lookAt(actualVector);
+  }
+
+  ///  Reset the camera orientation to its initial value
+  void SerpentsCamera::resetOrientation()
+  {
+    camera->setOrientation(originalOrientation);
   }
 
   void SerpentsCamera::setZoomLevel(const Ogre::Real & zoom)

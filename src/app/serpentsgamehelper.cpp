@@ -63,14 +63,17 @@
 // string handling utility
 #include "guslib/util/stringutil.h"
 
-//
-// This library's headers
-//
-
+// OGRE headers
 #include "OgreRoot.h"
 #include "OgreRenderWindow.h"
 #include "OgreEntity.h"
 #include "OgreSubEntity.h"
+
+//
+// This project's headers
+//
+
+// none
 
 namespace app
 {

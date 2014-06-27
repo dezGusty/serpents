@@ -18,8 +18,27 @@
 //
 //    A renderable object's interface.
 
+//
+// Includes
+//
+
+//
+// C++ system headers
+//
+
+// none
+
+//
+// Other libraries' headers
+//
+#include "OgrePrerequisites.h"
+#include "OgreVector3.h"
+
+
 // Forwards the inclusion of ogre.h
-#include <config/serpentsogre.h>
+//#include <config/serpentsogre.h>
+
+
 
 namespace Serpents
 {
@@ -43,7 +62,7 @@ namespace Serpents
 		Ogre::Vector3 masterTranslationVector;
 		Ogre::Vector3 translationVector;
 
-		Ogre::SceneManager * sceneManager_;
+		//Ogre::SceneManager * sceneManager_;
 		Ogre::String sceneNodeName_;
 
 		static long internalCounter;

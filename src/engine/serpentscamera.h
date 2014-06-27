@@ -25,12 +25,26 @@
 // C++ system headers
 //
 
+// none
+
+//
+// Other libraries' headers
+//
+
+#include "OgrePrerequisites.h"
+#include "OgreVector3.h"
 
 //
 // This project's headers.
 //
 
-#include "OgreRoot.h"
+
+// Forward declaration to avoid inclusion of header.
+namespace Ogre
+{
+  class Root;
+  class Camera;
+}
 
 namespace Serpents
 {
@@ -80,10 +94,7 @@ namespace Serpents
     virtual void lookAt(const Ogre::Vector3& lookTarget);
 
     ///  Reset the camera orientation to its initial value
-    virtual void resetOrientation()
-    {
-      camera->setOrientation(originalOrientation);
-    }
+    virtual void resetOrientation();
 
     virtual void setZoomStep(const Ogre::Real &value)
     {

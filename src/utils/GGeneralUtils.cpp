@@ -16,16 +16,20 @@
 //
 //    General utitilies file
 
+//
+// Includes
+//
 
-#include <utils/GGeneralUtils.h>
-#include <math.h>
-#include <string.h>
-#include <stdarg.h>
-#include <stdlib.h>
-#include <stdio.h>
+//
+// Own header
+//
+#include "utils/ggeneralutils.h"
 
-//cout
-#include <iostream>
+//
+// C++ system files
+//
+#include <sstream>
+#include <string>
 
 namespace GUtils
 {
@@ -216,18 +220,7 @@ namespace GUtils
 		return ret;
 	}
 
-	bool GusUtils::fileExists( const char * fileName )
-	{
-		if( fileName == NULL )
-			return false;
-		bool bRet= true;
-		FILE * f=NULL;
-		errno_t err = fopen_s( &f, fileName, "r");
-		if( 2 == err )//ENOENT, No such file or directory
-			bRet = false;
-		if(f) fclose(f);
-		return bRet;
-	}
+	
 
 	std::string GusUtils::rectToString( DRECT myRect )
 	{
