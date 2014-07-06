@@ -26,9 +26,12 @@ Echo.Compressing output...
 
 REM Built coverity report. Compress it.
 zip -r gustysserpents.zip cov-int
-
 PopD
-
+Echo.Compressed output...
+If Exist "submitcoveritybuild.bat" (
+  Echo.A batch for auto-submitting the coverity build has been detected and will be called.
+  Call "submitcoveritybuild.bat"
+)
 
 :End
 PopD
