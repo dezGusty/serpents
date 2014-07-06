@@ -282,8 +282,6 @@ SET (SOURCE_FILES_APP
   ./src/app/ogreapp.h
   ./src/app/serpentsengine.cpp
   ./src/app/serpentsengine.h
-  ./src/app/serpentsgamehelper.cpp
-  ./src/app/serpentsgamehelper.h
   ./src/app/serpentsframelistener.cpp
   ./src/app/serpentsframelistener.h
   ./src/app/serpentsgui.cpp
@@ -302,8 +300,8 @@ SET (SOURCE_FILES_CONFIG
 
 # Specify the group for state implementations.
 SET (SOURCE_FILES_IMPL
-  ./src/impl/MenuState.cpp
-  ./src/impl/MenuState.h
+  ./src/impl/menustate.cpp
+  ./src/impl/menustate.h
   ./src/impl/SerpMaterialListener.cpp
   ./src/impl/SerpMaterialListener.h
   ./src/impl/workbenchstate.cpp
@@ -312,8 +310,17 @@ SET (SOURCE_FILES_IMPL
 
 # Specify the group for engine
 SET (SOURCE_FILES_ENGINE
+  ./src/engine/renderableobject.cpp
+  ./src/engine/renderableobject.h
+  ./src/engine/renderableobjectinterface.h
+  ./src/engine/scene.cpp
+  ./src/engine/scene.h
   ./src/engine/serpentscamera.cpp
   ./src/engine/serpentscamera.h
+  ./src/engine/serpentsgamehelper.cpp
+  ./src/engine/serpentsgamehelper.h
+  ./src/engine/shadinghelper.cpp
+  ./src/engine/shadinghelper.h
 )
 
 

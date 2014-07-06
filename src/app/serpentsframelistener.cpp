@@ -49,6 +49,8 @@
 // Engine class has a fwd declaration in the header, so it must be included here.
 #include "app/serpentsengine.h"
 
+#include "OgreRenderWindow.h"
+
 namespace app
 {
   SerpFrameListener::SerpFrameListener(

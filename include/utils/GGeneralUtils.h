@@ -123,10 +123,6 @@ namespace GUtils
 
 		static double Pow( double num, double pw );
 
-		static int * numberToCharBasisIntArray( long number, int *returnedLen );
-
-		static char * numberToCharBasisCharArray( long number, int *returnedLen );
-
 		static long charBasisIntArrayToNumber( int * theArray, int len );
 		
 		static long charBasisCharArrayToNumber( const char * theArray, int len );

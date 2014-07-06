@@ -29,11 +29,7 @@
 //    Last change:  $LastChangedDate$
 //    Revision:    $Revision$
 
-#ifdef CEGUI_07
-#include "CEGUI.h"
-#else
 #include "cegui/CEGUI.h"
-#endif
 
 #include <OIS.h>
 
@@ -86,7 +82,7 @@ namespace utils
 
     static CEGUI::MouseButton convertOISButtonToCegui (int buttonID);
 
-    // Make sure that the FULL widget name (including path) can be used easily in CEGUI_07 as well.
+    // Make sure that the FULL widget name (including path) IF interoperability with CEGUI_07 should to be maintained.
     static std::string getNameForWidget (const std::string& name);
 
     static CEGUI::Window* getWindow (const CEGUI::String& name);

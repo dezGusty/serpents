@@ -47,7 +47,8 @@
 //
 
 // Forwards the inclusion of ogre.h
-#include "config/serpentsogre.h"
+#include "OgreRoot.h"
+#include "OgreRenderWindow.h"
 
 #include "app/serpentsframelistener.h"
 #include "app/serpentsgui.h"
@@ -56,25 +57,64 @@
 
 namespace app
 {
-  SerpEngine::SerpEngine(Ogre::SceneManager * aManager, Ogre::Root * rootElement, const std::string & name)
+  /**
+    Constructor.
+  */
+  SerpEngine::SerpEngine(Ogre::SceneManager * aManager, Ogre::Root * rootElement)
     : exiting_(false),
       rootPtr_(rootElement),
       sceneManagerPtr_(aManager),
+      shadingHelperPtr_(new Serpents::ShadingHelper()),
       frameListenerPtr_(0),
       cameraPtr_(0),
-      cameraSecPtr_(0),
-      name_(name)
-#if GUS_USE_RTSS
-      ,
-      mShaderGenerator(0)
-#endif
+      cameraSecPtr_(0)
   {
     GTRACE(3, "SerpEngine created.");
   }
 
+  /**
+    Destructor.
+  */
   SerpEngine::~SerpEngine()
   {
+    delete shadingHelperPtr_;
   }
+
+  //
+  // -------------------- Statistical functions ---------------------------
+  // Note: these are taken from the [FrameStats] structure in file [OgreRenderTarget.h]
+  //
+
+  /**
+    Get the FPS count for the last frame.
+  */
+  float SerpEngine::getStatisticalFPS()
+  {
+    Ogre::RenderTarget::FrameStats stats(
+      this->getFrameListener()->getRenderWindow()->getStatistics());
+    return stats.lastFPS;
+  }
+
+  /**
+    Get the triangle count for the last frame.
+  */
+  size_t SerpEngine::getStatisticalTriangleCount()
+  {
+    Ogre::RenderTarget::FrameStats stats(
+      this->getFrameListener()->getRenderWindow()->getStatistics());
+    return stats.triangleCount;
+  }
+
+  /**
+    Get the batch count for the last frame.
+  */
+  size_t SerpEngine::getStatisticalBatchCount()
+  {
+    Ogre::RenderTarget::FrameStats stats(
+      this->getFrameListener()->getRenderWindow()->getStatistics());
+    return stats.batchCount;
+  }
+
 
   bool SerpEngine::isExiting()
   {
@@ -311,132 +351,4 @@ namespace app
     shutDown();
   }
 
-  //
-  // --------------------------------------------- GUS_USE_RTSS section -----------------------------------------------
-  //
-#if GUS_USE_RTSS
-  bool SerpEngine::initializeRTShaderSystem(Ogre::SceneManager* sceneMgr)
-  {
-    SerpEngineStartupSettings dummy;
-    dummy.preferredShadingLanguage = "cg";
-    dummy.storeRtssCacheInMemory = true;
-
-    return initializeRTShaderSystem(sceneMgr, dummy);
-  }
-
-  bool SerpEngine::initializeRTShaderSystem(
-      Ogre::SceneManager* sceneMgr,
-      const SerpEngineStartupSettings& startupSettings)
-  {
-    startupSettingsCopy_ = startupSettings;
-
-    if (Ogre::RTShader::ShaderGenerator::initialize())
-    {
-      mShaderGenerator = Ogre::RTShader::ShaderGenerator::getSingletonPtr();
-
-      mShaderGenerator->addSceneManager(sceneMgr);
-      mShaderGenerator->setTargetLanguage(startupSettings.preferredShadingLanguage);
-      GTRACE(2, "stored rtss singleton and added the scene manager to it");
-      // Invalidate the scheme in order to re-generate all shaders based technique related to this scheme.
-      mShaderGenerator->invalidateScheme(Ogre::RTShader::ShaderGenerator::DEFAULT_SCHEME_NAME);
-    }
-    else
-    {
-      GTRACE(2, "ERROR initializing the RTSS!!!");
-    }
-
-    // Setup core libraries and shader cache path.
-    Ogre::StringVector groupVector = Ogre::ResourceGroupManager::getSingleton().getResourceGroups();
-    Ogre::StringVector::iterator itGroup = groupVector.begin();
-    Ogre::StringVector::iterator itGroupEnd = groupVector.end();
-    Ogre::String shaderCoreLibsPath;
-    Ogre::String shaderCachePath;
-    bool rtssUsesMemoryCache = startupSettings.storeRtssCacheInMemory;
-    bool coreLibsFound = false;
-    for (; itGroup != itGroupEnd; ++itGroup)
-    {
-      Ogre::ResourceGroupManager::LocationList resLocationsList =
-          Ogre::ResourceGroupManager::getSingleton().getResourceLocationList(*itGroup);
-
-      Ogre::ResourceGroupManager::LocationList::iterator it = resLocationsList.begin();
-      Ogre::ResourceGroupManager::LocationList::iterator itEnd = resLocationsList.end();
-
-      // Try to find the location of the core shader lib functions and use it
-      // as shader cache path as well - this will reduce the number of generated files
-      // when running from different directories.
-      for (; it != itEnd; ++it)
-      {
-        GTRACE(4, "Looking into: [" <<(*it)->archive->getName() << "] for [" << "RTShaderLib" << "]");
-        if ((*it)->archive->getName().find("RTShaderLib") != Ogre::String::npos)
-        {
-          shaderCoreLibsPath =(*it)->archive->getName() + "/cache/";
-          shaderCachePath = shaderCoreLibsPath;
-          coreLibsFound = true;
-          break;
-        }
-      }
-
-      // Core libs path found in the current group.
-      if (coreLibsFound)
-      {
-        break;
-      }
-    }
-
-    if (rtssUsesMemoryCache)
-    {
-      // empty path => generate directly from memory.
-      mShaderGenerator->setShaderCachePath(Ogre::StringUtil::BLANK);
-    }
-    else
-    {
-      mShaderGenerator->setShaderCachePath(shaderCachePath);
-    }
-
-    GTRACE(3, "The entry [RTShaderLib] was " <<(coreLibsFound ? "" : "NOT ") << "found in the resources list");
-
-    // Core shader libs not found -> shader generating will fail.
-    if (shaderCoreLibsPath.empty())
-    {
-      return false;
-    }
-
-    // Create and register the material manager listener.
-    //mMaterialMgrListener = new ShaderGeneratorTechniqueResolverListener(mShaderGenerator);
-    //Ogre::MaterialManager::getSingleton().addListener(mMaterialMgrListener);
-    return true;
-  }
-
-  void SerpEngine::cleanupRTSGResources()
-  {
-    GTRACE(2, "ERROR:(GUS TODO MSG) you are leaving the RTSS files and scripts, but you are deleting other resources!!!");
-    GTRACE(2, "Other resources which are used by the RTSS, such as level shaders, shadow casters, textures, etc.");
-
-    mShaderGenerator->removeSceneManager(this->getSceneManagerPtr());
-    mShaderGenerator->flushShaderCache();
-    Ogre::RTShader::ShaderGenerator::destroy();
-    this->setShaderGenerator(0);
-    {
-    //  enginePtr_->getShaderGenerator()->finalize();
-    //  mShaderGenerator = Ogre::RTShader::ShaderGenerator::getSingletonPtr();
-
-    //  mShaderGenerator->addSceneManager(sceneMgr);
-    //  mShaderGenerator->setTargetLanguage(startupSettings.preferredShadingLanguage);
-    //  GTRACE(2, "stored rtss singleton and added the scene manager to it");
-    //  // Invalidate the scheme in order to re-generate all shaders based technique related to this scheme.
-    //  mShaderGenerator->invalidateScheme(Ogre::RTShader::ShaderGenerator::DEFAULT_SCHEME_NAME);
-    }
-  }
-
-  void SerpEngine::reloadRTSGResources()
-  {
-    bool bResult = this->initializeRTShaderSystem(this->getSceneManagerPtr(), startupSettingsCopy_);
-
-    if (false == bResult)
-    {
-      GTRACE(2, "Failed to initialize the RTSS");
-    }
-  }
-
-#endif  // GUS_USE_RTSS
 }

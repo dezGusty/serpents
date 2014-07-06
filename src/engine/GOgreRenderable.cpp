@@ -96,7 +96,7 @@ namespace Serpents
 		tempPtr->raySceneQuery = raySceneQuery;
 		return tempPtr;
 	}
-	
+
 
 	void GOgreRenderable::unload()
 	{
@@ -137,7 +137,7 @@ namespace Serpents
 			sceneManager_->destroySceneNode( tempNode->getName() );
 
 			//	remove the entity too
-			
+
 			GTRACE(5, "Entity delete:" << getEntName() );
 			sceneManager_->destroyEntity( getEntName() );
 
@@ -189,7 +189,7 @@ namespace Serpents
 		GTRACE(5, "Created scene node [" <<myString<<","<<sceneNodeName_<<"]");
 
 		//	make an unique name for the entity.
-		myString = Ogre::String("e") + Ogre::String(myStr.c_str()) 
+		myString = Ogre::String("e") + Ogre::String(myStr.c_str())
 			+ Ogre::String("_") + StringConverter::toString((int)creationIndex);
 		GTRACE(5, "Creating entity for mesh ["<<meshName<<"]");
 		entity = sceneManager_->createEntity( myString, meshName );
@@ -197,7 +197,7 @@ namespace Serpents
 		{
 			GTRACE(5, "Set render group to "<<(int)renderGroup);
 			entity->setRenderQueueGroup(renderGroup);
-			//entity->setRenderQueueGroup(RENDER_QUEUE_OUTLINE_GLOW_OBJECTS); 
+			//entity->setRenderQueueGroup(RENDER_QUEUE_OUTLINE_GLOW_OBJECTS);
 		}
 		entity->setVisible( false );
 		entName = entity->getName();
@@ -295,7 +295,7 @@ namespace Serpents
 			RaySceneQueryResult::iterator j = qryResult.begin();
 			if (j != qryResult.end() && j->worldFragment)
 			{
-				myNode->setPosition( myNode->getPosition().x, 
+				myNode->setPosition( myNode->getPosition().x,
 					j->worldFragment->singleIntersection.y,// + h/2,
 					myNode->getPosition().z);
 			}

@@ -43,24 +43,30 @@
 
 #include "gussound.h"
 
+#include "OgreRoot.h" // TODO: Move somewhere else? ()
+#include "OgreHardwarePixelBuffer.h"
+#include "CEGUI\RendererModules\Ogre\Renderer.h"  // cegui
+#include "OgreShadowCameraSetupPSSM.h"
+#include "OgreShadowCameraSetupFocused.h"
+#include "OgreShadowCameraSetupPlaneOptimal.h"
+
 //
 // This project's headers
 //
 
 #include "app/serpentsengine.h"
-#include "app/serpentsframelistener.h"
 
 #include "engine/serpentscamera.h"
 
-#include "app/serpentsgamehelper.h"
+#include "engine/serpentsgamehelper.h"
 // Main sound header.
 
 #include "utils/CEGUIUtils.h"
 
 namespace Serpents
 {
-  WorkbenchState::WorkbenchState(const std::string& name, const std::string& prefLvl, app::SerpEngine* ptr)
-    : SerpState(name, ptr),
+  WorkbenchState::WorkbenchState(const std::string& name, const std::string& prefLvl, app::SerpEngine* enginePtr)
+    : SerpState(name, enginePtr),
       initialized_(false),
       canRotate_(false),
       oldMouseX_(-1),
@@ -91,6 +97,7 @@ namespace Serpents
       m_secondaryViewActive(0),
       m_preferredSkinConfig("")
   {
+    scene_ = new Scene(enginePtr);
   }
 
 
@@ -154,16 +161,18 @@ namespace Serpents
       {
         try
         {
-          Ogre::CompositorManager::getSingleton().setCompositorEnabled(vp, *it, true);
-          Ogre::CompositorManager::getSingleton().removeCompositor(vp, *it);
+          SerpentsCamera::setCompositorEnabledForViewportByName(it->c_str(), vp, true);
+          SerpentsCamera::removeCompositorFromViewportByName(it->c_str(), vp);
         }
         catch (const std::exception & e)
         {
           GTRACE(1, "Caught exception: " << e.what());
         }
       }
-      Ogre::CompositorManager::getSingletonPtr()->removeCompositorChain(vp);
+
+      SerpentsCamera::removeCompositorChainFromViewport(vp);
     }
+
     enginePtr_->shutDown();
   }
 
@@ -385,35 +394,6 @@ namespace Serpents
     return true;
   }
 
-
-  void WorkbenchState::addCompositorByName(const std::string& name, Ogre::Viewport* vp)
-  {
-    GTRACE(5, "Adding compositor [" << name << "](or at least trying to)");
-    try
-    {
-      Ogre::CompositorManager::getSingleton().addCompositor(vp, name.c_str());
-      Ogre::CompositorManager::getSingleton().setCompositorEnabled(vp, name.c_str(), true);
-    }
-    catch (const std::exception & e)
-    {
-      GTRACE(1, "Caught exception: " << e.what());
-    }
-  }
-
-  void WorkbenchState::removeCompositorByName(const std::string& name, Ogre::Viewport* vp)
-  {
-    GTRACE(5, "Removing compositor [" << name << "]");
-    try
-    {
-      Ogre::CompositorManager::getSingleton().setCompositorEnabled(vp, name.c_str(), false);
-      Ogre::CompositorManager::getSingleton().removeCompositor(vp, name.c_str());
-    }
-    catch (const std::exception & e)
-    {
-      GTRACE(1, "Caught exception: " << e.what());
-    }
-  }
-
   void WorkbenchState::addSceneCompositors()
   {
     std::vector<std::string> sceneCompositorList = levelConfig_["general"]["applyCompositorToScene"].getAsStringList();
@@ -421,7 +401,7 @@ namespace Serpents
     {
       for (std::vector<std::string>::iterator it = sceneCompositorList.begin(); it != sceneCompositorList.end(); ++it)
       {
-        addCompositorByName(*it, playerCamera_->getCamera()->getViewport());
+        playerCamera_->addCompositorByName(it->c_str());
       }
     }
 
@@ -433,7 +413,7 @@ namespace Serpents
       for (std::vector<std::string>::iterator it = secondarySceneCompositorList.begin();
           it != secondarySceneCompositorList.end(); ++it)
       {
-        addCompositorByName(*it, enginePtr_->getSecondaryCamera()->getViewport());
+        secondCamera_->addCompositorByName(it->c_str());
       }
     }
   }
@@ -443,10 +423,10 @@ namespace Serpents
     std::vector<std::string> sceneCompositorList = levelConfig_["general"]["applyCompositorToScene"].getAsStringList();
     for (std::vector<std::string>::iterator it = sceneCompositorList.begin(); it != sceneCompositorList.end(); ++it)
     {
-      removeCompositorByName(*it, playerCamera_->getCamera()->getViewport());
+      playerCamera_->removeCompositorByName(it->c_str());
     }
 
-    Ogre::CompositorManager::getSingletonPtr()->removeCompositorChain(playerCamera_->getCamera()->getViewport());
+    playerCamera_->removeCompositorChain();
 
     std::vector<std::string> secondarySceneCompositorList =
       levelConfig_["general"]["applyCompositorToSecondaryView"].getAsStringList();
@@ -454,10 +434,10 @@ namespace Serpents
     for (std::vector<std::string>::iterator it = secondarySceneCompositorList.begin();
         it != secondarySceneCompositorList.end(); ++it)
     {
-      removeCompositorByName(*it, enginePtr_->getSecondaryCamera()->getViewport());
+      secondCamera_->removeCompositorByName(it->c_str());
     }
 
-    Ogre::CompositorManager::getSingletonPtr()->removeCompositorChain(enginePtr_->getSecondaryCamera()->getViewport());
+    secondCamera_->removeCompositorChain();
   }
 
 
@@ -1268,7 +1248,7 @@ namespace Serpents
       levelConfig_["lighting"]["applyCompositorToSecondaryView"].getAsStringList();
     for (std::vector<std::string>::iterator it = compositorList.begin(); it != compositorList.end(); ++it)
     {
-      addCompositorByName(*it, char_view);
+      secondCamera_->addCompositorByName(it->c_str());
     }
 
     char_rt->update();
@@ -1327,20 +1307,10 @@ namespace Serpents
     GTRACE(4, "Applying compositor enabled status to [" << bCompositorStatus << "] for "
         << sceneCompositorList.size() << " compositors to the scene texture viewports");
 
+    for (std::vector<std::string>::iterator it = sceneCompositorList.begin();
+        it != sceneCompositorList.end(); ++it)
     {
-      Ogre::Viewport *vp = playerCamera_->getCamera()->getViewport();
-      for (std::vector<std::string>::iterator it = sceneCompositorList.begin();
-          it != sceneCompositorList.end(); ++it)
-      {
-        try
-        {
-          Ogre::CompositorManager::getSingleton().setCompositorEnabled(vp, *it, bCompositorStatus);
-        }
-        catch (const std::exception & e)
-        {
-          GTRACE(1, "Caught exception: " << e.what());
-        }
-      }
+      playerCamera_->setCompositorEnabledByName(it->c_str(), bCompositorStatus);
     }
 
     std::vector<std::string> secondary_scene_compositor_list =
@@ -1349,18 +1319,12 @@ namespace Serpents
     GTRACE(4, "Applying compositor enabled status to [" << bCompositorStatus << "] for "
       << secondary_scene_compositor_list.size() << " compositors to the secondary scene texture viewports");
     {
+      
       Ogre::Viewport *vp = enginePtr_->getSecondaryCamera()->getViewport();
       for (std::vector<std::string>::iterator it = secondary_scene_compositor_list.begin();
           it != secondary_scene_compositor_list.end(); ++it)
       {
-        try
-        {
-          Ogre::CompositorManager::getSingleton().setCompositorEnabled(vp, *it, bCompositorStatus);
-        }
-        catch (const std::exception & e)
-        {
-          GTRACE(1, "Caught exception: " << e.what());
-        }
+        secondCamera_->setCompositorEnabledByName(it->c_str(), bCompositorStatus);
       }
     }
   }
@@ -1457,18 +1421,6 @@ namespace Serpents
           {
             checkbox_002->setSelected(true);
           }
-        }
-
-        CEGUI::FrameWindow* widget = static_cast<CEGUI::FrameWindow*>(utils::CEGUIHelperUtil::getWindow(
-            "WorkbenchOptionsRoot/WorkbenchOptions"));
-
-        if (widget)
-        {
-          // Toggle the roll-up event twice to invalidate the contents of the frame.
-          // The regular invalidation doesn't seem to do anything.
-          // Neither is re-setting properties that would cause a redraw.
-          widget->toggleRollup();
-          widget->toggleRollup();
         }
       }
     }
@@ -1799,127 +1751,6 @@ namespace Serpents
   }
 
 
-  void printAllKids(Ogre::SceneNode * rootNode, int level = 0)
-  {
-    if (!rootNode)
-    {
-      return;
-    }
-
-    GTRACE(3, "Lvl: " << level << "; Node: " << rootNode->getName());
-    Ogre::Node::ChildNodeIterator it = rootNode->getChildIterator();
-    while (it.hasMoreElements())
-    {
-      Ogre::SceneNode * node = static_cast<Ogre::SceneNode*>(it.getNext());
-      Ogre::SceneNode::ObjectIterator it2 = node->getAttachedObjectIterator();
-      while (it2.hasMoreElements())
-      {
-        Ogre::MovableObject *movable = static_cast<Ogre::MovableObject*>(it2.getNext());
-        GTRACE(3, "attached: " << movable->getName() << "; " << movable->getMovableType());
-        if (movable->getMovableType() == "Entity")
-        {
-          Ogre::Entity * ent = static_cast<Ogre::Entity*>(movable);
-          int numSubEntities = ent->getNumSubEntities();
-          for (int i = 0; i < numSubEntities; ++i)
-          {
-            Ogre::SubEntity * subent = ent->getSubEntity(i);
-            GTRACE(3, "Entity " << i << " material: " << subent->getMaterialName());
-          }
-        }
-      }
-
-      printAllKids(node, level + 1);
-    }
-  }
-
-
-  std::vector <std::string> getEntitiesWithMaterial(Ogre::SceneNode * rootNode, std::string materialName)
-  {
-    std::vector <std::string> ret;
-
-    if (!rootNode)
-    {
-      return ret;
-    }
-
-    if (materialName.length() <= 0)
-    {
-      return ret;
-    }
-
-    Ogre::Node::ChildNodeIterator it = rootNode->getChildIterator();
-    while (it.hasMoreElements())
-    {
-      Ogre::SceneNode* node = static_cast<Ogre::SceneNode*>(it.getNext());
-      if (NULL == node)
-      {
-        return ret;
-      }
-
-      Ogre::SceneNode::ObjectIterator it2 = node->getAttachedObjectIterator();
-      while (it2.hasMoreElements())
-      {
-        Ogre::MovableObject* movable = static_cast<Ogre::MovableObject*>(it2.getNext());
-        if (NULL == movable)
-        {
-          return ret;
-        }
-
-        GTRACE(3, "attached: " << movable->getName() << "; " << movable->getMovableType());
-        if (movable->getMovableType() == "Entity")
-        {
-          Ogre::Entity * ent = static_cast<Ogre::Entity*>(movable);
-          if (NULL == ent)
-          {
-            return ret;
-          }
-
-          int numSubEntities = ent->getNumSubEntities();
-          for (int i = 0; i < numSubEntities; ++i)
-          {
-            Ogre::SubEntity * subent = ent->getSubEntity(i);
-            if (subent->getMaterialName() == materialName)
-            {
-              ret.push_back(ent->getName());
-            }
-
-            GTRACE(3, "Entity " << i << " material: " << subent->getMaterialName());
-          }
-        }
-      }
-
-      std::vector <std::string> subret = getEntitiesWithMaterial(node, materialName);
-      for (std::vector <std::string>::iterator myIt = subret.begin(); myIt != subret.end(); ++myIt)
-      {
-        ret.push_back(*myIt);
-      }
-    }
-
-    return ret;
-  }
-
-  void setMaterialForEntities(
-      Ogre::SceneManager * sceneManager,
-      std::string materialName,
-      std::vector <std::string> entities)
-  {
-    for (std::vector <std::string>::iterator it = entities.begin(); it != entities.end(); ++it)
-    {
-      std::string entityName = *it;
-      Ogre::Entity *ent = sceneManager->getEntity(entityName);
-      if (ent)
-      {
-        int numSubEntities = ent->getNumSubEntities();
-        for (int i = 0; i < numSubEntities; ++i)
-        {
-          Ogre::SubEntity * subent = ent->getSubEntity(i);
-          subent->setMaterialName(materialName);
-
-          GTRACE(3, "Entity " << i << " set material to: " << subent->getMaterialName());
-        }
-      }
-    }
-  }
 
 
   bool WorkbenchState::renderScene()
@@ -1930,8 +1761,6 @@ namespace Serpents
     }
 
     GTRACE(5, "WorkbenchState::renderScene");
-
-    Ogre::RenderTarget::FrameStats stats = enginePtr_->getFrameListener()->getRenderWindow()->getStatistics();
 
     CEGUI::WindowManager* win_mgr = CEGUI::WindowManager::getSingletonPtr();
     CEGUI::Window* label;
@@ -1944,7 +1773,7 @@ namespace Serpents
       if (label)
       {
         std::stringstream ss;
-        ss << std::fixed << std::setprecision(1) << stats.lastFPS;
+        ss << std::fixed << std::setprecision(1) << enginePtr_->getStatisticalFPS();
         std::string sText = ss.str();
         label->setText((CEGUI::utf8*) sText.c_str());
       }
@@ -1954,17 +1783,9 @@ namespace Serpents
     if (applyCameraSetupNextTick_)
     {
       GTRACE(4, "Applying shadow camera setup in current tick for render");
-#if GUS_USE_RTSS
-      // Grab the scheme render state.
-      Ogre::RTShader::RenderState* schemRenderState = enginePtr_->getShaderGenerator()->getRenderState(
-          Ogre::RTShader::ShaderGenerator::DEFAULT_SCHEME_NAME);
 
-      // Assume a lighting model of SSLM_PerVertexLighting
-      Ogre::RTShader::SubRenderState* perPerVertexLightModel =
-          enginePtr_->getShaderGenerator()->createSubRenderState(Ogre::RTShader::FFPLighting::Type);
+      enginePtr_->getShadingHelperPtr()->addPerVertexLightingToActiveScheme();
 
-      schemRenderState->addTemplateSubRenderState(perPerVertexLightModel);
-#endif
       Ogre::PSSMShadowCameraSetup * subptr = 0;
       if (win_mgr)
       {
@@ -2037,42 +1858,20 @@ namespace Serpents
             enginePtr_->getSceneManagerPtr()->setShadowCameraSetup(scs);
             GTRACE(3, "Applied shadow CAMERA setup of type " << sMode);
             label->setText((CEGUI::utf8*) sMode.c_str());
-#if GUS_USE_RTSS
+
             if (currentCameraSetup_ == 4)
             {
-              Ogre::RTShader::SubRenderState* subRenderState =
-                  enginePtr_->getShaderGenerator()->createSubRenderState(Ogre::RTShader::IntegratedPSSM3::Type);
-              Ogre::RTShader::IntegratedPSSM3* pssm3SubRenderState =
-                  static_cast<Ogre::RTShader::IntegratedPSSM3*>(subRenderState);
-
-              if (subptr)
-              {
-                const Ogre::PSSMShadowCameraSetup::SplitPointList& srcSplitPoints = subptr->getSplitPoints();
-                Ogre::RTShader::IntegratedPSSM3::SplitPointList dstSplitPoints;
-
-                for (unsigned int i = 0; i < srcSplitPoints.size(); ++i)
-                {
-                  dstSplitPoints.push_back(srcSplitPoints[i]);
-                }
-
-                pssm3SubRenderState->setSplitPoints(dstSplitPoints);
-                schemRenderState->addTemplateSubRenderState(subRenderState);
-              }
+              enginePtr_->getShadingHelperPtr()->addIntegratedPSSMRenderState(subptr);
             }
             else
             {
-              Ogre::RTShader::SubRenderStateList myList = schemRenderState->getTemplateSubRenderStateList();
-              for (Ogre::RTShader::SubRenderStateList::iterator it = myList.begin(); it != myList.end(); ++it)
-              {
-                schemRenderState->removeTemplateSubRenderState(*it);
-              }
+              enginePtr_->getShadingHelperPtr()->removeActiveLightingSettings();
             }
-#endif
           }
-#if GUS_USE_RTSS
-          enginePtr_->getShaderGenerator()->invalidateScheme(Ogre::RTShader::ShaderGenerator::DEFAULT_SCHEME_NAME);
+
+          enginePtr_->getShadingHelperPtr()->invalidateActiveScheme();
           readAndApplyShadowCasterMaterial();
-#endif
+
           applyCameraSetupNextTick_ = false;
         }
       }
@@ -2091,32 +1890,7 @@ namespace Serpents
         label = utils::CEGUIHelperUtil::getWindow(btnName1);
         if (label)
         {
-          std::string sMode("");
-          switch (currentShadowTech_)
-          {
-          case 1:
-            sMode = "STENCIL_MODULATIVE";
-            break;
-          case 2:
-            sMode = "STENCIL_ADDITIVE";
-            break;
-          case 3:
-            sMode = "TEXTURE_ADDITIVE";
-            break;
-          case 4:
-            sMode = "TEXTURE_MODULATIVE";
-            break;
-          case 5:
-            sMode = "TEXTURE_ADDITIVE_INTEGRATED";
-            break;
-          case 6:
-            sMode = "TEXTURE_MODULATIVE_INTEGRATED";
-            break;
-          case 0:
-          default:
-            sMode = "OFF";
-            break;
-          }
+          std::string sMode(enginePtr_->getShadingHelperPtr()->getShadowTechniqueName(currentShadowTech_));
           label->setText((CEGUI::utf8*) sMode.c_str());
         }
       }
@@ -2202,7 +1976,7 @@ namespace Serpents
       }
 
       Ogre::Node::ChildNodeIterator it = enginePtr_->getSceneManagerPtr()->getRootSceneNode()->getChildIterator();
-      printAllKids(enginePtr_->getSceneManagerPtr()->getRootSceneNode());
+      app::SerpentsGameHelper::getPtr()->printAllKidsToLogger(enginePtr_->getSceneManagerPtr()->getRootSceneNode());
 
       Ogre::StringVectorPtr ress = Ogre::ResourceGroupManager::getSingleton().findResourceNames(
           resourceGroupName, "*");
@@ -2224,12 +1998,13 @@ namespace Serpents
         it != materialsToReload.end(); ++it)
       {
         std::string matName = *it;
-        std::vector <std::string> entities =
-            getEntitiesWithMaterial(enginePtr_->getSceneManagerPtr()->getRootSceneNode(), matName);
+        std::vector <std::string> entities = app::SerpentsGameHelper::getPtr()->getEntitiesWithMaterial(
+          enginePtr_->getSceneManagerPtr()->getRootSceneNode(), matName);
         for (std::vector <std::string>::iterator sit = entities.begin(); sit != entities.end(); ++sit)
         {
           GTRACE(4, "FYI: material was removed from entity: " << *sit);
         }
+
         materialToEntitiesMap[matName] = entities;
       }
 
@@ -2243,17 +2018,13 @@ namespace Serpents
       Ogre::ShadowTechnique myTech = enginePtr_->getSceneManagerPtr()->getShadowTechnique();
       enginePtr_->getSceneManagerPtr()->setShadowTechnique(Ogre::SHADOWTYPE_NONE);
 
-#if GUS_USE_RTSS
-      enginePtr_->cleanupRTSGResources();
-#endif
+      enginePtr_->getShadingHelperPtr()->cleanupRTSGResources();
       removeSceneCompositors();
 
       // reload the group
       Ogre::ResourceGroupManager::getSingleton().clearResourceGroup(resourceGroupName);
 
-#if GUS_USE_RTSS
-      enginePtr_->reloadRTSGResources();
-#endif
+      enginePtr_->getShadingHelperPtr()->reloadRTSGResources();
 
       applyShadowTechNextTick_ = true;
       applyCameraSetupNextTick_ = true;
@@ -2270,13 +2041,8 @@ namespace Serpents
       {
         std::string matName = *it;
         std::vector <std::string> entities = materialToEntitiesMap[matName];
-        setMaterialForEntities(enginePtr_->getSceneManagerPtr(), matName, entities);
+        app::SerpentsGameHelper::getPtr()->setMaterialForEntities(enginePtr_->getSceneManagerPtr(), matName, entities);
       }
-
-#if GUS_USE_RTSS
-      // TODO(Augustin Preda, 2014.05.31): verify if needed.
-      // enginePtr_->reloadRTSGResources();
-#endif
 
       readAndApplyShadowCasterMaterial();
       applyShadowTextureReceiverMaterial(shadowTextureReceiverMaterial);
@@ -2320,71 +2086,18 @@ namespace Serpents
   {
   }
 
-
-  void WorkbenchState::applyShadowTechnique(Ogre::ShadowTechnique st)
+  void WorkbenchState::applyShadowTechnique(int shadowType)
   {
-    enginePtr_->getSceneManagerPtr()->setShadowTechnique(st);
+    GTRACE(4, "WorkbenchState::applyShadowTechnique : " << shadowType
+      << " (" << enginePtr_->getShadingHelperPtr()->getShadowTechniqueName(shadowType)<< ")");
+
+    enginePtr_->getShadingHelperPtr()->setShadowTechnique(shadowType);
+
     int indexFrom = levelConfig_["lighting"]["lightIndexFrom"].getAsInt();
     int indexTo = levelConfig_["lighting"]["lightIndexTo"].getAsInt();
 
-    try
-    {
-      // Go through the lights and reapply the settings.
-      for (int nIdx = indexFrom; nIdx <= indexTo; ++nIdx)
-      {
-        std::stringstream ss;
-        ss << "light." << nIdx;
-        std::string sName = ss.str();
-
-        applyLightSettingsFromCfg(sName);
-      }
-    }
-    catch (const std::exception &e)
-    {
-      GTRACE(4, "Exception when applying shadow technique: " << e.what());
-    }
-  }
-
-
-  void WorkbenchState::applyShadowTechnique(int shadowType)
-  {
-    GTRACE(4, "WorkbenchState::applyShadowTechnique : " << shadowType);
-    if (shadowType != 0)
-    {
-      switch (shadowType)
-      {
-      case 2:
-        applyShadowTechnique(Ogre::SHADOWTYPE_STENCIL_ADDITIVE);
-        GTRACE(4, "Using shadow technique: SHADOWTYPE_STENCIL_ADDITIVE");
-        break;
-      case 3:
-        applyShadowTechnique(Ogre::SHADOWTYPE_TEXTURE_ADDITIVE);
-        GTRACE(4, "Using shadow technique: SHADOWTYPE_TEXTURE_ADDITIVE");
-        break;
-      case 4:
-        applyShadowTechnique(Ogre::SHADOWTYPE_TEXTURE_MODULATIVE);
-        GTRACE(4, "Using shadow technique: SHADOWTYPE_TEXTURE_MODULATIVE");
-        break;
-      case 5:
-        applyShadowTechnique(Ogre::SHADOWTYPE_TEXTURE_ADDITIVE_INTEGRATED);
-        GTRACE(4, "Using shadow technique: SHADOWTYPE_TEXTURE_ADDITIVE_INTEGRATED");
-        break;
-      case 6:
-        applyShadowTechnique(Ogre::SHADOWTYPE_TEXTURE_MODULATIVE_INTEGRATED);
-        GTRACE(4, "Using shadow technique: SHADOWTYPE_TEXTURE_MODULATIVE_INTEGRATED");
-        break;
-      case 1:
-      default:
-        applyShadowTechnique(Ogre::SHADOWTYPE_STENCIL_MODULATIVE);
-        GTRACE(4, "Using shadow technique: SHADOWTYPE_STENCIL_MODULATIVE");
-        break;
-      }
-    }
-    else
-    {
-      applyShadowTechnique(Ogre::SHADOWTYPE_NONE);
-      GTRACE(4, "Using shadow technique: SHADOWTYPE_NONE");
-    }
+    // Augustin Preda, 2014.07.06: previously, the lights were also (re)applied when applying the shadow technique.
+    // Suspended call to [applyLightSettingsFromCfg]
 
     // GL performs much better if you pick half-float format.
     //  E.g. setShadowTexturePixelFormat(Ogre::PF_FLOAT16_R);
@@ -2463,7 +2176,7 @@ namespace Serpents
       vp->setClearEveryFrame(true);
       for (std::vector<std::string>::iterator it = compositorList.begin(); it != compositorList.end(); ++it)
       {
-        addCompositorByName(*it, vp);
+        //scene_->addCompositorByName(it->c_str(), vp);
       }
     }
   }
@@ -2509,171 +2222,18 @@ namespace Serpents
     applyShadowTechNextTick_ = true;
   }
 
-  void WorkbenchState::applyLightSettingsFromCfg(const std::string& lightCfgEntry)
-  {
-    double x, y, z;
-    Ogre::Light * lTemp;
-
-    std::string sName(lightCfgEntry);
-    std::string sLightName = levelConfig_[sName]["name"].getAsStringOrDefaultVal("");
-
-    lTemp = enginePtr_->getSceneManagerPtr()->getLight(sLightName);
-
-    int lightType = levelConfig_[sName]["type"].getAsInt();
-    x = levelConfig_[sName]["lookAt.x"].getAsDouble();
-    y = levelConfig_[sName]["lookAt.y"].getAsDouble();
-    z = levelConfig_[sName]["lookAt.z"].getAsDouble();
-
-
-    double spotX = levelConfig_[sName]["range.x"].getAsDoubleOrDefaultVal(0.0f);
-    double spotY = levelConfig_[sName]["range.y"].getAsDoubleOrDefaultVal(0.0f);
-
-    double initPosX = levelConfig_[sName]["position.x"].getAsDouble();
-    double initPosY = levelConfig_[sName]["position.y"].getAsDouble();
-    double initPosZ = levelConfig_[sName]["position.z"].getAsDouble();
-
-    Ogre::Vector3 posVector(initPosX, initPosY, initPosZ);
-    Ogre::Vector3 dirVector(x, y, z);
-
-    lTemp->setPosition(initPosX, initPosY, initPosZ);
-
-    switch (lightType)
-    {
-    case 0:
-      lTemp->setType(Ogre::Light::LT_POINT);
-      break;
-    case 1:
-      lTemp->setType(Ogre::Light::LT_DIRECTIONAL);
-      {
-        Ogre::Vector3 diffVector = dirVector - posVector;
-        diffVector.normalise();
-        lTemp->setDirection(diffVector);
-        GTRACE(4, "Setting direction for light [" << sName << "]: " << dirVector);
-      }
-      break;
-    case 2:
-      lTemp->setType(Ogre::Light::LT_SPOTLIGHT);
-      {
-        Ogre::Vector3 diffVector = dirVector - posVector;
-        diffVector.normalise();
-        lTemp->setDirection(diffVector);
-        GTRACE(4, "Setting direction for light [" << sName << "]: " << dirVector);
-      }
-
-      lTemp->setSpotlightRange(Ogre::Degree(spotX), Ogre::Degree(spotY));
-      break;
-    }
-
-    int nCastShadows = levelConfig_[sName]["castShadows"].getAsInt();
-    lTemp->setCastShadows(nCastShadows != 0);
-
-    x = levelConfig_[sName]["diffuseColor.x"].getAsDouble();
-    y = levelConfig_[sName]["diffuseColor.y"].getAsDouble();
-    z = levelConfig_[sName]["diffuseColor.z"].getAsDouble();
-    lTemp->setDiffuseColour(x, y, z);
-
-    x = levelConfig_[sName]["specularColor.x"].getAsDouble();
-    y = levelConfig_[sName]["specularColor.y"].getAsDouble();
-    z = levelConfig_[sName]["specularColor.z"].getAsDouble();
-    lTemp->setSpecularColour(x, y, z);
-  }
-
-
   void WorkbenchState::createLights()
   {
     GTRACE(3, "creating lights...");
 
-    // Try to create a light if one doesn't exist already
-    int indexFrom = levelConfig_["lighting"]["lightIndexFrom"].getAsInt();
-    int indexTo = levelConfig_["lighting"]["lightIndexTo"].getAsInt();
-    double x, y, z;
+    std::vector<std::string> lightConfigurations(levelConfig_["lighting"]["sceneLightConfigs"].getAsStringList());
 
     try
     {
-      for (int nIdx = indexFrom; nIdx <= indexTo; ++nIdx)
+      for (std::vector<std::string>::iterator it = lightConfigurations.begin();
+          it != lightConfigurations.end(); ++it)
       {
-        std::stringstream ss;
-        ss << "light." << nIdx;
-        std::string sName = ss.str();
-
-        std::string sLightName = levelConfig_[sName]["name"].getAsStringOrDefaultVal("");
-        if (sLightName.length() > 0)
-        {
-          Ogre::Light * lTemp;
-          GTRACE(4, "Creating light for scene: " << sLightName);
-          lTemp = enginePtr_->getSceneManagerPtr()->createLight(sLightName);
-
-          applyLightSettingsFromCfg(sName);
-
-
-          double initPosX = levelConfig_[sName]["position.x"].getAsDouble();
-          double initPosY = levelConfig_[sName]["position.y"].getAsDouble();
-          double initPosZ = levelConfig_[sName]["position.z"].getAsDouble();
-
-          x = levelConfig_[sName]["lookAt.x"].getAsDouble();
-          y = levelConfig_[sName]["lookAt.y"].getAsDouble();
-          z = levelConfig_[sName]["lookAt.z"].getAsDouble();
-
-          int lightType = levelConfig_[sName]["type"].getAsInt();
-
-          Ogre::ManualObject* myManualObject = NULL;
-          if (lightType != 0)
-          {
-            std::string lineName = sName;
-            lineName.append(".line");
-            std::string lineMaterial = lineName;
-            lineMaterial.append(".material");
-            myManualObject =  enginePtr_->getSceneManagerPtr()->createManualObject(lineName);
-            Ogre::MaterialPtr myManualObjectMaterial =
-                Ogre::MaterialManager::getSingleton().create(lineMaterial, staticGroupName_);
-            myManualObjectMaterial->setReceiveShadows(false);
-            myManualObjectMaterial->getTechnique(0)->setLightingEnabled(true);
-            myManualObjectMaterial->getTechnique(0)->getPass(0)->setDiffuse(0, 0, 1, 0);
-            myManualObjectMaterial->getTechnique(0)->getPass(0)->setAmbient(0, 0, 1);
-            myManualObjectMaterial->getTechnique(0)->getPass(0)->setSelfIllumination(0, 0, 1);
-            myManualObject->begin(lineMaterial, Ogre::RenderOperation::OT_LINE_LIST);
-            myManualObject->position(initPosX, initPosY, initPosZ);
-            myManualObject->position(x, y, z);
-            GTRACE(4, "Added light debug line from(" << initPosX << ", " << initPosY << ", " << initPosZ << ") to ("
-              << x << ", " << y << ", " << z << ")");
-            // etc
-            myManualObject->end();
-          }
-
-
-          Ogre::BillboardSet* bbs = enginePtr_->getSceneManagerPtr()->createBillboardSet(sName+std::string("bbs"), 1);
-          Ogre::ColourValue myCol(0.95f, 0.95f, 1.0f);
-          bbs->createBillboard(Ogre::Vector3::ZERO, myCol);
-          bbs->setMaterialName("Workbench/Flare");
-          bbs->setCastShadows(false);
-
-          {
-            std::string nodeName = sName;
-            nodeName.append("node");
-            Ogre::SceneNode * myNode =
-                enginePtr_->getSceneManagerPtr()->getRootSceneNode()->createChildSceneNode(nodeName);
-
-            // Light attaching to node DISABLED.
-            //myNode->attachObject(lTemp);
-            if (lightType != 0 && myManualObject != NULL)
-            {
-              myNode->attachObject(myManualObject);
-            }
-
-            std::string anonName = nodeName;
-            anonName.append(".anonymous");
-            Ogre::SceneNode * anonNode =
-                enginePtr_->getSceneManagerPtr()->getRootSceneNode()->createChildSceneNode(anonName);
-
-            anonNode->attachObject(bbs);
-            anonNode->scale(0.2f, 0.2f, 0.2f);
-
-            anonNode->translate(initPosX, initPosY, initPosZ);
-            //myNode->addChild(anonNode);
-
-            GTRACE(4, "Moved node " << nodeName);
-          }
-        }
+        scene_->createLightFromConfig(levelConfig_[*it], true, staticGroupName_);
       }
     }
     catch (const std::exception &e)
@@ -2788,185 +2348,9 @@ namespace Serpents
         std::string sName = ss.str();
         GTRACE(4, "Creating item: " << sName);
 
-        int nType = levelConfig_[sName]["type"].getAsInt();
-        double posX = levelConfig_[sName]["position.x"].getAsDouble();
-        double posY = levelConfig_[sName]["position.y"].getAsDouble();
-        double posZ = levelConfig_[sName]["position.z"].getAsDouble();
+        scene_->createObjectFromConfig(levelConfig_[sName], staticGroupName_);
 
-        double sizeWidth = levelConfig_[sName]["size.x"].getAsDouble();
-        double sizeHeight = levelConfig_[sName]["size.z"].getAsDouble();
-        int segsWidth = levelConfig_[sName]["seg.x"].getAsIntOrDefaultVal(1);
-        int segsHeight = levelConfig_[sName]["seg.z"].getAsIntOrDefaultVal(1);
-
-        std::string materialName = levelConfig_[sName]["material"].getAsString();
-        int renderGroup = levelConfig_[sName]["renderGroup"].getAsIntOrDefaultVal(0);
-
-        bool castsShadows = levelConfig_[sName]["castShadows"].getAsBoolOrDefault(true);
-        GTRACE(4, "Item named " << sName << " will " <<(castsShadows?"":"NOT ") << "cast shadows.");
-
-        double scaleX = levelConfig_[sName]["scale.x"].getAsDoubleOrDefaultVal(1.0);
-        double scaleY = levelConfig_[sName]["scale.y"].getAsDoubleOrDefaultVal(1.0);
-        double scaleZ = levelConfig_[sName]["scale.z"].getAsDoubleOrDefaultVal(1.0);
-
-        switch (nType)
-        {
-          case 1:
-            // mesh
-            {
-              std::string meshName = levelConfig_[sName]["mesh"].getAsString();
-
-              if (meshName != "")
-              {
-                // create the entity, node and attach them to the scene.
-                Ogre::Entity * eTemp;
-                Ogre::MeshPtr ptrMesh;
-                ptrMesh = Ogre::MeshManager::getSingletonPtr()->load(meshName, staticGroupName_);
-
-                bool buildTangents;
-                buildTangents = levelConfig_[sName]["buildTangentVectors"].getAsBoolOrDefault(false);
-                if (buildTangents)
-                {
-                  unsigned short src, dest;
-                  if (false == ptrMesh-> suggestTangentVectorBuildParams(Ogre::VES_TANGENT, src, dest))
-                  {
-                    ptrMesh->buildTangentVectors(Ogre::VES_TANGENT, src, dest);
-                  }
-                }
-                eTemp = enginePtr_->getSceneManagerPtr()->createEntity(sName, meshName);
-                std::string tempNodeName = sName;
-                tempNodeName.append("node");
-                Ogre::SceneNode *snTemp =
-                    enginePtr_->getSceneManagerPtr()->getRootSceneNode()->createChildSceneNode(tempNodeName);
-
-                snTemp->attachObject(eTemp);
-
-                snTemp->setPosition(posX, posY, posZ);
-                snTemp->scale(scaleX, scaleY, scaleZ);
-
-                if (renderGroup!= 0)
-                {
-                  eTemp->setRenderQueueGroup(renderGroup);
-                }
-                if (materialName != "")
-                {
-                  eTemp->setMaterialName(materialName);
-                }
-                eTemp->setCastShadows(castsShadows);
-                GTRACE(4, "Created entity for mesh object and applied shadow cast " << castsShadows);
-              }
-            }
-            break;
-          case 0:
-          default:
-            {
-              // plane type
-              std::string planeName(sName);
-              planeName.append("plane");
-
-              int planeNormalIdx = levelConfig_[sName]["normal"].getAsIntOrDefaultVal(0);
-              Ogre::Vector3 planeNormalVector = Ogre::Vector3::UNIT_X;
-              switch (planeNormalIdx)
-              {
-              case -3:
-                planeNormalVector = Ogre::Vector3::NEGATIVE_UNIT_Z;
-                break;
-              case -2:
-                planeNormalVector = Ogre::Vector3::NEGATIVE_UNIT_Y;
-                break;
-              case -1:
-                planeNormalVector = Ogre::Vector3::NEGATIVE_UNIT_X;
-                break;
-              case 1:
-                planeNormalVector = Ogre::Vector3::UNIT_X;
-                break;
-              case 2:
-                planeNormalVector = Ogre::Vector3::UNIT_Y;
-                break;
-              case 3:
-              default:
-                planeNormalVector = Ogre::Vector3::UNIT_Z;
-                break;
-              }
-
-              int planeUpIdx = levelConfig_[sName]["up"].getAsIntOrDefaultVal(0);
-              Ogre::Vector3 planeUpVector = Ogre::Vector3::UNIT_X;
-              switch (planeUpIdx)
-              {
-              case -3:
-                planeUpVector = Ogre::Vector3::NEGATIVE_UNIT_Z;
-                break;
-              case -2:
-                planeUpVector = Ogre::Vector3::NEGATIVE_UNIT_Y;
-                break;
-              case -1:
-                planeUpVector = Ogre::Vector3::NEGATIVE_UNIT_X;
-                break;
-              case 1:
-                planeUpVector = Ogre::Vector3::UNIT_X;
-                break;
-              case 2:
-                planeUpVector = Ogre::Vector3::UNIT_Y;
-                break;
-              case 3:
-              default:
-                planeUpVector = Ogre::Vector3::UNIT_Z;
-                break;
-              }
-
-              GTRACE(4, "Planar object " << sName << " will use normal vector : " << planeNormalVector);
-              GTRACE(4, "Planar object " << sName << " will use up vector : " << planeUpVector);
-
-              Ogre::MovablePlane* myPlane = new Ogre::MovablePlane(planeName);
-              myPlane->normal = planeNormalVector;
-              myPlane->d = posY;
-
-              if (mPlane == 0)
-              {
-                mPlane = myPlane;
-              }
-
-              std::string planeMeshName(sName);
-              planeMeshName.append("mesh");
-              Ogre::MeshManager::getSingleton().createPlane(
-                  planeMeshName,
-                  staticGroupName_, *myPlane,
-                  sizeWidth, sizeHeight,
-                  segsWidth, segsHeight,
-                  true, 1, 1, 1, planeUpVector);
-
-              GTRACE(4, "Created plane mesh " << planeMeshName << " size " << sizeWidth << "x" << sizeHeight
-                << "; segments " << segsWidth << "x" << segsHeight);
-              // create the entity, node and attach them to the scene.
-              Ogre::Entity * eTemp;
-              eTemp = enginePtr_->getSceneManagerPtr()->createEntity(sName, planeMeshName);
-              std::string tempNodeName = sName;
-              tempNodeName.append("node");
-              Ogre::SceneNode *snTemp =
-                  enginePtr_->getSceneManagerPtr()->getRootSceneNode()->createChildSceneNode(tempNodeName);
-              snTemp->attachObject(eTemp);
-
-              snTemp->translate(posX, 0, posZ);
-              if (renderGroup!= 0)
-              {
-                eTemp->setRenderQueueGroup(renderGroup);
-              }
-              if (materialName != "")
-              {
-#if 0
-                Ogre::MaterialPtr matPtr = Ogre::MaterialManager::getSingletonPtr()->getByName(materialName);
-                matPtr->setReceiveShadows(!castsShadows);
-                eTemp->setMaterial(matPtr);
-#else
-                eTemp->setMaterialName(materialName);
-#endif
-              }
-
-              eTemp->setCastShadows(castsShadows);
-              GTRACE(4, "Created entity for plane and applied shadow cast " << castsShadows);
-            }
-            break;
-        }
-      }
+      }  // endfor
     }
     catch (const std::exception &e)
     {
@@ -3040,13 +2424,12 @@ namespace Serpents
 
     if (sTemp != "")
     {
-      enginePtr_->getSceneManagerPtr()->setSkyBox(
-          true,             // enable
-          sTemp,            // material
-          dTemp,            // dist
-          true,             // draw first
-          Ogre::Quaternion::IDENTITY,   // orientation
-          staticGroupName_);  // resource group name.
+      scene_->setSkyBoxData(
+        true,
+        sTemp.c_str(),
+        dTemp,
+        true,
+        staticGroupName_.c_str());
     }
   }
 

@@ -40,14 +40,14 @@ namespace Serpents
 	}
 
 	void StencilOpQueueListener::renderQueueStarted(Ogre::uint8 queueGroupId, const Ogre::String& invocation, bool& skipThisInvocation)
-	{ 
+	{
 		if( queueGroupId >= firstStencilOpRenderQueue
 			&& queueGroupId <= lastStencilOpRenderQueue )
 		{
-			Ogre::RenderSystem * rendersys = Ogre::Root::getSingleton().getRenderSystem(); 
+			Ogre::RenderSystem * rendersys = Ogre::Root::getSingleton().getRenderSystem();
 			rendersys->setStencilCheckEnabled(true);
 			rendersys->clearFrameBuffer(Ogre::FBT_STENCIL);
-			rendersys->setStencilBufferParams(); 
+			rendersys->setStencilBufferParams();
 			started = true;
 			stopped = false;
 		}
@@ -56,31 +56,31 @@ namespace Serpents
 		{
 			if( it->queueID_ == queueGroupId )
 			{
-				Ogre::RenderSystem * rendersys = Ogre::Root::getSingleton().getRenderSystem(); 
-				rendersys->setStencilCheckEnabled(true); 
+				Ogre::RenderSystem * rendersys = Ogre::Root::getSingleton().getRenderSystem();
+				rendersys->setStencilCheckEnabled(true);
 				rendersys->setStencilBufferParams(it->func_,
-					it->value_, STENCIL_FULL_MASK, 
+					it->value_, STENCIL_FULL_MASK,
 					it->stencilFailOp_, it->depthFailOp_, it->passOp_, false);
 			}
 		}
 
 		skipThisInvocation = false;
-	} 
+	}
 
 
 	void StencilOpQueueListener::renderQueueEnded(Ogre::uint8 queueGroupId, const Ogre::String& invocation, bool& repeatThisInvocation)
-	{ 
+	{
 		if ( queueGroupId >= LAST_STENCIL_OP_RENDER_QUEUE )
 		{
 			if( started )
 			{
-				Ogre::RenderSystem * rendersys = Ogre::Root::getSingleton().getRenderSystem(); 
-				rendersys->setStencilCheckEnabled(false); 
-				rendersys->setStencilBufferParams(); 
+				Ogre::RenderSystem * rendersys = Ogre::Root::getSingleton().getRenderSystem();
+				rendersys->setStencilCheckEnabled(false);
+				rendersys->setStencilBufferParams();
 				stopped = true;
 				started = false;
 			}
-		} 
-	} 
+		}
+	}
 
 }

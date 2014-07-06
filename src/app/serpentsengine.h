@@ -30,13 +30,15 @@
 //
 // C++ system headers
 //
-#include <string>
+
+// none
 
 //
 // Other libraries' headers
 //
 
 #include "guslib/util/configuration.h"
+#include "OgrePrerequisites.h"
 #include "OIS.h"
 
 //
@@ -49,12 +51,17 @@
 #include "app/serpentsstate.h"
 #include "app/serpentsgui.h"
 
+#include "engine/shadinghelper.h"
 
-#define GUS_USE_RTSS 1
-
-#if GUS_USE_RTSS
-#include "OgreRTShaderSystem.h"
-#endif
+// Forward declaration to avoid inclusion of large headers.
+namespace Ogre
+{
+  class Root;
+  class RenderWindow;
+  class SceneNode;
+  class SceneManager;
+  class Camera;
+}
 
 // common definitions.
 
@@ -63,22 +70,6 @@ namespace app
   // Fwd. class decls.
 
   class SerpFrameListener;
-
-  //
-  // POD structure?
-  //
-  class SerpEngineStartupSettings
-  {
-  public:
-    std::string preferredShadingLanguage;
-    bool storeRtssCacheInMemory;
-
-    SerpEngineStartupSettings()
-      : preferredShadingLanguage("cg")
-      , storeRtssCacheInMemory(false)
-    {
-    }
-  };
 
 
   class SerpEngine
@@ -89,7 +80,6 @@ namespace app
   protected:
     bool exiting_;
     bool windowIsActive_;
-    std::string name_;
 
     SerpFrameListener * frameListenerPtr_;
     Ogre::Root * rootPtr_;
@@ -101,38 +91,46 @@ namespace app
     SerpStateManagerUtil stateManager_;
     SerpGUI * guiPtr_;
     guslib::Configuration config_;
-    SerpEngineStartupSettings startupSettingsCopy_;
-#if GUS_USE_RTSS
-  protected:
-    Ogre::RTShader::ShaderGenerator*      mShaderGenerator;      // The Shader generator instance.
+
+    Serpents::ShadingHelper* shadingHelperPtr_;
 
   public:
-    virtual bool initializeRTShaderSystem(Ogre::SceneManager* sceneMgr);
-    virtual bool initializeRTShaderSystem(
-        Ogre::SceneManager* sceneMgr,
-        const SerpEngineStartupSettings& startupSettings);
+    /**
+      Constructor.
+    */
+    SerpEngine(Ogre::SceneManager * aManager, Ogre::Root * rootElement);
 
-    void setShaderGenerator(Ogre::RTShader::ShaderGenerator* shaderGenerator)
-    {
-      mShaderGenerator = shaderGenerator;
-    };
-
-    Ogre::RTShader::ShaderGenerator* getShaderGenerator()
-    {
-      return mShaderGenerator;
-    }
-
-    void cleanupRTSGResources();
-    void reloadRTSGResources();
-
-#endif  // GUS_USE_RTSS
-
-  public:
-    SerpEngine(Ogre::SceneManager * aManager, Ogre::Root * rootElement, const std::string & name);
-
+    /**
+      Destructor.
+    */
     virtual ~SerpEngine();
 
-    virtual Ogre::SceneManager * getSceneManagerPtr()
+    //
+    // -------------------- Statistical functions ---------------------------
+    // Note: these are taken from the [FrameStats] structure in file [OgreRenderTarget.h]
+    //
+
+    /**
+      Get the FPS count for the last frame.
+    */
+    float getStatisticalFPS();
+
+    /**
+      Get the triangle count for the last frame.
+    */
+    size_t getStatisticalTriangleCount();
+
+    /**
+      Get the batch count for the last frame.
+    */
+    size_t getStatisticalBatchCount();
+
+    //
+    // -------------------- Getters and setters ---------------------------------
+    //
+
+
+    virtual Ogre::SceneManager* getSceneManagerPtr()
     {
       return sceneManagerPtr_;
     }
@@ -140,6 +138,11 @@ namespace app
     virtual SerpStateManagerUtil& getStateMgr()
     {
       return stateManager_;
+    }
+
+    virtual Serpents::ShadingHelper* getShadingHelperPtr()
+    {
+      return shadingHelperPtr_;
     }
 
     virtual bool isExiting();
@@ -162,6 +165,7 @@ namespace app
     {
       guiPtr_ = ptr;
     }
+
 
     /**
       This is basically a copy of the standard OGRE root function "renderOneFrame".

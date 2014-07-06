@@ -1,92 +1,117 @@
-#ifndef _APP_MENU_STATE_H
-#define _APP_MENU_STATE_H
+#pragma once
 
-//    This file is part of Gusty's Serpents
-//    Copyright (C) 2009  Augustin Preda (thegusty999@gmail.com)
+//   This file is part of Gusty's Serpents, licensed under the terms of the MIT License
+//   (further described below).
 //
-//    Gusty's Serpents is free software: you can redistribute it and/or modify
-//    it under the terms of the GNU General Public License as published by
-//    the Free Software Foundation, either version 3 of the License, or
-//    (at your option) any later version.
+//   Copyright (C) 2009-2014  Augustin Preda (thegusty999@gmail.com)
 //
-//    This program is distributed in the hope that it will be useful,
-//    but WITHOUT ANY WARRANTY; without even the implied warranty of
-//    MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
-//    GNU General Public License for more details.
+//   Permission is hereby granted, free of charge, to any person obtaining a copy
+//   of this software and associated documentation files (the "Software"), to deal
+//   in the Software without restriction, including without limitation the rights
+//   to use, copy, modify, merge, publish, distribute, sublicense, and/or sell
+//   copies of the Software, and to permit persons to whom the Software is
+//   furnished to do so, subject to the following conditions:
 //
-//    You should have received a copy of the GNU General Public License
-//    along with this program.  If not, see <http://www.gnu.org/licenses/>.
+//   The above copyright notice and this permission notice shall be included in
+//   all copies or substantial portions of the Software.
 //
-//    The state that handles the main menu.
+//   THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND, EXPRESS OR
+//   IMPLIED, INCLUDING BUT NOT LIMITED TO THE WARRANTIES OF MERCHANTABILITY,
+//   FITNESS FOR A PARTICULAR PURPOSE AND NONINFRINGEMENT. IN NO EVENT SHALL THE
+//   AUTHORS OR COPYRIGHT HOLDERS BE LIABLE FOR ANY CLAIM, DAMAGES OR OTHER
+//   LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING FROM,
+//   OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN
+//   THE SOFTWARE.
+//
+//    Menu State handling class.
+//
+//    Last change:  $LastChangedDate$
+//    Revision:    $Revision$
+
+//
+// Includes
+//
+
+//
+// C++ system headers.
+//
+
+//
+// Other libraries' headers
+//
+#include "OIS.h"
+
+//
+// This project's headers
+//
 
 // Extend the basic state
 #include "app/serpentsstate.h"
 
-// Standard Ogre includes
-#include <OIS.h>
-
-#include "app/serpentsgui.h"
+// Allow a 3D scene to be displayed
+#include "engine/scene.h"
 
 namespace Serpents
 {
-	class MenuState 
-		: public app::SerpState
-	{
-	private:
-		bool initialized_;
-		bool initialize ();
+  class MenuState
+    : public app::SerpState
+  {
+  private:
+    bool initialized_;
+    bool initialize();
 
-		void quitApp ();
-		void newGame ();
-		void showOptions (bool onOffFlag);
+    void quitApp();
+    void newGame();
 
-		CEGUI::FrameWindow *optionsWindow;
-		void loadResolutionOptionsForSelectedRenderer ();
+    app::SerpStateParams enteringParams;
 
-		app::SerpStateParams enteringParams;
+    Serpents::Scene* scene_;
 
-	public:
-		MenuState (const std::string& name
-			, app::SerpEngine *enginePtr
-			);
+    /**
+      Save engine configuration.
+    */
+    void saveConfiguration();
 
+    class GUIInternals;
+    GUIInternals* guiInternals_;
 
-		//
-		// The overrides for the state handling
-		//
+  public:
+    /**
+      Constructor.
+    */
+    MenuState(
+      const char* name,
+      app::SerpEngine *enginePtr);
 
-		// Handle state initialization.
-		virtual void enter (const app::SerpStateParams& params) override;
-		virtual void exit ();
+    /**
+      Destructor.
+    */
+    virtual ~MenuState();
 
-		virtual void pause () ;
-		virtual void resume ();
+    //
+    // The overrides for the state handling
+    //
 
-		//
-		// The overrides to handle input
-		//
-		virtual void reactToKeyPress(OIS::KeyCode keycode);
-		virtual void reactToKeyRelease(OIS::KeyCode keycode);
+    // Handle state initialization.
+    virtual void enter(const app::SerpStateParams& params) override;
+    virtual void exit();
 
-		virtual void reactToMouseMoved (int x, int y) override;
-		virtual void reactToMousePressed (const OIS::MouseButtonID& btn, int x, int y) override;
-		virtual void reactToMouseReleased (const OIS::MouseButtonID& btn, int x, int y) override;
+    virtual void pause();
+    virtual void resume();
 
-		virtual bool handleLogicThreadLoop ();
-		virtual bool renderScene ();
-		virtual bool renderGUI ();
-		virtual void notifyOfShutdown ();
+    //
+    // The overrides to handle input
+    //
+    virtual void reactToKeyPress(OIS::KeyCode keycode);
+    virtual void reactToKeyRelease(OIS::KeyCode keycode);
 
-		bool onButtonQuitClicked (const CEGUI::EventArgs& evt);
-		bool onButtonOptOkClicked (const CEGUI::EventArgs& evt);
-		bool onButtonOptCancelClicked (const CEGUI::EventArgs& evt);
-		bool onButtonNewGameClicked (const CEGUI::EventArgs& evt);
-		bool onButtonOptionsClicked (const CEGUI::EventArgs& evt);
+    virtual void reactToMouseMoved(int x, int y) override;
+    virtual void reactToMousePressed(const OIS::MouseButtonID& btn, int x, int y) override;
+    virtual void reactToMouseReleased(const OIS::MouseButtonID& btn, int x, int y) override;
 
-		bool onComboValueChange (const CEGUI::EventArgs& evt);
-
-	};
+    virtual bool handleLogicThreadLoop();
+    virtual bool renderScene();
+    virtual bool renderGUI();
+    virtual void notifyOfShutdown();
+  };
 }
-
-
-#endif // _APP_MENU_STATE_H

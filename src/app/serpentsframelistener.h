@@ -38,7 +38,14 @@
 //
 
 // Forwards the inclusion of ogre.h
-#include "config/serpentsogre.h"
+#include "OgreFrameListener.h"
+#include "OgreWindowEventUtilities.h"
+
+// Forward declaration to avoid inclusion of large headers.
+namespace Ogre
+{
+  class RenderWindow;
+}
 
 namespace app
 {
@@ -68,8 +75,8 @@ namespace app
   public:
     ///  Constructor.
     SerpFrameListener(
-        SerpEngine *engine,
-        Ogre::RenderWindow *win,
+        SerpEngine* engine,
+        Ogre::RenderWindow* win,
         bool bufferedKeys = false,
         bool bufferedMouse = false);
 

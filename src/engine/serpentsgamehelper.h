@@ -52,12 +52,19 @@
 // using the singleton
 #include "guslib/common/singleton.hpp"
 
+//
+// This project's headers
+//
+
+// none
+
 // Forward declaration to avoid inclusion of header.
 namespace Ogre
 {
   class Root;
   class RenderWindow;
   class SceneNode;
+  class SceneManager;
 }
 
 
@@ -242,6 +249,24 @@ namespace app
       return returnValue;
     }
 
+    /**
+     * Get all entities (by name) that use a certain material.
+     * @param rootNode The scene node from where the search is to begin.
+     * @param materialName The name of the material to search for.
+     * @return An array containing the names of the entities that use the given material.
+     */
+    std::vector <std::string> getEntitiesWithMaterial(Ogre::SceneNode * rootNode, std::string materialName) const;
+
+    /**
+     * Set a material to use (by name) for an array of entities, also specified by name.
+     * @param sceneManager The OGRE scene manager to use.
+     * @param materialName The name of the material to set.
+     * @param entities The vector of entities identified by name.
+     */
+    void setMaterialForEntities(
+      Ogre::SceneManager * sceneManager,
+      std::string materialName,
+      std::vector <std::string> entities) const;
 
     /**
      * Search in the list of stored features for a specific one.
@@ -335,7 +360,7 @@ namespace app
       @param rootNode The node to start the print from.
       @author Augustin Preda.
     */
-    void printAllKidsToLogger(Ogre::SceneNode * rootNode, int level = 0);
+    void printAllKidsToLogger(Ogre::SceneNode * rootNode, int level = 0) const;
 
     /**
      * Retrieves (via output parameters) the settings requested by the user for the video mode size

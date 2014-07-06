@@ -22,7 +22,7 @@ namespace Serpents
 			return false;
 		}
 
-		
+
 
 		GTIMEUNITS timeUnits = timer.renew();
 		return true;

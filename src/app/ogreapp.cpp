@@ -71,7 +71,7 @@
 #include "app/serpentsframelistener.h"
 
 // Game helper
-#include "app/SerpentsGameHelper.h"
+#include "engine/serpentsgamehelper.h"
 
 // TODO: move to another place?
 #include "impl/WorkbenchState.h"
@@ -981,7 +981,7 @@ namespace app
     Ogre::TextureManager::getSingleton().setDefaultNumMipmaps(5);
 
     // Create the game engine and frame listener.
-    enginePtr_ = new SerpEngine(sceneManagerPtr, ogreRootPtr_, "serp");
+    enginePtr_ = new SerpEngine(sceneManagerPtr, ogreRootPtr_);
     enginePtr_->setMainCamera(myCam);
     enginePtr_->setSecondaryCamera(secCam);
     enginePtr_->setConfig(config_);
@@ -999,20 +999,19 @@ namespace app
     guslib::Configuration cfgMenu;
     enginePtr_->getStateMgr().setStateNextTick("test", app::SerpStateParams(cfgMenu));
 
-#if GUS_USE_RTSS
     GTRACE(3, "Initializing the RTSS...");
-    SerpEngineStartupSettings engineStartupSetting;
-    engineStartupSetting.preferredShadingLanguage = config_["general"]["preferredShadingLanguage"].getAsStringOrDefaultVal("cg");
-    engineStartupSetting.storeRtssCacheInMemory = config_["general"]["rtssMemoryCache"].getAsBoolOrDefault(false);
-    bool bResult = enginePtr_->initializeRTShaderSystem(enginePtr_->getSceneManagerPtr(), engineStartupSetting);
+    Serpents::ShadingSettings shadingSettings;
+    shadingSettings.preferredShadingLanguage = config_["general"]["preferredShadingLanguage"].getAsStringOrDefaultVal("cg");
+    shadingSettings.storeRtssCacheInMemory = config_["general"]["rtssMemoryCache"].getAsBoolOrDefault(false);
+    bool bResult = enginePtr_->getShadingHelperPtr()->initializeRTShaderSystem(
+      enginePtr_->getSceneManagerPtr(), shadingSettings);
     GTRACE(3, "Result: " << bResult);
 
+    // TODO: should this setting of a material scheme remain here?
     Ogre::Viewport* mainVP = myCam->getViewport();
-    mainVP->setMaterialScheme(Ogre::RTShader::ShaderGenerator::DEFAULT_SCHEME_NAME);
+    mainVP->setMaterialScheme(enginePtr_->getShadingHelperPtr()->getDefaultSchemaName().c_str());
 
     // for the time being, don't use shaders for the second viewport(s)
-
-#endif
 
 #if 0
     StencilOpQueueListener *stencilListener = new StencilOpQueueListener();
@@ -1162,7 +1161,7 @@ namespace app
     GTRACE(3, "Finished render loop");
 
     // TODO: Unload any OGRE compositor schemes here. ?
-    enginePtr_->cleanupRTSGResources();
+    enginePtr_->getShadingHelperPtr()->cleanupRTSGResources();
 
     // This is the main thread; it was joined with the application's main thread, so before leaving this
     // one, make sure all the other threads have the chance to finish nicely, otherise their new state

@@ -31,7 +31,7 @@
 //
 // Own header.
 //
-#include "app/serpentsgamehelper.h"
+#include "engine/serpentsgamehelper.h"
 
 // Build options
 #include <guslib/guslib_platform.h>
@@ -78,6 +78,9 @@
 namespace app
 {
   SerpentsGameHelperUtil::SerpentsGameHelperUtil()
+    : preferredDisplayMode_(WINDOWED_WITH_BORDER),
+      preferredRendererName_(""),
+      preferredResolutionName_("")
   {
   }
 
@@ -139,6 +142,105 @@ namespace app
     return out;
   }
 
+
+  /**
+   * Get all entities (by name) that use a certain material.
+   * @param rootNode The scene node from where the search is to begin.
+   * @param materialName The name of the material to search for.
+   * @return An array containing the names of the entities that use the given material.
+   */
+  std::vector <std::string> SerpentsGameHelperUtil::getEntitiesWithMaterial(
+    Ogre::SceneNode * rootNode,
+    std::string materialName) const
+  {
+    std::vector <std::string> ret;
+
+    if (NULL == rootNode)
+    {
+      return ret;
+    }
+
+    if (materialName.length() <= 0)
+    {
+      return ret;
+    }
+
+    Ogre::Node::ChildNodeIterator it = rootNode->getChildIterator();
+    while (it.hasMoreElements())
+    {
+      Ogre::SceneNode* node = static_cast<Ogre::SceneNode*>(it.getNext());
+      if (NULL == node)
+      {
+        return ret;
+      }
+
+      Ogre::SceneNode::ObjectIterator it2 = node->getAttachedObjectIterator();
+      while (it2.hasMoreElements())
+      {
+        Ogre::MovableObject* movable = static_cast<Ogre::MovableObject*>(it2.getNext());
+        if (NULL == movable)
+        {
+          return ret;
+        }
+
+        GTRACE(3, "attached: " << movable->getName() << "; " << movable->getMovableType());
+        if (movable->getMovableType() == "Entity")
+        {
+          Ogre::Entity * ent = static_cast<Ogre::Entity*>(movable);
+
+          int numSubEntities = ent->getNumSubEntities();
+          for (int i = 0; i < numSubEntities; ++i)
+          {
+            Ogre::SubEntity * subent = ent->getSubEntity(i);
+            if (subent->getMaterialName() == materialName)
+            {
+              ret.push_back(ent->getName());
+            }
+
+            GTRACE(3, "Entity " << i << " material: " << subent->getMaterialName());
+          }
+        }
+      }
+
+      std::vector <std::string> subret = getEntitiesWithMaterial(node, materialName);
+      for (std::vector <std::string>::iterator myIt = subret.begin(); myIt != subret.end(); ++myIt)
+      {
+        ret.push_back(*myIt);
+      }
+    }
+
+    return ret;
+  }
+
+
+  /**
+  * Set a material to use (by name) for an array of entities, also specified by name.
+  * @param sceneManager The OGRE scene manager to use.
+  * @param materialName The name of the material to set.
+  * @param entities The vector of entities identified by name.
+  */
+  void SerpentsGameHelperUtil::setMaterialForEntities(
+    Ogre::SceneManager * sceneManager,
+    std::string materialName,
+    std::vector <std::string> entities) const
+  {
+    for (std::vector <std::string>::iterator it = entities.begin(); it != entities.end(); ++it)
+    {
+      std::string entityName = *it;
+      Ogre::Entity *ent = sceneManager->getEntity(entityName);
+      if (ent)
+      {
+        int numSubEntities = ent->getNumSubEntities();
+        for (int i = 0; i < numSubEntities; ++i)
+        {
+          Ogre::SubEntity * subent = ent->getSubEntity(i);
+          subent->setMaterialName(materialName);
+
+          GTRACE(3, "Entity " << i << " set material to: " << subent->getMaterialName());
+        }
+      }
+    }
+  }
 
   /**
    * Search in the list of stored features for a specific one.
@@ -324,9 +426,9 @@ namespace app
     @param rootNode The node to start the print from.
     @author Augustin Preda.
   */
-  void SerpentsGameHelperUtil::printAllKidsToLogger(Ogre::SceneNode * rootNode, int level)
+  void SerpentsGameHelperUtil::printAllKidsToLogger(Ogre::SceneNode * rootNode, int level) const
   {
-    if (!rootNode)
+    if (NULL == rootNode)
     {
       return;
     }

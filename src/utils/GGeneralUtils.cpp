@@ -161,45 +161,6 @@ namespace GUtils
 	}
 
 
-	int * GusUtils::numberToCharBasisIntArray( long number, int *returnedLen )
-	{
-		int ret = 0;
-		int * numArr = NULL;
-		while( number > 0 )
-		{
-			long res = number%256;
-			number/=256;
-			int * aux = numArr;
-			numArr = new int[ret + 1];
-			if( aux != NULL )
-				for( int i=0; i<ret; i++ )
-					numArr[i] = aux[i];
-			numArr[ret] = res;
-			delete aux;
-			ret ++;
-		}
-		*returnedLen = ret;
-		return numArr;
-	}
-
-
-	char * GusUtils::numberToCharBasisCharArray( long number, int *returnedLen )
-	{
-		char * ret;
-		int retLen = 0;
-		int * aux = numberToCharBasisIntArray( number, &retLen );
-		ret = new char[retLen];
-		for( int i=0; i<retLen; i++ )
-		{
-			ret[i] = (char)aux[i];
-		}
-		*returnedLen = retLen;
-		delete aux;
-		return ret;
-	}
-
-
-
 	long GusUtils::charBasisIntArrayToNumber( int * theArray, int len )
 	{
 		long ret=0;

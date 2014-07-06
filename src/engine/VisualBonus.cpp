@@ -94,7 +94,7 @@ namespace Serpents
 			GTRACE(1, "ERROR! NULL engine for bonus manager (createBonusFromPrototype)!");
 			return NULL;
 		}
-	
+
 		GTRACE(5, "creating new bonus...");
 
 		GTRACE(4, "VisualBonusManager proto="<<prototype->getType());

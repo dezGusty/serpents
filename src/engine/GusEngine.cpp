@@ -59,7 +59,7 @@ namespace Serpents
 			return RENDER_ENGINE_D3D_LONG_NAME;
 		if( input == RENDER_ENGINE_OGL_SHORT_NAME )
 			return RENDER_ENGINE_OGL_LONG_NAME;
-		return "";		
+		return "";
 	}
 
 
@@ -172,7 +172,7 @@ namespace Serpents
 		}
 		ResourceGroupManager::getSingleton().initialiseResourceGroup("General");
 		ResourceGroupManager::getSingleton().loadResourceGroup("General");
-		
+
 		bMenuResourcesWereLoaded = true;
 
 		// TODO: add a listener and a progress bar for the resources.
@@ -190,7 +190,7 @@ namespace Serpents
 
 		GusAudioEngine::getInstancePtr()->addSound(GUS_SOUND_MENU_SELECTION_CHANGED, GUS_SOUND_MENU_SELECTION_CHANGED, GST_Internal, GSC_Effect, true);
 
-		//if( ! GusAudioEngine::getInstancePtr()->addSound( * new GSound(Serpents::ST_Internal, GUS_SOUND_MENU_SELECTION_CHANGED, 
+		//if( ! GusAudioEngine::getInstancePtr()->addSound( * new GSound(Serpents::ST_Internal, GUS_SOUND_MENU_SELECTION_CHANGED,
 		//	GUS_SOUND_MENU_SELECTION_CHANGED, true, 1.0f) ) )
 		//	return;
 
@@ -198,11 +198,11 @@ namespace Serpents
 
 		GusAudioEngine::getInstancePtr()->addSound(GUS_SOUND_MENU_SELECTION_CLICKED, GUS_SOUND_MENU_SELECTION_CLICKED, GST_Internal, GSC_Effect, true);
 
-		//if( ! GusAudioEngine::getInstancePtr()->addSound( * new GSound(Serpents::ST_Internal, GUS_SOUND_MENU_SELECTION_CLICKED, 
+		//if( ! GusAudioEngine::getInstancePtr()->addSound( * new GSound(Serpents::ST_Internal, GUS_SOUND_MENU_SELECTION_CLICKED,
 		//	GUS_SOUND_MENU_SELECTION_CLICKED, true, 1.0f) ) )
 		//	return;
 		GTRACE(3, "Loaded "<<GUS_SOUND_MENU_SELECTION_CLICKED);
-		//if( ! GusAudioEngine::getInstancePtr()->addSound( * new GSound(Serpents::ST_Internal, GUS_SOUND_MENU_OPTION_CHANGED, 
+		//if( ! GusAudioEngine::getInstancePtr()->addSound( * new GSound(Serpents::ST_Internal, GUS_SOUND_MENU_OPTION_CHANGED,
 		//	GUS_SOUND_MENU_OPTION_CHANGED, true, 1.0f) ) )
 		//	return;
 		GusAudioEngine::getInstancePtr()->addSound(GUS_SOUND_MENU_OPTION_CHANGED, GUS_SOUND_MENU_OPTION_CHANGED, GST_Internal, GSC_Effect, true);
@@ -216,7 +216,7 @@ namespace Serpents
 		//GSound *snd;
 		for( GusVector<GusString>::iterator it = playlist.begin(); it!= playlist.end(); ++it )
 		{
-			GAdvSound * mytempsnd = new GAdvSound(* GusAudioEngine::getInstancePtr(), *it, *it, 
+			GAdvSound * mytempsnd = new GAdvSound(* GusAudioEngine::getInstancePtr(), *it, *it,
 				GST_UserDefined, GSC_Music, false);
 			GusAudioEngine::getInstancePtr()->addSound( mytempsnd );
 			GusAudioEngine::getInstancePtr()->getPlaylist("menumusic")->addSound(mytempsnd);
@@ -225,7 +225,7 @@ namespace Serpents
 		playlist = GAppSettings::getInstancePtr()->getMusicSettingsPtr()->getMusicGameList();
 		for( GusVector<GusString>::iterator it = playlist.begin(); it!= playlist.end(); ++it )
 		{
-			GAdvSound * mytempsnd = new GAdvSound(* GusAudioEngine::getInstancePtr(), *it, *it, 
+			GAdvSound * mytempsnd = new GAdvSound(* GusAudioEngine::getInstancePtr(), *it, *it,
 				GST_UserDefined, GSC_Music, false);
 			GusAudioEngine::getInstancePtr()->addSound( mytempsnd );
 			GusAudioEngine::getInstancePtr()->getPlaylist("gamemusic")->addSound(mytempsnd);
@@ -258,7 +258,7 @@ namespace Serpents
 
 
 		// run thru the events.
-		// maybe some events will allow other to be treated as well, but some will require that after 
+		// maybe some events will allow other to be treated as well, but some will require that after
 		// they are treted, the function exits, a frame is rendered and a followup event is processed.
 
 		if( eventQueue.empty() )
@@ -307,7 +307,7 @@ namespace Serpents
 		static String currFps = "FPS: ";
 
 		// update stats when necessary
-		try 
+		try
 		{
 			OverlayElement * fpsCurr = OverlayManager::getSingleton().getOverlayElement("GusApp/FPSText");
 			if( fpsCurr != 0 )
@@ -741,7 +741,7 @@ namespace Serpents
 		GTRACE(4, "keyReleased, "<<arg.key);
 		return true;
 	}
-	
+
 
 	void GusEngine::OnMenuAction( GMenuItem * item )
 	{
@@ -856,7 +856,7 @@ namespace Serpents
 			GusString engineStr = GusMainApp::getCurrentRenderOptions(myWidth, myHeight);
 			for( GMenuItemList::iterator it = itemList.begin(); it!= itemList.end(); ++it )
 			{
-				if( ((*it)->getName() == RENDER_ENGINE_D3D_SHORT_NAME && 
+				if( ((*it)->getName() == RENDER_ENGINE_D3D_SHORT_NAME &&
 					RENDER_ENGINE_D3D_LONG_NAME == engineStr )
 					|| ((*it)->getName() == RENDER_ENGINE_OGL_SHORT_NAME &&
 					RENDER_ENGINE_OGL_LONG_NAME == engineStr ) )
@@ -925,7 +925,7 @@ namespace Serpents
 					}
 				}
 			}
-			
+
 
 		}
 		GTRACE(5, "OnMenuDepthChange; active="<<menu->getActive()->getName());
@@ -957,7 +957,7 @@ namespace Serpents
 				// if the rendering engine changed, we need to re-load options.
 				this->addResolutionOptions();
 
-				GAppSettings::getInstancePtr()->getUserSettingsPtr()->setTempEngine( 
+				GAppSettings::getInstancePtr()->getUserSettingsPtr()->setTempEngine(
 					option->getName()=="Direct3D" ? Direct3D : OpenGL  );
 
 				// The stored temp settings must also be updated.

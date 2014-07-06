@@ -23,8 +23,8 @@
 //
 //   Application configuration utility.
 //
-//   Last change:  $LastChangedDate: 2014-05-30 23:02:39 +0300 (V, 30 mai. 2014) $
-//   Revision:    $Revision: 652 $
+//   Last change:  $LastChangedDate: 2014-07-04 08:56:45 +0300 (V, 04 iul. 2014) $
+//   Revision:    $Revision: 663 $
 
 //
 // Includes
@@ -45,13 +45,16 @@
 //
 // This libraries' headers
 //
-#include "guslib/util/stringutil.h"
+#include "guslib/common/simpleexception.h"
 
-#include "guslib/util/config.h"
+// Include the smart pointer.
+#include "guslib/thirdparty/yasper.h"
 
 #include "guslib/trace/trace.h"
+#include "guslib/util/config.h"
+#include "guslib/util/stringutil.h"
 
-#include "guslib/common/simpleexception.h"
+
 
 namespace guslib
 {
@@ -262,32 +265,71 @@ namespace guslib
     return propGroup_.back();
   }
 
+  //
+  //  ------------------------------------ Configuration Internals ------------------------------------------------
+  //
+
+  /**
+    Opaque pointer: private implementation of scene.
+  */
+  class Configuration::Impl
+  {
+  public:
+    yasper::ptr<ConfigLoader> loaderSharedPtr_;
+
+    /**
+      Constructor.
+    */
+    Configuration::Impl()
+      : loaderSharedPtr_(0)
+    {
+    }
+
+    /**
+      Copy this
+    */
+    Impl(const Impl& rhs)
+    {
+      this->loaderSharedPtr_ = rhs.loaderSharedPtr_;
+      if (false == rhs.loaderSharedPtr_.IsValid())
+      {
+        GTRACE(3, "ERROR: Configuration copy constructor: Invalid shared ptr!");
+      }
+    }
+  };
 
   //
-  // Configuration main class
+  // -------------------- Configuration main class ----------------------------
   //
 
+  /**
+    Constructor.
+  */
   Configuration::Configuration()
-    : loaderSharedPtr_(0)
+    : impl_(new Configuration::Impl())
   {
     Config::init();
     GTRACE(3, "Created Configuration");
   }
 
+  /**
+    Copy Constructor.
+  */
   Configuration::Configuration(const Configuration& rhs)
   {
     this->defaultGroup_ = rhs.defaultGroup_;
     this->groups_ = rhs.groups_;
-    this->loaderSharedPtr_ = rhs.loaderSharedPtr_;
-    if (false == rhs.loaderSharedPtr_.IsValid())
-    {
-      GTRACE(3, "ERROR: Configuration copy constructor: Invalid shared ptr!");
-    }
+    this->impl_ = new Configuration::Impl(*rhs.impl_);
+    
     GTRACE(3, "copied Configuration");
   }
 
+  /**
+    Destructor.
+  */
   Configuration::~Configuration()
   {
+    delete impl_;
     GTRACE(3, "Destroyed Configuration");
   }
 
@@ -344,10 +386,10 @@ namespace guslib
     std::string fileExtension = stringutil::GetExtensionFromFileName(fileName);   // E.g. "ini";
 
     // Use the loader based on the extension.
-    loaderSharedPtr_ = ConfigLoaderFactory::getPtr()->CreateObject(fileExtension);
-    if (loaderSharedPtr_)
+    impl_->loaderSharedPtr_ = ConfigLoaderFactory::getPtr()->CreateObject(fileExtension);
+    if (impl_->loaderSharedPtr_)
     {
-      bReturn = loaderSharedPtr_->load(*this, fileName);
+      bReturn = impl_->loaderSharedPtr_->load(*this, fileName);
     }
 
     GTRACE(5, "Configuration - DONE loading from " << fileName);
@@ -358,26 +400,26 @@ namespace guslib
 
   void Configuration::save()
   {
-    if (NULL == loaderSharedPtr_)
+    if (NULL == impl_->loaderSharedPtr_)
     {
       GTRACE(3, "Tried to save configuration, but no loader is available");
       return;
     }
 
     GTRACE(5, "Configuration - saving");
-    loaderSharedPtr_->save(*this);
+    impl_->loaderSharedPtr_->save(*this);
   }
 
   void Configuration::saveAs(const std::string& fileName)
   {
-    if (NULL == loaderSharedPtr_)
+    if (NULL == impl_->loaderSharedPtr_)
     {
       GTRACE(3, "Tried to save configuration, but no loader is available");
       return;
     }
 
     GTRACE(5, "Configuration - saving as...");
-    loaderSharedPtr_->save(*this, fileName);
+    impl_->loaderSharedPtr_->save(*this, fileName);
   }
 
   ConfigLoader::ConfigLoader()

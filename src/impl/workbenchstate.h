@@ -53,6 +53,9 @@
 
 #include "app/serpentsstate.h"
 
+// Allow a 3D scene to be displayed
+#include "engine/scene.h"
+
 
 namespace Serpents
 {
@@ -128,6 +131,8 @@ namespace Serpents
     */
     void populateHardCodedComboValues(CEGUI::Combobox* comboPtr, const char* brushName);
 
+    Serpents::Scene* scene_;
+
     Ogre::MovablePlane* mPlane;
 
     CEGUI::Window* mContextMenuPtr;
@@ -142,9 +147,6 @@ namespace Serpents
     void applyLightSettingsFromCfg(const std::string& lightCfgEntry);
     void readAndApplyShadowCasterMaterial();
 
-    void addCompositorByName(const std::string& name, Ogre::Viewport* vp);
-    void removeCompositorByName(const std::string& name, Ogre::Viewport* vp);
-
     void addSceneCompositors();
     void removeSceneCompositors();
 
@@ -158,7 +160,7 @@ namespace Serpents
 
   public:
     // TODO(Augustin Preda, 2014.05.31): make protected, add friend factory
-    WorkbenchState(const std::string& name, const std::string& prefLvl, app::SerpEngine* ptr = 0);
+    WorkbenchState(const std::string& name, const std::string& prefLvl, app::SerpEngine* enginePtr);
 
     // The overrides for the state handling
     virtual void enter(const app::SerpStateParams& param);

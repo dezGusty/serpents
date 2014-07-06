@@ -26,8 +26,8 @@
 //
 //   Application configuration utility.
 //
-//   Last change:  $LastChangedDate: 2014-04-13 22:58:12 +0300 (D, 13 apr. 2014) $
-//   Revision:    $Revision: 647 $
+//   Last change:  $LastChangedDate: 2014-07-04 08:56:45 +0300 (V, 04 iul. 2014) $
+//   Revision:    $Revision: 663 $
 
 //
 // Includes
@@ -60,10 +60,6 @@
 
 // using the singleton
 #include "guslib/common/singleton.hpp"
-
-// Include the smart pointer.
-#include "guslib/thirdparty/yasper.h"
-
 
 namespace guslib
 {
@@ -228,11 +224,22 @@ namespace guslib
     // the default group to use for setting/retrieving properties.
     std::string defaultGroup_;
 
-    yasper::ptr<ConfigLoader> loaderSharedPtr_;
-
+    class Impl;
+    Configuration::Impl* impl_;
   public:
+    /**
+      Constructor.
+    */
     Configuration();
+
+    /**
+      Copy Constructor.
+    */
     Configuration(const Configuration& rhs);
+
+    /**
+      Destructor.
+    */
     virtual ~Configuration();
 
     PropertyGroup& operator[](const std::string& name);
