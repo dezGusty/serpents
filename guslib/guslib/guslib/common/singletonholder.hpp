@@ -24,8 +24,8 @@
 //   OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN
 //   THE SOFTWARE.
 //
-//   Last change:  $LastChangedDate: 2014-04-26 23:40:46 +0300 (S, 26 apr. 2014) $
-//   Revision:    $Revision: 650 $
+//   Last change:  $LastChangedDate: 2014-09-04 08:43:29 +0300 (J, 04 sep. 2014) $
+//   Revision:    $Revision: 670 $
 
 //
 // Includes
@@ -37,7 +37,7 @@
 #include <guslib/guslibbuildopts.h>
 
 #if GUSLIB_THREAD_SUPPORT == 1
-# include "guslib/system/thread.h"
+# include <thread>
 #endif
 
 #include "guslib/common/simpleexception.h"
@@ -63,7 +63,7 @@ namespace guslib
 
   protected:
 #if GUSLIB_THREAD_SUPPORT == 1
-    static GUS_MUTEX(creationMutex_);
+    static std::recursive_mutex creationMutex_;
 #endif
 
   public:
@@ -72,9 +72,9 @@ namespace guslib
     {
       // first check if it was created. If the mutex would be placed first, a performance hit would occur, since
       // all operations would create and release a lock.
-      if (NULL == objectPtr_)
+      if (nullptr == objectPtr_)
       {
-        throw guslib::SimpleException("SingletonHolder getting NULL ptr");
+        throw guslib::SimpleException("SingletonHolder getting nullptr");
       }
       return objectPtr_;
     }   //  getptr
@@ -82,12 +82,12 @@ namespace guslib
     // Assign the pointer to the singleton instance.
     static void setPtr(T * ptr)
     {
-      if (NULL == ptr)
+      if (nullptr == ptr)
       {
-        throw guslib::SimpleException("SingletonHolder being assigned NULL ptr");
+        throw guslib::SimpleException("SingletonHolder being assigned nullptr");
       }
 #if GUSLIB_THREAD_SUPPORT == 1
-        GUS_LOCK_MUTEX(creationMutex_);
+      std::lock_guard<std::recursive_mutex> lg{ creationMutex_ };
 #endif
       objectPtr_ = ptr;
     }
@@ -98,23 +98,23 @@ namespace guslib
       if (objectPtr_)
       {
 #if GUSLIB_THREAD_SUPPORT == 1
-        GUS_LOCK_MUTEX(creationMutex_);
+        std::lock_guard<std::recursive_mutex> lg{ creationMutex_ };
 #endif
         if (objectPtr_)
         {
           delete objectPtr_;
-          objectPtr_ = NULL;
+          objectPtr_ = nullptr;
         }
       }
     }   //  destroy
   };
 
 #if GUSLIB_FLAG_SINGLETONINST != 0
-  template <class T> T* SingletonHolder<T>::objectPtr_ = NULL;
+  template <class T> T* SingletonHolder<T>::objectPtr_ = nullptr;
 #endif
 
 #if GUSLIB_THREAD_SUPPORT == 1
-  template <class T> GUS_MUTEX_TYPE SingletonHolder<T>::creationMutex_;
+  template <class T> std::recursive_mutex SingletonHolder<T>::creationMutex_;
 #endif
 
 }   // namespace end

@@ -23,8 +23,8 @@
 //
 //   Application configuration utility.
 //
-//   Last change:  $LastChangedDate: 2014-04-13 22:58:12 +0300 (D, 13 apr. 2014) $
-//   Revision:    $Revision: 647 $
+//   Last change:  $LastChangedDate: 2014-09-10 22:37:41 +0200 (Mi, 10 sep. 2014) $
+//   Revision:    $Revision: 671 $
 
 //
 // Includes
@@ -40,10 +40,10 @@
 //
 
 // Add the "ini" configuration to the factory.
-#include "guslib/util/iniconfig.h"
+#include "guslib/util/config/iniconfig.h"
 
 // Add the configuration class.
-#include "guslib/util/configuration.h"
+#include "guslib/util/config/configuration.h"
 
 namespace guslib
 {
@@ -61,6 +61,15 @@ namespace guslib
     }
 
     calledInit_ = true;
-    ConfigLoaderFactory::getPtr()->Register("ini", IniLoader::createLoader);
+    config::LoaderFactory::getPtr()->Register("ini", config::IniLoader::createLoader);
+  }
+
+  void Config::terminate()
+  {
+    if (!calledInit_)
+    {
+      return;
+    }
+
   }
 }

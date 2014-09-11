@@ -24,8 +24,8 @@
 //   OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN
 //   THE SOFTWARE.
 //
-//   Last change:  $LastChangedDate: 2014-04-13 22:58:12 +0300 (D, 13 apr. 2014) $
-//   Revision:    $Revision: 647 $
+//   Last change:  $LastChangedDate: 2014-09-04 08:43:29 +0300 (J, 04 sep. 2014) $
+//   Revision:    $Revision: 670 $
 
 //
 // Includes
@@ -77,7 +77,8 @@ class AbstractFactory
       {
         return (i->second) ();
       }
-      return NULL;
+
+      return nullptr;
     }
 
     virtual bool Register(const IdentifierType& id, ProductCreator creator)

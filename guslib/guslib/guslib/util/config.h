@@ -26,8 +26,8 @@
 //
 //   Application configuration utility.
 //
-//   Last change:  $LastChangedDate: 2014-04-13 22:58:12 +0300 (D, 13 apr. 2014) $
-//   Revision:    $Revision: 647 $
+//   Last change:  $LastChangedDate: 2014-09-10 22:37:41 +0200 (Mi, 10 sep. 2014) $
+//   Revision:    $Revision: 671 $
 
 namespace guslib
 {
@@ -46,6 +46,11 @@ namespace guslib
       Initialize the factory.
     */
     static void init();
+
+    /**
+      Perform cleanup for the factory.
+    */
+    static void terminate();
   };
 }
 

@@ -26,12 +26,17 @@
 //
 //   Menu background logic handling.
 //
-//   Last change:  $LastChangedDate: 2014-05-30 23:02:39 +0300 (V, 30 mai. 2014) $
-//   Revision:    $Revision: 652 $
+//   Last change:  $LastChangedDate: 2014-09-11 20:14:06 +0200 (J, 11 sep. 2014) $
+//   Revision:    $Revision: 672 $
 
 //
 // Includes
 //
+
+//
+// Platform specific definitions and overall build options for the library.
+//
+#include <guslib/guslibbuildopts.h>
 
 //
 // C++ system headers
@@ -51,7 +56,7 @@ namespace guslib
   class GMenuItem;
   class GMenuListener;
 
-  typedef enum GMenuCommandEnum
+  enum class GMenuCommand
   {
     cmdMenuUp,        // such as moving the menu selection top.
     cmdMenuDown,      // such as moving the menu selection down.
@@ -60,7 +65,7 @@ namespace guslib
     cmdActionIn,      // such as pressing enter
     cmdActionEsc,     // such as pressing escape :-)
     numCommands
-  }GMenuCommand;
+  };
 
   // the list of subitems or child elements.
   typedef std::vector<GMenuItem*> GMenuItemList;
@@ -72,7 +77,7 @@ namespace guslib
     themselves, so this is where the GMenuAuxData comes in. A GMenuAuxData can be added to the menu items.
     Extend this class to provide the required information.
   */
-  class GMenuAuxData
+  class GUSLIB_EXPORT_SYMBOL GMenuAuxData
   {
   public:
     GMenuAuxData()
@@ -98,10 +103,15 @@ namespace guslib
     myMenu.getRoot ().addChild (&mi1);
     @endcode
   */
-  class GMenuItem
+  class GUSLIB_EXPORT_SYMBOL GMenuItem
   {
+  private:
+    class Impl;
+    Impl* impl_;
+
   public:
     GMenuItem(const GMenu * gmMaster, const std::string &sName, const std::string &sCaption);
+    GMenuItem(const GMenuItem& rhs);
     virtual ~GMenuItem();
 
     virtual void addChild(GMenuItem * child);
@@ -110,25 +120,22 @@ namespace guslib
       return auxData;
     }
 
-    virtual std::string getCaption()
-    {
-      return caption;
-    }
+    // Name getter and setter
+    const std::string& getName() const;
+    void setName(const std::string& name);
 
-    const GMenuItemList getChildren() const
-    {
-      return children;
-    }
+    // Caption getter and setter.
+    virtual const std::string& getCaption();
+    virtual void setCaption(const std::string& caption);
+
+    // Getter for the child nodes.
+    const GMenuItemList& getChildren() const;
 
     virtual int getItemDepth()
     {
       return itemDepth;
     }
 
-    const std::string & getName() const
-    {
-      return name;
-    }
     
     virtual GMenuItem * getSelectedChild();
     virtual int getSelectedChildIndex();
@@ -141,7 +148,7 @@ namespace guslib
 
     virtual bool hasChildren()
     {
-      return children.size() > 0;
+      return getChildren().size() > 0;
     }
     virtual bool isSelected()
     {
@@ -162,14 +169,8 @@ namespace guslib
     {
       auxData = aux;
     }
-    virtual void setCaption(const std::string &aCaption)
-    {
-      caption = aCaption;
-    }
-    virtual void setName(const std::string &sName)
-    {
-      name = sName;
-    }
+
+
     virtual void setParent(GMenuItem *newParent);
     virtual void setSelected(bool bInput)
     {
@@ -186,13 +187,11 @@ namespace guslib
     virtual void startAction();
   protected:
     GMenu * ptrToMenu;
-    std::string name;
-    std::string caption;
 
     GMenuAuxData * auxData;
     bool childWrap;
     bool selected;
-    GMenuItemList children;
+    
     GMenuItem *ptrToParent;
     int childSelectionIndex;  // Which child is selected (index in vector).
     int itemDepth;  // The depth in the menu where the item is found.
@@ -213,7 +212,7 @@ namespace guslib
   myMenu->getRoot()->addChild(mi1);
   @endcode
   */
-  class GMenuSubMenu : public GMenuItem
+  class GUSLIB_EXPORT_SYMBOL GMenuSubMenu : public GMenuItem
   {
   public:
     GMenuSubMenu(const GMenu * masterMenu, const std::string &name, const std::string &capt="");
@@ -239,7 +238,7 @@ namespace guslib
   @endcode
   @see startAction.
   */
-  class GMenuAction : public GMenuItem
+  class GUSLIB_EXPORT_SYMBOL GMenuAction : public GMenuItem
   {
   public:
     GMenuAction(const GMenu * masterMenu, const std::string &name, const std::string &capt = "");
@@ -260,7 +259,7 @@ namespace guslib
   A "back" menu item. This could be simulated with a menu action, but is provided in this form for
   convenience.
   */
-  class GMenuBack : public GMenuItem
+  class GUSLIB_EXPORT_SYMBOL GMenuBack : public GMenuItem
   {
   public:
     GMenuBack(const GMenu * masterMenu, const std::string &name, const std::string &capt = "");
@@ -276,17 +275,21 @@ namespace guslib
   };
 
   /// A menu option item (a menu item with the child elements being the possible choices).
-  class GMenuOption : public GMenuItem
+  class GUSLIB_EXPORT_SYMBOL GMenuOption : public GMenuItem
   {
+  private:
+    class Impl;
+    Impl* impl_;
+
+    /// DISABLED.
+    GMenuOption::GMenuOption(const GMenuOption& rhs) = delete;
   public:
     GMenuOption(const GMenu * masterMenu, const std::string &name, const std::string &capt = "");
     virtual ~GMenuOption();
-    virtual std::string getCaption();
-    virtual const std::string & getType()
-    {
-      static std::string s("option");
-      return s;
-    }
+
+    // Caption getter and setter.
+    virtual const std::string& getCaption();
+    virtual const std::string& getType() const;
 
     // Override the hdl.
     virtual void reactToCommand(GMenuCommand cmd);
@@ -302,10 +305,15 @@ namespace guslib
 
   /// The menu class. This contains a single root menu item. All further menu items are connected to
   /// and contained by this root item.
-  class GMenu
+  class GUSLIB_EXPORT_SYMBOL GMenu
   {
+  private:
+    class Impl;
+    Impl* impl_;
+
   public:
     GMenu();
+    GMenu(const GMenu& rhs);
     virtual ~GMenu();
 
     virtual void clearKeyMap();
@@ -349,7 +357,7 @@ namespace guslib
     /// This search will not be very fast, so try not to call this from a rendering loop if speed is required.
     /// The search can be restricted to a subtree. If itemToSearchFrom set to null, the entire tree is searched.
     /// Also note that this is a recursive function. It may crash for large menu tree configs.
-    virtual GMenuItem * searchForItemByName(std::string itemName, GMenuItem * itemToSearchFrom = NULL);
+    virtual GMenuItem * searchForItemByName(std::string itemName, GMenuItem * itemToSearchFrom = nullptr);
     virtual void setKeyMap(GMenuCommand cmd, int keyCode);
     virtual void setListener(const GMenuListener *ptrListener);
     virtual void setRootItem(const GMenuItem* root)
@@ -382,14 +390,14 @@ namespace guslib
 
     GMenuListener *listener;
 
-    typedef std::map<GMenuCommand, int> GusKeyMapping;
-    GusKeyMapping keyMap;
+    //typedef std::map<GMenuCommand, int> GusKeyMapping;
+    //GusKeyMapping keyMap;
   };
 
 
   /// The listener interface.
   /// This will receive the events of the user's navigation thru a created menu.
-  class GMenuListener
+  class GUSLIB_EXPORT_SYMBOL GMenuListener
   {
   public:
     GMenuListener()

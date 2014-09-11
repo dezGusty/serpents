@@ -27,8 +27,8 @@
 //   This header will change between different releases of guslib. Including the header will result in a recompile
 //   when a new guslib version is released.
 //
-//   Last change: $LastChangedDate: 2014-04-26 23:40:46 +0300 (S, 26 apr. 2014) $
-//   Revision:    $Revision: 650 $
+//   Last change: $LastChangedDate: 2014-09-11 20:14:06 +0200 (J, 11 sep. 2014) $
+//   Revision:    $Revision: 672 $
 
 //
 // This file provides version information for the guslib component.
@@ -75,9 +75,9 @@
 #define GUSLIB_NUM_MAJOR_VER_SIMPLE 1
 
 // Minor versions. Please keep in sync!
-#define GUSLIB_NUM_MINOR_VER_SIMPLE 4
-#define GUSLIB_NUM_MINOR_VER_2DIGITS 04
-#define GUSLIB_NUM_MINOR_VER_3DIGITS 004
+#define GUSLIB_NUM_MINOR_VER_SIMPLE 6
+#define GUSLIB_NUM_MINOR_VER_2DIGITS 06
+#define GUSLIB_NUM_MINOR_VER_3DIGITS 006
 
 // Patch versions. Please keep in sync!
 #define GUSLIB_NUM_PATCH_VER_SIMPLE 0.0

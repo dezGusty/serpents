@@ -23,8 +23,8 @@
 //
 //   Menu background logic handling.
 //
-//   Last change:  $LastChangedDate: 2014-05-30 23:02:39 +0300 (V, 30 mai. 2014) $
-//   Revision:    $Revision: 652 $
+//   Last change:  $LastChangedDate: 2014-09-11 20:14:06 +0200 (J, 11 sep. 2014) $
+//   Revision:    $Revision: 672 $
 
 //
 // Includes
@@ -51,35 +51,88 @@
 
 namespace guslib
 {
-  GMenuItem::GMenuItem(const GMenu * gmMaster, const std::string & sName, const std::string & sCaption)
-    : name(sName),
-      caption(sCaption),
+  //
+  // ----------------------------- Menu item internals ---------------------------------
+  //
+
+  class GMenuItem::Impl
+  {
+  public:
+    std::string name_;
+    std::string caption_;
+    GMenuItemList children_;
+
+    GMenuItem::Impl(const std::string& name, const std::string& caption)
+      : name_(name),
+        caption_(caption)
+    {
+    }
+  };
+
+  //
+  // -------------------------------- Menu item class -----------------------------------
+  //
+
+  GMenuItem::GMenuItem(const GMenu * gmMaster, const std::string& name, const std::string& caption)
+    : impl_(new GMenuItem::Impl(name, caption)),
       childSelectionIndex(0)
   {
     ptrToMenu = const_cast<GMenu *>(gmMaster);
-    ptrToParent = NULL;
+    ptrToParent = nullptr;
     selected = false;
     itemDepth = 0;
-    auxData = NULL;
+    auxData = nullptr;
     childWrap = MENU_ITEMS_WRAP_DEFAULT;
   }
 
+  GMenuItem::GMenuItem(const GMenuItem& rhs)
+    : impl_(new GMenuItem::Impl(*rhs.impl_))
+  {
+
+  }
 
   GMenuItem::~GMenuItem()
   {
-    GTRACE(7, "Destruction of menu item : " << name);
+    GTRACE(7, "Destruction of menu item : " << impl_->name_);
+    delete impl_;
+  }
+
+  const std::string& GMenuItem::getCaption()
+  {
+    return impl_->caption_;
+  }
+
+  const std::string& GMenuItem::getName() const
+  {
+    return impl_->name_;
+  }
+
+  void GMenuItem::setCaption(const std::string& caption)
+  {
+    impl_->caption_ = caption;
+  }
+
+  void GMenuItem::setName(const std::string& name)
+  {
+    impl_->name_ = name;
+  }
+
+  const GMenuItemList& GMenuItem::getChildren() const
+  {
+    return impl_->children_;
   }
 
   void GMenuItem::addChild(GMenuItem *newItem)
   {
-    children.push_back(newItem);
+    impl_->children_.push_back(newItem);
     // if this is the first added item, select it.
-    if (children.size() <= 1)
+    if (impl_->children_.size() <= 1)
     {
       this->setSelectedChild(0);
     }
-    children[children.size()-1]->itemDepth = this->itemDepth + 1;
-    children[children.size()-1]->ptrToParent = this;
+
+    impl_->children_[impl_->children_.size()-1]->itemDepth = this->itemDepth + 1;
+    impl_->children_[impl_->children_.size()-1]->ptrToParent = this;
   }
 
 
@@ -87,16 +140,16 @@ namespace guslib
   {
     if (false == hasChildren())
     {
-      return NULL;
+      return nullptr;
     }
 
     if (childSelectionIndex < 0
-      || childSelectionIndex >= static_cast<int>(children.size()))
+      || childSelectionIndex >= static_cast<int>(impl_->children_.size()))
     {
       childSelectionIndex = 0;
     }
 
-    return children[ childSelectionIndex ];
+    return impl_->children_[childSelectionIndex];
   }
 
 
@@ -110,23 +163,23 @@ namespace guslib
   {
     switch (cmd)
     {
-    case cmdActionIn:
+    case GMenuCommand::cmdActionIn:
       {
         // If the item is a menu, it may be possible for it to allow having no child elements.
         GMenuItem * tempPtr = getSelectedChild();
-        if (tempPtr != NULL)
+        if (tempPtr != nullptr)
         {
           tempPtr->startAction();
         }
         break;
       }
-    case cmdMenuDown:
+    case GMenuCommand::cmdMenuDown:
       selectNextChild();
       break;
-    case cmdMenuUp:
+    case GMenuCommand::cmdMenuUp:
       selectPreviousChild();
       break;
-    case cmdActionEsc:
+    case GMenuCommand::cmdActionEsc:
       returnControlToParent();
       break;
     default:
@@ -137,21 +190,21 @@ namespace guslib
 
   void GMenuItem::removeAllChildren()
   {
-    children.clear();
+    impl_->children_.clear();
   }
 
   void GMenuItem::removeChild(const GMenuItem * child)
   {
-    if (child == NULL)
+    if (child == nullptr)
     {
       return;
     }
 
-    for (GMenuItemList::iterator it = children.begin(); it!= children.end(); ++it)
+    for (GMenuItemList::iterator it = impl_->children_.begin(); it!= impl_->children_.end(); ++it)
     {
       if ((*it)->getName() == child->getName())
       {
-        children.erase(it);
+        impl_->children_.erase(it);
         return;
       }
     }
@@ -160,12 +213,12 @@ namespace guslib
 
   void GMenuItem::returnControlToParent(bool triggeredByEsc)
   {
-    if (this->ptrToParent == NULL)
+    if (this->ptrToParent == nullptr)
     {
       // If there is no parent, call the callback with a null parameter, to allow special handling in listener.
-      if (ptrToMenu->getListener() != NULL)
+      if (ptrToMenu->getListener() != nullptr)
       {
-        ptrToMenu->getListener()->OnMenuDepthChange(NULL, false);
+        ptrToMenu->getListener()->OnMenuDepthChange(nullptr, false);
       }
 
       return;
@@ -175,7 +228,7 @@ namespace guslib
     ptrToMenu->setVisibleItem(ptrToParent);
 
     // Called from root item or parent menu item.
-    if (ptrToMenu->getListener() != NULL)
+    if (ptrToMenu->getListener() != nullptr)
     {
       ptrToMenu->getListener()->OnMenuDepthChange(ptrToMenu, false);
       ptrToMenu->getListener()->OnMenuShouldRedraw(ptrToMenu);
@@ -191,7 +244,7 @@ namespace guslib
     bool bChangedSelection = false;
 
     // See if it's the last item.
-    if (childSelectionIndex >= static_cast<int>(children.size() - 1))
+    if (childSelectionIndex >= static_cast<int>(impl_->children_.size() - 1))
     {
       if (childWrap || bOverrideWrap)
       {
@@ -215,7 +268,7 @@ namespace guslib
     if (bChangedSelection)
     {
       setSelectedChild(childSelectionIndex);
-      if (ptrToMenu->getListener() != NULL)
+      if (ptrToMenu->getListener() != nullptr)
       {
         ptrToMenu->getListener()->OnMenuSelectionChange(this);
         ptrToMenu->getListener()->OnMenuShouldRedraw(ptrToMenu);
@@ -240,7 +293,7 @@ namespace guslib
       if (childWrap || bOverrideWrap)
       {
         // If wrap is enabled, move to first, otherwise do nothing.
-        childSelectionIndex = static_cast<int>(children.size() - 1);
+        childSelectionIndex = static_cast<int>(impl_->children_.size() - 1);
         bChangedSelection = true;
       }
     }
@@ -259,7 +312,7 @@ namespace guslib
     if (bChangedSelection)
     {
       setSelectedChild(childSelectionIndex);
-      if (ptrToMenu->getListener() != NULL)
+      if (ptrToMenu->getListener() != nullptr)
       {
         ptrToMenu->getListener()->OnMenuSelectionChange(this);
         ptrToMenu->getListener()->OnMenuShouldRedraw(ptrToMenu);
@@ -272,7 +325,7 @@ namespace guslib
   void GMenuItem::setParent(GMenuItem *newParent)
   {
     // remove the connection to the child's existing parent.
-    if (ptrToParent != NULL)
+    if (ptrToParent != nullptr)
     {
       ptrToParent->removeChild(this);
     }
@@ -283,12 +336,12 @@ namespace guslib
 
   void GMenuItem::setSelectedChild(int nNewChildSelectionIndex)
   {
-    if (nNewChildSelectionIndex <0 || nNewChildSelectionIndex >= static_cast<int>(children.size()))
+    if (nNewChildSelectionIndex <0 || nNewChildSelectionIndex >= static_cast<int>(impl_->children_.size()))
     {
       return;
     }
 
-    for (GMenuItemList::iterator it = children.begin(); it!= children.end(); ++it)
+    for (GMenuItemList::iterator it = impl_->children_.begin(); it!= impl_->children_.end(); ++it)
     {
       if ((*it)->isSelected())
       {
@@ -296,14 +349,14 @@ namespace guslib
       }
     }
 
-    children[nNewChildSelectionIndex]->setSelected(true);
+    impl_->children_[nNewChildSelectionIndex]->setSelected(true);
     this->childSelectionIndex = nNewChildSelectionIndex;
   }
 
   void GMenuItem::setSelectedChild(GMenuItem *aChild)
   {
     int idx = 0;
-    for (GMenuItemList::iterator it = children.begin(); it!= children.end(); ++it)
+    for (GMenuItemList::iterator it = impl_->children_.begin(); it!= impl_->children_.end(); ++it)
     {
       if ((*it) == aChild)
       {
@@ -327,7 +380,7 @@ namespace guslib
     }
 
     // Called from root item or parent menu item.
-    if (ptrToMenu->getListener() != NULL)
+    if (ptrToMenu->getListener() != nullptr)
     {
       ptrToMenu->getListener()->OnMenuDepthChange(ptrToMenu, true);
       ptrToMenu->getListener()->OnMenuShouldRedraw(ptrToMenu);
@@ -360,7 +413,7 @@ namespace guslib
   void GMenuAction::startAction()
   {
     returnControlToParent(true);
-    if (ptrToMenu->getListener() != NULL)
+    if (ptrToMenu->getListener() != nullptr)
     {
         ptrToMenu->getListener()->OnMenuAction(this);
     }
@@ -379,7 +432,7 @@ namespace guslib
 
   void GMenuBack::startAction()
   {
-    if (ptrToMenu->getListener() != NULL)
+    if (ptrToMenu->getListener() != nullptr)
     {
       bool bResult = ptrToMenu->getListener()->OnMenuBack(this);
       if (ptrToParent && bResult)
@@ -391,43 +444,70 @@ namespace guslib
 
   // -------------------------- end of actions
 
+
   // ----------------------------- options --------------------
 
+  //
+  // ----------------------------- Options menu item internals ---------------------------------
+  //
+
+  class GMenuOption::Impl
+  {
+  public:
+    std::string type_;
+    std::string combinedCaption_;
+
+    GMenuOption::Impl(const std::string& type)
+      : type_(type),
+        combinedCaption_("")
+    {
+    }
+  };
+
   GMenuOption::GMenuOption(const GMenu *masterMenu, const std::string &name, const std::string &capt)
-    :GMenuItem(masterMenu, name, capt)
+    : GMenuItem(masterMenu, name, capt),
+      impl_(new GMenuOption::Impl("option"))
   {
     initialSelection = 0;
   }
   GMenuOption::~GMenuOption()
   {
+    delete impl_;
   }
 
-  std::string GMenuOption::getCaption()
+  const std::string& GMenuOption::getType() const
   {
-    std::string sOutputString;
-    sOutputString = caption;
-    if (this->getSelectedChild() != NULL)
+    return impl_->type_;
+  }
+
+  const std::string& GMenuOption::getCaption()
+  {
+    // Call the base implementation.
+    impl_->combinedCaption_ = GMenuItem::getCaption();
+
+    if (this->getSelectedChild() != nullptr)
     {
-      sOutputString = sOutputString + std::string(" : ") + getSelectedChild()->getCaption();
+      impl_->combinedCaption_.append(" : ");
+      impl_->combinedCaption_.append(getSelectedChild()->getCaption());
     }
 
-    return sOutputString;
+    return impl_->combinedCaption_;
   }
 
   void GMenuOption::reactToCommand(GMenuCommand cmd)
   {
     switch (cmd)
     {
-    case cmdActionIn:
+    case GMenuCommand::cmdActionIn:
       returnControlToParent(false);
       break;
-    case cmdActionRight:
+    case GMenuCommand::cmdActionRight:
       selectNextChild();
       break;
-    case cmdActionLeft:
+    case GMenuCommand::cmdActionLeft:
       selectPreviousChild();
       break;
-    case cmdActionEsc:
+    case GMenuCommand::cmdActionEsc:
       returnControlToParent();
       break;
     default:
@@ -439,13 +519,13 @@ namespace guslib
 
   void GMenuOption::returnControlToParent(bool bTriggeredByEsc)
   {
-    if (this->ptrToParent == NULL)
+    if (this->ptrToParent == nullptr)
     {
       return;
     }
 
     ptrToMenu->setActiveItem(ptrToParent);
-    if (ptrToMenu->getListener() != NULL)
+    if (ptrToMenu->getListener() != nullptr)
     {
       ptrToMenu->getListener()->OnMenuOptionStopEdit(this, getSelectedChild(), bTriggeredByEsc);
       if (bTriggeredByEsc)
@@ -463,7 +543,7 @@ namespace guslib
     bool bTemp = selectNextChildBase(bOverrideWrap);
     if (bTemp)
     {
-      if (ptrToMenu->getListener() != NULL)
+      if (ptrToMenu->getListener() != nullptr)
       {
         ptrToMenu->getListener()->OnMenuOptionValueChange(this, getSelectedChild());
         ptrToMenu->getListener()->OnMenuShouldRedraw(ptrToMenu);
@@ -477,7 +557,7 @@ namespace guslib
     bool bTemp = selectPreviousChildBase(bOverrideWrap);
     if (bTemp)
     {
-      if (ptrToMenu->getListener() != NULL)
+      if (ptrToMenu->getListener() != nullptr)
       {
         ptrToMenu->getListener()->OnMenuOptionValueChange(this, getSelectedChild());
         ptrToMenu->getListener()->OnMenuShouldRedraw(ptrToMenu);
@@ -496,7 +576,7 @@ namespace guslib
     ptrToMenu->setActiveItem(this);
     this->setInitialSelection(this->getSelectedChildIndex());
 
-    if (ptrToMenu->getListener() != NULL)
+    if (ptrToMenu->getListener() != nullptr)
     {
       ptrToMenu->getListener()->OnMenuShouldRedraw(ptrToMenu);
       ptrToMenu->getListener()->OnMenuOptionStartEdit(this, getSelectedChild());
@@ -506,40 +586,62 @@ namespace guslib
   // ----------------------- end of options -------------------
 
 
+  class GMenu::Impl
+  {
+  public:
+    std::map<GMenuCommand, int> keyMap;
+  };
+
   GMenu::GMenu()
-    : resetPosOnLvlChange_(true),
-      listener(NULL)
+    : resetPosOnLvlChange_(true)
+    , listener(nullptr)
+    , rootItem(nullptr)
+    , impl_(new GMenu::Impl())
   {
     rootItem = new GMenuSubMenu(this, "root", "Main Menu");
     activeItem = rootItem;
     visibleItem = rootItem;
 
-    keyMap[cmdActionIn]  =13;    // enter
-    keyMap[cmdMenuDown] = 40;    // arrow-down
-    keyMap[cmdMenuUp] = 38;    // arrow-up
-    keyMap[cmdActionLeft] = 37;  // arrow-left
-    keyMap[cmdActionRight] = 39;  // arrow-right
-    keyMap[cmdActionEsc] = 27;  // escape
+    impl_->keyMap[GMenuCommand::cmdActionIn] = 13;    // enter
+    impl_->keyMap[GMenuCommand::cmdMenuDown] = 40;    // arrow-down
+    impl_->keyMap[GMenuCommand::cmdMenuUp] = 38;    // arrow-up
+    impl_->keyMap[GMenuCommand::cmdActionLeft] = 37;  // arrow-left
+    impl_->keyMap[GMenuCommand::cmdActionRight] = 39;  // arrow-right
+    impl_->keyMap[GMenuCommand::cmdActionEsc] = 27;  // escape
   }
 
+  GMenu::GMenu(const GMenu& rhs)
+    : impl_(new GMenu::Impl(*rhs.impl_))
+    , resetPosOnLvlChange_(rhs.resetPosOnLvlChange_)
+    , rootItem(new GMenuItem(*rhs.rootItem))
+    , activeItem(rhs.activeItem)
+    , visibleItem(rhs.visibleItem)
+    , listener(rhs.listener)
+  {
+  }
 
   GMenu::~GMenu()
   {
-    if (0 != rootItem)
+    if (nullptr != rootItem)
     {
       delete rootItem;
+    }
+
+    if (nullptr != impl_)
+    {
+      delete impl_;
     }
   }
 
   void GMenu::clearKeyMap()
   {
-    keyMap.clear();
+    impl_->keyMap.clear();
   }
 
 
   void GMenu::reactToCommand(GMenuCommand cmd)
   {
-    if (this->activeItem != NULL)
+    if (this->activeItem != nullptr)
     {
       activeItem->reactToCommand(cmd);
     }
@@ -547,22 +649,22 @@ namespace guslib
 
   void GMenu::reactToKeyPress(int keyCode)
   {
-    for (GusKeyMapping::iterator it = keyMap.begin(); it != keyMap.end(); ++it)
+    for (auto it : impl_->keyMap)
     {
-      if ((*it).second == keyCode)
+      if (it.second == keyCode)
       {
-        reactToCommand((*it).first);
+        reactToCommand(it.first);
       }
     }
   }
 
   GMenuItem * GMenu::searchForItemByName(std::string itemName, GMenuItem * itemToSearchFrom)
   {
-    if (itemToSearchFrom == NULL)
+    if (itemToSearchFrom == nullptr)
     {
-      if (rootItem == NULL)
+      if (rootItem == nullptr)
       {
-        return NULL;
+        return nullptr;
       }
 
       return searchForItemByName(itemName, rootItem);
@@ -587,13 +689,13 @@ namespace guslib
       }
 
       // not found.
-      return NULL;
+      return nullptr;
     }
   }
 
   void GMenu::setKeyMap(GMenuCommand cmd, int keyCode)
   {
-    keyMap[cmd] = keyCode;
+    impl_->keyMap[cmd] = keyCode;
   }
 
 

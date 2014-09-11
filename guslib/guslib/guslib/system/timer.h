@@ -26,8 +26,8 @@
 //
 //   Timer utility.
 //
-//   Last change:  $LastChangedDate: 2014-04-16 00:16:54 +0300 (Mi, 16 apr. 2014) $
-//   Revision:    $Revision: 648 $
+//   Last change:  $LastChangedDate: 2014-09-02 21:32:49 +0300 (Ma, 02 sep. 2014) $
+//   Revision:    $Revision: 669 $
 
 //
 // Includes
@@ -56,11 +56,6 @@
 
 #include "guslib/common/singleton.hpp"
 
-#if GUSLIB_THREAD_SUPPORT == 1
-#include "guslib/system/thread.h"
-#else
-#pragma message("Timer: Multithreaded synchronization disabled!")
-#endif
 
 #if GUSLIB_USE_OGRE_TIMERS == 1
 #  include "OgreTimer.h"

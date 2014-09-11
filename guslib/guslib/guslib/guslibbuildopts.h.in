@@ -61,22 +61,6 @@
 #define GUSLIB_THREAD_SUPPORT ${GUSLIB_THREAD_SUPPORT_NUM}
 #endif
 
-/**
-  Define the type of thread support for guslib
-
-  GUSLIB_THREAD_PROVIDER = 0
-    No support for threading.
-  GUSLIB_THREAD_PROVIDER = 1
-    C++11 thread support.
-  GUSLIB_THREAD_PROVIDER = 2
-    TinyThread lib provides threading functionality.
-  GUSLIB_THREAD_PROVIDER = 3
-    Boost libraries provide threading functionality.
-*/
-#ifndef GUSLIB_THREAD_PROVIDER
-#define GUSLIB_THREAD_PROVIDER ${GUSLIB_THREAD_PROVIDER_NUM}
-#endif
-
 // Some options you may set for the project:
 // GUSLIB_FLAG_SINGLETONINST: specify whether the singleton can declare and set to NULL the instances of the defined classes.
 
@@ -86,17 +70,7 @@
 
 // Other flags:
 //
-// GUSLIB_USE_BOOST_SMART_POINTERS
 // GUSLIB_USE_BOOST_RANDOM
-// GUSLIB_USE_YASPER_SMART_POINTER
-
-#ifndef GUSLIB_USE_BOOST_SMART_POINTERS
-#define GUSLIB_USE_BOOST_SMART_POINTERS ${GUSLIB_FLAG_USE_BOOST_SMART_POINTERS_NUM}
-#endif
-
-#ifndef GUSLIB_USE_YASPER_SMART_POINTER
-#define GUSLIB_USE_YASPER_SMART_POINTER ${GUSLIB_FLAG_USE_YASPER_SMART_POINTER_NUM}
-#endif
 
 #ifndef GUSLIB_USE_BOOST_RANDOM
 #define GUSLIB_USE_BOOST_RANDOM ${GUSLIB_FLAG_USE_BOOST_RANDOM_NUM}

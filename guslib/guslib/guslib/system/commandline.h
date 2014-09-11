@@ -26,8 +26,8 @@
 //
 //   Command line handling utility
 //
-//   Last change:  $LastChangedDate: 2014-04-16 00:16:54 +0300 (Mi, 16 apr. 2014) $
-//   Revision:    $Revision: 648 $
+//   Last change:  $LastChangedDate: 2014-09-02 21:32:49 +0300 (Ma, 02 sep. 2014) $
+//   Revision:    $Revision: 669 $
 
 //
 // Includes
@@ -44,7 +44,7 @@
 
 // Include OS specific headers.
 #if GUSLIB_PLATFORM_TYPE == GUSLIB_PLATFORM_TYPE_WINDOWS
-#include <windows.h>
+#include <guslib/system/systemwindowsfwd.h>
 #endif  // GUSLIB_PLATFORM_TYPE
 
 //

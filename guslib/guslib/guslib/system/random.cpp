@@ -23,8 +23,8 @@
 //
 //   Random number generating utility.
 //
-//   Last change:  $LastChangedDate: 2014-04-13 22:58:12 +0300 (D, 13 apr. 2014) $
-//   Revision:    $Revision: 647 $
+//   Last change:  $LastChangedDate: 2014-09-04 08:43:29 +0300 (J, 04 sep. 2014) $
+//   Revision:    $Revision: 670 $
 
 //
 // Includes
@@ -169,6 +169,6 @@ namespace guslib
 
 #if GUSLIB_FLAG_SINGLETONINST == 0
   // If the singleton is not set to create instances.
-  guslib::RandomUtil * guslib::Singleton <guslib::RandomUtil>::objectPtr_ = NULL;
+  guslib::RandomUtil * guslib::Singleton <guslib::RandomUtil>::objectPtr_ = nullptr;
 #endif
 }

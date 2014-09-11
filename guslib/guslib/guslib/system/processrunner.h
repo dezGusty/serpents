@@ -43,7 +43,7 @@
 
 #if GUSLIB_PLATFORM_TYPE == GUSLIB_PLATFORM_TYPE_WINDOWS
 // Add support for reading registry keys
-#  include <windows.h>
+#include <guslib/system/systemwindowsfwd.h>
 #endif  // GUSLIB_PLATFORM_TYPE == GUSLIB_PLATFORM_TYPE_WINDOWS
 
 //

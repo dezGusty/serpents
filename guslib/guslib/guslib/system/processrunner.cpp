@@ -255,7 +255,11 @@ namespace guslib
       )
     {
       DWORD encountered_error = GetLastError();
-      CloseHandle(hdl_child_std_in_write);
+      if (hdl_child_std_in_write != NULL)
+      {
+        CloseHandle(hdl_child_std_in_write);
+      }
+
       return guslib::stringutil::LongLongToString(encountered_error);
     }
 

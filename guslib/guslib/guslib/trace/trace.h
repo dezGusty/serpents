@@ -24,8 +24,8 @@
 //   OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN
 //   THE SOFTWARE.
 //
-//   Last change:  $LastChangedDate: 2014-06-27 22:54:16 +0300 (V, 27 iun. 2014) $
-//   Revision:    $Revision: 657 $
+//   Last change:  $LastChangedDate: 2014-09-10 22:37:41 +0200 (Mi, 10 sep. 2014) $
+//   Revision:    $Revision: 671 $
 
 //
 // Includes
@@ -49,7 +49,7 @@
 
 #if GUSLIB_THREAD_SUPPORT == 1
 // Use thread mutexes if required
-#include "guslib/system/thread.h"
+#include <thread>
 #endif
 
 // Use the phoenix singleton implementation. This is a useful singleton pattern for logging.
@@ -80,7 +80,7 @@ namespace guslib
 #pragma warning(push)
 #pragma warning(disable:4251)
 
-  enum TraceEncoding
+  enum class TraceEncoding
   {
     ASCII = 0,
     UTF_8 = 1
@@ -130,12 +130,12 @@ namespace guslib
     ///
     ///  DISABLED. Copy constructor.
     ///
-    TraceUtil(const TraceUtil& rhs);
+    TraceUtil(const TraceUtil& rhs) = delete;
 
     ///
     /// DISABLED. Assignment operator.
     ///
-    TraceUtil& operator=(const TraceUtil&);
+    TraceUtil& operator=(const TraceUtil&) = delete;
 
   protected:
     bool fileIsOpened;
@@ -152,7 +152,7 @@ namespace guslib
 
 #if GUSLIB_THREAD_SUPPORT == 1
     /// mutex used in multithreaded trace access.
-    GUS_MUTEX(writeMutex);
+    std::recursive_mutex writeMutex;
 #endif
 
     ///
@@ -191,10 +191,9 @@ namespace guslib
     ///
     virtual std::ostream& getOutputStream();
 
-
 #if GUSLIB_THREAD_SUPPORT == 1
     /// mutex used in multithreaded trace access.
-    virtual GUS_MUTEX_TYPE& getWriteMutex()
+    virtual std::recursive_mutex& getWriteMutex()
     {
       return writeMutex;
     }
@@ -279,7 +278,7 @@ namespace guslib
 
 #if GUSLIB_FLAG_SINGLETONINST == 0
   // If the singleton is not set to create instances.
-  guslib::TraceUtil * guslib::Singleton <guslib::TraceUtil>::objectPtr_ = NULL;
+  guslib::TraceUtil * guslib::Singleton <guslib::TraceUtil>::objectPtr_ = nullptr;
 #endif
 
 
@@ -315,7 +314,7 @@ namespace guslib
 #define GTRACE(level, text)\
   if (guslib::Tracer::getPtr()->canTraceWithLevel(level))\
   {\
-    GUS_LOCK_MUTEX(guslib::Tracer::getPtr()->getWriteMutex());\
+    std::lock_guard<std::recursive_mutex> lg{guslib::Tracer::getPtr()->getWriteMutex()};\
     guslib::Tracer::getPtr()->getOutputStream() << GUSLIB_TRACE_TEXT(level, text);\
   }
 #else

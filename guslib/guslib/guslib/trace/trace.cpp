@@ -21,8 +21,8 @@
 //   OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN
 //   THE SOFTWARE.
 //
-//  Last change:  $LastChangedDate: 2014-06-27 22:54:16 +0300 (V, 27 iun. 2014) $
-//  Revision:    $Revision: 657 $
+//  Last change:  $LastChangedDate: 2014-09-11 20:14:06 +0200 (J, 11 sep. 2014) $
+//  Revision:    $Revision: 672 $
 
 //
 // Includes
@@ -39,8 +39,8 @@
 #include <fstream>
 #include <string>
 
-#ifndef GUSLIB_FLAG_MULTITHREAD
-#pragma message("Warning: Multithreaded synchronization disabled! Define GUSLIB_FLAG_MULTITHREAD to enable it (requires boost libs).")
+#if GUSLIB_THREAD_SUPPORT != 1
+#pragma message("Warning: Multithreaded synchronization disabled! Define GUSLIB_FLAG_MULTITHREAD to enable it.")
 #endif  // GUSLIB_FLAG_MULTITHREAD
 
 // ------------------- Implementation ------------------------
@@ -66,7 +66,7 @@ namespace guslib
     Impl():
       fileName_(""),
       of_(std::ofstream("")),
-      customOut_(NULL)
+      customOut_(nullptr)
     {
     }
   };
@@ -79,8 +79,8 @@ namespace guslib
       fileIsOpened(false),
       level_(10),
       enabled_(true),
-      encoding_(ASCII),
-      encodingUsed_(ASCII)
+      encoding_(TraceEncoding::ASCII),
+      encodingUsed_(TraceEncoding::ASCII)
   {
   }
 
@@ -176,7 +176,7 @@ namespace guslib
   void inline TraceUtil::writeLine(const char* textToWrite)
   {
 #if GUSLIB_THREAD_SUPPORT == 1
-    GUS_LOCK_MUTEX(writeMutex);
+    std::lock_guard<std::recursive_mutex> lg{ writeMutex };
 #endif
     if (false == fileIsOpened)
     {

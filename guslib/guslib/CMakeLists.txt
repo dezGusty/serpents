@@ -135,38 +135,33 @@ SET (SOURCE_FILES_COMMON
   ./guslib/common/simpleexception.h
   ./guslib/common/singleton.hpp
   ./guslib/common/singletonholder.hpp
-  ./guslib/common/smartptr.h
 )
 
 SET (SOURCE_FILES_SYSTEM
   ./guslib/system/apprestart.h
+  ./guslib/system/commandline.cpp
   ./guslib/system/commandline.h
+  ./guslib/system/custommutex.cpp
+  ./guslib/system/custommutex.h
   ./guslib/system/processrunner.cpp
   ./guslib/system/processrunner.h
   ./guslib/system/random.cpp
   ./guslib/system/random.h
   ./guslib/system/systemmutex.cpp
   ./guslib/system/systemmutex.h
-  ./guslib/system/thread.h
-  ./guslib/system/threadingdefsboost.h
-  ./guslib/system/threadingdefstthread.h
+  ./guslib/system/systemwindowsfwd.h
   ./guslib/system/timer.cpp
   ./guslib/system/timer.h
-  ./guslib/system/commandline.cpp
 )
 
 SET (SOURCE_FILES_THIRDPARTY
-  ./guslib/thirdparty/fast_mutex.h
   ./guslib/thirdparty/SimpleIni.h
   ./guslib/thirdparty/tinystr.cpp
   ./guslib/thirdparty/tinystr.h
-  ./guslib/thirdparty/tinythread.cpp
-  ./guslib/thirdparty/tinythread.h
   ./guslib/thirdparty/tinyxml.cpp
   ./guslib/thirdparty/tinyxml.h
   ./guslib/thirdparty/tinyxmlerror.cpp
   ./guslib/thirdparty/tinyxmlparser.cpp
-  ./guslib/thirdparty/yasper.h
 )
 
 SET (SOURCE_FILES_TRACE
@@ -174,19 +169,28 @@ SET (SOURCE_FILES_TRACE
   ./guslib/trace/trace.h
 )
 
+SET (SOURCE_FILES_UTIL_CFG
+  ./guslib/util/config/configuration.cpp
+  ./guslib/util/config/configuration.h
+  ./guslib/util/config/iniconfig.cpp
+  ./guslib/util/config/iniconfig.h
+  ./guslib/util/config/loader.cpp
+  ./guslib/util/config/loader.h
+  ./guslib/util/config/property.cpp
+  ./guslib/util/config/property.h
+  ./guslib/util/config/propertygroup.cpp
+  ./guslib/util/config/propertygroup.h
+)
+
 SET (SOURCE_FILES_UTIL
   ./guslib/util/config.cpp
   ./guslib/util/config.h
-  ./guslib/util/configuration.cpp
-  ./guslib/util/configuration.h
   ./guslib/util/consolemenu.cpp
   ./guslib/util/consolemenu.h
   ./guslib/util/filehelper.cpp
   ./guslib/util/filehelper.h
-  ./guslib/util/iniconfig.cpp
-  ./guslib/util/stringutil.cpp
-  ./guslib/util/iniconfig.h
   ./guslib/util/inifile.h
+  ./guslib/util/stringutil.cpp
   ./guslib/util/stringutil.h
 )
 
@@ -203,6 +207,7 @@ SET (SOURCE_FILES
   ${SOURCE_FILES_THIRDPARTY}
   ${SOURCE_FILES_TRACE}
   ${SOURCE_FILES_UTIL}
+  ${SOURCE_FILES_UTIL_CFG}
   ${SOURCE_FILES_BASE_FOLDER}
 )
 
@@ -244,6 +249,10 @@ SOURCE_GROUP("guslib\\trace" FILES
 
 SOURCE_GROUP("guslib\\util" FILES
   ${SOURCE_FILES_UTIL}
+)
+
+SOURCE_GROUP("guslib\\util\\config" FILES
+  ${SOURCE_FILES_UTIL_CFG}
 )
 
 IF (WIN32)

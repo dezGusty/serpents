@@ -21,8 +21,8 @@
 //   OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN
 //   THE SOFTWARE.
 //
-//   Last change:  $LastChangedDate: 2014-05-30 23:02:39 +0300 (V, 30 mai. 2014) $
-//   Revision:    $Revision: 652 $
+//   Last change:  $LastChangedDate: 2014-09-04 08:43:29 +0300 (J, 04 sep. 2014) $
+//   Revision:    $Revision: 670 $
 
 
 //
@@ -63,8 +63,8 @@ namespace guslib
     std::vector <std::string> SplitByChar(const std::string& source, const char delimiter)
     {
       std::vector <std::string> result;
-      std::stringstream splitter(source);
-      std::string tempItem("");
+      std::stringstream splitter{ source };
+      std::string tempItem{ "" };
 
       // split the items and add them to the vector.
       while (std::getline(splitter, tempItem, delimiter))
@@ -84,7 +84,7 @@ namespace guslib
       const char lastChar = *source.rbegin();
       if (lastChar == delimiter)
       {
-        result.push_back(std::string(""));
+        result.push_back("");
       }
 
       return result;
@@ -139,11 +139,11 @@ namespace guslib
       {
         switch (format)
         {
-        case LowerCase:
+        case LetterCase::LowerCase:
           return "true";
-        case UpperCase:
+        case LetterCase::UpperCase:
           return "TRUE";
-        case SentenceCase:
+        case LetterCase::SentenceCase:
         default:
           return "True";
         }
@@ -151,9 +151,9 @@ namespace guslib
 
       switch (format)
       {
-      case LowerCase:
+      case LetterCase::LowerCase:
         return "false";
-      case UpperCase:
+      case LetterCase::UpperCase:
         return "FALSE";
       default:
         break;
@@ -274,7 +274,7 @@ namespace guslib
 
     std::string TrimString(const std::string& content)
     {
-      std::string local_copy(content);
+      std::string local_copy{ content };
       size_t position = local_copy.find_last_not_of(" \t");
       if (std::string::npos != position)
       {

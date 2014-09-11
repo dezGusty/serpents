@@ -1,4 +1,4 @@
-﻿<?xml version="1.0" encoding="utf-8"?>
+<?xml version="1.0" encoding="utf-8"?>
 <Project DefaultTargets="Build" ToolsVersion="4.0" xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
   <ItemGroup Label="ProjectConfigurations">
     <ProjectConfiguration Include="Debug|Win32">
@@ -316,7 +316,6 @@ if %errorlevel% neq 0 goto :VCEnd</Command>
     <ClInclude Include="guslib\system\threadingdefsboost.h" />
     <ClInclude Include="guslib\system\threadingdefstthread.h" />
     <ClInclude Include="guslib\system\timer.h" />
-    <ClInclude Include="guslib\thirdparty\fast_mutex.h" />
     <ClInclude Include="guslib\thirdparty\SimpleIni.h" />
     <ClInclude Include="guslib\thirdparty\tinystr.h" />
     <ClInclude Include="guslib\thirdparty\tinythread.h" />

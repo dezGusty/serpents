@@ -24,8 +24,8 @@
 //   OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN
 //   THE SOFTWARE.
 //
-//   Last change:  $LastChangedDate: 2014-04-13 22:58:12 +0300 (D, 13 apr. 2014) $
-//   Revision:    $Revision: 647 $
+//   Last change:  $LastChangedDate: 2014-09-11 20:14:06 +0200 (J, 11 sep. 2014) $
+//   Revision:    $Revision: 672 $
 
 //
 // Includes
@@ -36,9 +36,16 @@
 //
 #include <guslib/guslibbuildopts.h>
 
-#if GUSLIB_THREAD_SUPPORT == 1
-#include <guslib/system/thread.h>
-#endif
+//
+// C++ system headers
+//
+#include <mutex>
+#include <thread>
+
+//
+// This library's headers
+//
+#include "guslib/system/custommutex.h"
 
 namespace guslib
 {
@@ -59,10 +66,7 @@ namespace guslib
     static T * objectPtr_;
 
 #if GUSLIB_THREAD_SUPPORT == 1
-#pragma warning(push)
-#pragma warning(disable:4251)
-    static GUS_MUTEX(creationMutex_);
-#pragma warning(pop)
+    static guslib::CustomMutex creationMutex_;
 #endif
 
   public:
@@ -71,16 +75,16 @@ namespace guslib
     {
       // first check if it was created. If the mutex would be placed first, a performance hit would occur, since
       // all operations would create and release a lock.
-      if (NULL ==  objectPtr_)
+      if (nullptr ==  objectPtr_)
       {
         // try to lock
 #if GUSLIB_THREAD_SUPPORT == 1
-        GUS_LOCK_MUTEX(creationMutex_);
+        guslib::CustomLock lg{ creationMutex_ };
 #endif
 
         // While the lock tried to take control, another thread may have already finished instantiating the object,
         // so a new check should be done to ensure safety (double-checked locking pattern).
-        if (NULL == objectPtr_)
+        if (nullptr == objectPtr_)
         {
           // Should create the object as volatile to prevent some compiler optimizations that may
           // lead to the lines being executed internally in a slightly different order than the
@@ -110,23 +114,24 @@ namespace guslib
       if (objectPtr_)
       {
 #if GUSLIB_THREAD_SUPPORT == 1
-        GUS_LOCK_MUTEX(creationMutex_);
+        guslib::CustomLock lg{ creationMutex_ };
+        //std::lock_guard<std::recursive_mutex> lg{ creationMutex_ };
 #endif
         if (objectPtr_)
         {
           delete objectPtr_;
-          objectPtr_ = 0;   // NULL
+          objectPtr_ = nullptr;
         }
       }
     }   // destroy
   };
 
 #if GUSLIB_FLAG_SINGLETONINST != 0
-  template <class T> T* Singleton<T>::objectPtr_ = 0;   // NULL
+  template <class T> T* Singleton<T>::objectPtr_ = nullptr;
 #endif
 
 #if GUSLIB_THREAD_SUPPORT == 1
-  template <class T> GUS_MUTEX_TYPE Singleton<T>::creationMutex_;
+  template <class T> guslib::CustomMutex Singleton<T>::creationMutex_;
 #endif
 
 }   // namespace end

@@ -26,8 +26,8 @@
 //
 //   String utility
 //
-//   Last change:  $LastChangedDate: 2014-04-25 21:56:20 +0300 (V, 25 apr. 2014) $
-//   Revision:    $Revision: 649 $
+//   Last change:  $LastChangedDate: 2014-09-04 08:43:29 +0300 (J, 04 sep. 2014) $
+//   Revision:    $Revision: 670 $
 
 //
 // Includes
@@ -50,7 +50,7 @@
 
 namespace guslib
 {
-  typedef GUSLIB_EXPORT_SYMBOL enum
+  GUSLIB_EXPORT_SYMBOL enum class LetterCase
   {
     SentenceCase,  // Sentencecase
     LowerCase,    // lowercase
@@ -58,7 +58,7 @@ namespace guslib
     CamelCase,    // camelCase
     UpperCamelCase,  // CamelCase
     NumLetterCases
-  }LetterCase;
+  };
 
 
   namespace stringutil
@@ -84,7 +84,7 @@ namespace guslib
     GUSLIB_EXPORT_SYMBOL std::string WStringToString(const std::wstring& s);
 
     GUSLIB_EXPORT_SYMBOL bool StringToBool(const std::string& s);
-    GUSLIB_EXPORT_SYMBOL std::string BoolToString(bool value, LetterCase format = SentenceCase);
+    GUSLIB_EXPORT_SYMBOL std::string BoolToString(bool value, LetterCase format = LetterCase::SentenceCase);
 
     GUSLIB_EXPORT_SYMBOL int StringToInt(const std::string & s);
     GUSLIB_EXPORT_SYMBOL std::string IntToString(int value);

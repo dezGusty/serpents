@@ -84,8 +84,8 @@ namespace guslib
     {
       try
       {
-        std::ifstream  src(sourceFile.c_str(),       std::ios::binary);
-        std::ofstream  dst(destinationFile.c_str(),  std::ios::binary);
+        std::ifstream  src{ sourceFile.c_str(), std::ios::binary };
+        std::ofstream  dst{ destinationFile.c_str(), std::ios::binary };
 
         dst << src.rdbuf();
         return true;
@@ -139,14 +139,14 @@ namespace guslib
 
       // open the directory
       dir = opendir(directoryName.c_str());
-      if (NULL == dir)
+      if (nullptr == dir)
       {
         return false;
       }
 
       // Traverse the directory: this may be needed for handling recursive calls.
       struct dirent *ent;
-      while ((ent = readdir (dir)) != NULL)
+      while ((ent = readdir(dir)) != nullptr)
       {
         // Decide what to do with the directory entry
         switch (ent->d_type)
@@ -286,21 +286,20 @@ namespace guslib
       std::string file_entry;
 
       // Run through all given folders.
-      for (std::vector <std::string>::const_iterator folder_item = folder_list.begin();
-        folder_item != folder_list.end(); ++folder_item)
+      for (auto folder_item : folder_list)
       {
         // This is the dirent (directory entity) structure.
         DIR *dir;
 
         // open the directory
-        dir = opendir(folder_item->c_str());
+        dir = opendir(folder_item.c_str());
 
         if (0 != dir)
         {
           struct dirent *ent;
 
           // Read the data from the directory.
-          while ((ent = readdir(dir)) != NULL)
+          while ((ent = readdir(dir)) != nullptr)
           {
             // Decide what to do with the directory entry
             switch (ent->d_type)
@@ -631,10 +630,9 @@ namespace guslib
 
       if (matchingList.size() > 0)
       {
-        for (std::vector <std::string>::const_iterator it = matchingList.begin();
-          it != matchingList.end(); ++it)
+        for (auto item : matchingList)
         {
-          if (std::string::npos != content.find(*it))
+          if (std::string::npos != content.find(item))
           {
             // match found
             foundMatch = true;
